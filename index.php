@@ -88,7 +88,7 @@ if (!$user->isLoggedIn()) {
 </head>
 
 <body>
-
+  <h1>Welcome. Please Sign In</h1>
   <div class="loginBlock" id="login" style="display: block;">
     <div class="dr"><span></span></div>
     <?php if ($errorMessage) { ?>
@@ -112,8 +112,6 @@ if (!$user->isLoggedIn()) {
 
     <!-- Main content -->
     <div class="loginForm">
-      <h1>Welcome. Please Sign In</h1>
-
       <section class="content">
         <div class="container-fluid">
           <div class="row">
@@ -130,11 +128,11 @@ if (!$user->isLoggedIn()) {
                   <div class="card-body">
                     <div class="form-group">
                       <label for="exampleInputEmail1">User Name</label>
-                      <input type="text" name="username" id="inputEmail" placeholder="Username" class="form-control validate[required]" />
+                      <input type="text" name="username" id="username" placeholder="Username" class="form-control validate[required]" />
                     </div>
                     <div class="form-group">
                       <label for="exampleInputPassword1">Password</label>
-                      <input type="password" name="password" id="inputPassword" placeholder="Password" class="form-control validate[required]" />
+                      <input type="password" name="password" id="password" placeholder="Password" class="form-control validate[required]" />
                     </div>
                   </div>
                   <!-- /.card-body -->
@@ -153,77 +151,6 @@ if (!$user->isLoggedIn()) {
 
 
     <!-- /.card -->
-
-
-
-
-    <!-- <div class="loginForm">
-      <form class="form-horizontal" method="post" id="validation">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
-            <input type="text" name="username" id="inputEmail" placeholder="Username" class="form-control validate[required]" />
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-            <input type="password" name="password" id="inputPassword" placeholder="Password" class="form-control validate[required]" />
-          </div>
-        </div>
-        <div class="row"> -->
-    <!-- <div class="col-md-8">
-            <div class="form-group" style="margin-top: 5px;">
-              <label class="checkbox"><input type="checkbox"> Remember me</label>
-            </div>
-          </div> -->
-    <!-- <div class="col-md-4">
-            <input type="hidden" name="token" value="<?= Token::generate(); ?>">
-            <input type="submit" value="Sign in" class="btn btn-default btn-block">
-          </div>
-        </div>
-      </form>
-      <div class="dr"><span></span></div> -->
-    <!-- <div class="controls">
-        <div class="row">
-          <div class="col-md-6">
-            <button class="btn btn-link btn-block" onClick="loginBlock('#forgot');">Forgot password?</button>
-          </div>
-        </div>
-      </div> -->
-    <!-- </div>
-  </div> -->
-
-    <!-- <div class="loginBlock" id="forgot">
-    <h1>Forgot your password?</h1>
-    <div class="dr"><span></span></div>
-    <div class="loginForm">
-      <form class="form-horizontal" method="post">
-        <p>This form help you return your password. Please, enter your password, and send request</p>
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
-            <input type="text" placeholder="Your email" class="form-control" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6"></div>
-          <div class="col-md-6">
-            <button type="submit" class="btn btn-default btn-block">Send request</button>
-          </div>
-        </div>
-      </form>
-      <div class="dr"><span></span></div>
-      <div class="controls">
-        <div class="row">
-          <div class="col-md-12">
-            <button class="btn btn-link" onClick="loginBlock('#login');">&laquo; Back</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
 </body>
 
 </html>
