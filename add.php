@@ -113,25 +113,41 @@ if ($user->isLoggedIn()) {
                                                     </select>
                                                 </div>
                                             </div>
-
                                             <div class="col-sm-3">
                                                 <!-- select -->
                                                 <div class="form-group">
-                                                    <label>Phone:</label>
-                                                    <input type="text" name="phone1" class="form-control" pattern="\d*" minlength="10" maxlength="10" value="" required />
+                                                    <label>Marital Status:</label>
+                                                    <select id="region" name="region" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('marital_status') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-3">
+                                                <!-- select -->
+                                                <div class="form-group">
+                                                    <label class="col-form-label" for="inputSuccess">
+                                                    <!-- <label class="col-form-label" for="inputSuccess"><i class="fas fa-check"></i><i class="far fa-bell"><i class="far fa-times-circle"></i> -->
+                                                    <!-- Phone :</label> <input type="text" name="phone1" class="form-control is-valid is-invalid is-warning" id="inputSuccess" pattern="\d*" minlength="10" maxlength="10" value="" required /> -->
+                                                    Phone :</label> <input type="text" name="phone1" class="form-control" id="inputSuccess" pattern="\d*" minlength="10" maxlength="10" value="" required />
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-sm-2">
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>Phone2:</label>
                                                     <input type="text" name="phone2" class="form-control" pattern="\d*" minlength="10" maxlength="10" value="" />
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="row">
 
                                             <div class="col-sm-2">
                                                 <!-- select -->
@@ -190,7 +206,6 @@ if ($user->isLoggedIn()) {
 
                                         <div class="row">
                                             <div class="col-sm-4">
-                                                <!-- select -->
                                                 <div class="form-group">
                                                     <label>For Bagamoyo residents, please specify the intended duration of stay in Bagamoyo:</label>
                                                     <select id="duration" name="duration" class="form-control" value="" required>
@@ -203,43 +218,21 @@ if ($user->isLoggedIn()) {
                                             </div>
 
                                             <div class="col-sm-4">
-                                                <!-- textarea -->
                                                 <div class="form-group">
                                                     <label>Briefly describe participant residential location in relation to the nearest famous neighborhoods:
                                                     </label>
-                                                    <textarea name="location" id="location" cols="50%" rows="3" value="" required></textarea>
+                                                    <textarea name="location" id="location" cols="40%" rows="3" value="" required></textarea>
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-4">
-                                                <!-- select -->
                                                 <div class="form-group">
-                                                    <label>Reason:</label>
-                                                    <select id="reason" name="reason" value="" class="form-control">
-                                                        <option value="">Select</option>
-                                                        <?php foreach ($override->getData('end_study_reason') as $lt) { ?>
-                                                            <option value="<?= $lt['reason'] ?>"><?= $lt['reason'] ?></option>
-                                                        <?php } ?>
-                                                    </select>
+                                                    <label>Comments / Remarks / Notes
+                                                        :
+                                                    </label>
+                                                    <textarea name="location" id="location" cols="40%" rows="3" value="" required></textarea>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <!-- input states -->
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess"><i class="fas fa-check"></i> Input with
-                                                success</label>
-                                            <input type="text" class="form-control is-valid" id="inputSuccess" placeholder="Enter ...">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputWarning"><i class="far fa-bell"></i> Input with
-                                                warning</label>
-                                            <input type="text" class="form-control is-warning" id="inputWarning" placeholder="Enter ...">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputError"><i class="far fa-times-circle"></i> Input with
-                                                error</label>
-                                            <input type="text" class="form-control is-invalid" id="inputError" placeholder="Enter ...">
                                         </div>
                                     </form>
                                 </div>
