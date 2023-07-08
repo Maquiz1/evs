@@ -83,17 +83,49 @@ if ($user->isLoggedIn()) {
                 $rvwr_date = date('Y-m-d', strtotime(Input::get('reviewer_date')));
                 $death_date = date('Y-m-d', strtotime(Input::get('death_date')));
 
-                $clients = $override->getClient('clients','fname', Input::get('fname'), 'mname', Input::get('mname'), 'lname', Input::get('lname'));
-                if ($clients) {
-                    $errorMessage = Input::get('fname'). ' - '. Input::get('mname') . ' - '. Input::get('lname') .' Already Registered!';
+                $clients = $override->getClient('clients', 'fname', Input::get('fname'), 'mname', Input::get('mname'), 'lname', Input::get('lname'));
+                if (Input::get('add')) {
+                    if ($clients) {
+                        $errorMessage = Input::get('fname') . ' - ' . Input::get('mname') . ' - ' . Input::get('lname') . ' Already Registered!';
+                    } else {
+                        try {
+                            $user->createRecord('clients', array(
+                                'registered_date' => Input::get('registered_date'),
+                                'fname' => Input::get('fname'),
+                                'mname' => Input::get('mname'),
+                                'lname' => Input::get('lname'),
+                                'dob' => $dob_date,
+                                'gender' => Input::get('gender'),
+                                'marital' => Input::get('marital'),
+                                'education' => Input::get('education'),
+                                'occupation' => Input::get('occupation'),
+                                'phone1' => Input::get('phone1'),
+                                'phone2' => Input::get('phone2'),
+                                'region' => Input::get('region'),
+                                'district' => Input::get('district'),
+                                'ward' => Input::get('ward'),
+                                'village' => Input::get('village'),
+                                'hamlet' => Input::get('hamlet'),
+                                'duration' => Input::get('duration'),
+                                'location' => Input::get('location'),
+                                'staff_id' => $user->data()->id,
+                                'status' => 1,
+                                'status' => Input::get('status'),
+                                'comments' => Input::get('comments'),
+                            ));
+                            $successMessage = 'Client Registered Successful';
+                        } catch (Exception $e) {
+                            die($e->getMessage());
+                        }
+                    }
                 } else {
                     try {
-                        $user->createRecord('clients', array(
+                        $user->updateRecord('clients', array(
                             'registered_date' => Input::get('registered_date'),
                             'fname' => Input::get('fname'),
                             'mname' => Input::get('mname'),
                             'lname' => Input::get('lname'),
-                            'dob' => Input::get('dob'),
+                            'dob' => $dob_date,
                             'gender' => Input::get('gender'),
                             'marital' => Input::get('marital'),
                             'education' => Input::get('education'),
@@ -111,7 +143,7 @@ if ($user->isLoggedIn()) {
                             'status' => 1,
                             'status' => Input::get('status'),
                             'comments' => Input::get('comments'),
-                        ));
+                        ), Input::get('fname'));
                         $successMessage = 'Client Registered Successful';
                     } catch (Exception $e) {
                         die($e->getMessage());

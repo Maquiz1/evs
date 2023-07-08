@@ -75,6 +75,7 @@ $data_limit = 10000;
                                                 <th>SEX</th>
                                                 <th>AGE</th>
                                                 <th>STATUS</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -108,6 +109,9 @@ $data_limit = 10000;
                                                     <?php } elseif ($value['gender'] == 2) { ?>
                                                         <td>Female</td>
                                                     <?php } ?>
+                                                    <td>
+                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=1&cid=<?= $value['id'] ?>" class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Edit</a></div>
+                                                    </td>
                                                 </tr>
                                             <?php
                                                 $x++;
@@ -122,6 +126,7 @@ $data_limit = 10000;
                                                 <th>SEX</th>
                                                 <th>AGE</th>
                                                 <th>STATUS</th>
+                                                <th>Action</th>
                                             </tr>
                                         </tfoot>
                                     </table>
