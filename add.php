@@ -70,7 +70,7 @@ if ($user->isLoggedIn()) {
                                             <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label>Registered Date</label>
-                                                    <input type="text" name="fname" class="form-control" value="" required="" />
+                                                    <input type="date" class="form-control fas fa-calendar input-prefix" name="dob" id="dob" value="" required="" />
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
@@ -130,9 +130,9 @@ if ($user->isLoggedIn()) {
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">
-                                                    <!-- <label class="col-form-label" for="inputSuccess"><i class="fas fa-check"></i><i class="far fa-bell"><i class="far fa-times-circle"></i> -->
-                                                    <!-- Phone :</label> <input type="text" name="phone1" class="form-control is-valid is-invalid is-warning" id="inputSuccess" pattern="\d*" minlength="10" maxlength="10" value="" required /> -->
-                                                    Phone :</label> <input type="text" name="phone1" class="form-control" id="inputSuccess" pattern="\d*" minlength="10" maxlength="10" value="" required />
+                                                        <!-- <label class="col-form-label" for="inputSuccess"><i class="fas fa-check"></i><i class="far fa-bell"><i class="far fa-times-circle"></i> -->
+                                                        <!-- Phone :</label> <input type="text" name="phone1" class="form-control is-valid is-invalid is-warning" id="inputSuccess" pattern="\d*" minlength="10" maxlength="10" value="" required /> -->
+                                                        Phone :</label> <input type="text" name="phone1" class="form-control" id="inputSuccess" pattern="\d*" minlength="10" maxlength="10" value="" required />
 
                                                 </div>
                                             </div>
@@ -233,6 +233,11 @@ if ($user->isLoggedIn()) {
                                                     <textarea name="location" id="location" cols="40%" rows="3" value="" required></textarea>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                                            <input type="hidden" name="id" value="<?= $staff['id'] ?>">
+                                            <input type="submit" name="Register" value="Submit" class="btn btn-success btn-clean">
                                         </div>
                                     </form>
                                 </div>
