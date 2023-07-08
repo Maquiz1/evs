@@ -24,22 +24,7 @@ if ($user->isLoggedIn()) {
         if (Input::get('register')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                'project_id' => array(
-                    'required' => true,
-                ),
-                'initial' => array(
-                    'required' => true,
-                ),
-                'sensitization_one' => array(
-                    'required' => true,
-                ),
-                'sensitization_two' => array(
-                    'required' => true,
-                ),
-                'sensitization_no' => array(
-                    'required' => true,
-                ),
-                'client_category' => array(
+                'registered_date' => array(
                     'required' => true,
                 ),
                 'fname' => array(
@@ -57,12 +42,18 @@ if ($user->isLoggedIn()) {
                 'gender' => array(
                     'required' => true,
                 ),
-                // 'phone1' => array(
-                //     'required' => true,
-                //     // 'unique' => 'details'
-                // ),
-                'attend_school' => array(
+                'marital' => array(
                     'required' => true,
+                ),
+                'education' => array(
+                    'required' => true,
+                ),
+                'occupation' => array(
+                    'required' => true,
+                ),
+                'phone1' => array(
+                    'required' => true,
+                    // 'unique' => 'details'
                 ),
                 'region' => array(
                     'required' => true,
@@ -82,15 +73,9 @@ if ($user->isLoggedIn()) {
                 'duration' => array(
                     'required' => true,
                 ),
-                'willing_contact' => array(
-                    'required' => true,
-                ),
                 'location' => array(
                     'required' => true,
                 ),
-                'status' => array(
-                    'required' => true,
-                )
             ));
             if ($validate->passed()) {
                 $dob_date = date('Y-m-d', strtotime(Input::get('dob')));
@@ -98,42 +83,34 @@ if ($user->isLoggedIn()) {
                 $rvwr_date = date('Y-m-d', strtotime(Input::get('reviewer_date')));
                 $death_date = date('Y-m-d', strtotime(Input::get('death_date')));
 
-                // $details = $override->selectData3('details', 'sensitization_no', Input::get('sensitization_no'), 'project_name', Input::get('project_id'))[0];
-                // $phone = $override->selectData1('details', 'phone', Input::get('phone1'))[0];
-                if ($details) {
-                    $errorMessage = 'Please re-check Sensitization number For That Study, Already Registered!';
+                $clients = $override->getClient('clients','fname', Input::get('fname'), 'mname', Input::get('mname'), 'lname', Input::get('lname'));
+                if ($clients) {
+                    $errorMessage = Input::get('fname'). ' - '. Input::get('mname') . ' - '. Input::get('lname') .' Already Registered!';
                 } else {
                     try {
-                        $user->createRecord('details', array(
-                            'project_name' => Input::get('project_id'),
-                            'initial' => Input::get('initial'),
-                            'sensitization_one' => Input::get('sensitization_one'),
-                            'sensitization_two' => Input::get('sensitization_two'),
-                            'sensitization_no' => Input::get('sensitization_no'),
-                            'client_category' => Input::get('client_category'),
+                        $user->createRecord('clients', array(
+                            'registered_date' => Input::get('registered_date'),
                             'fname' => Input::get('fname'),
                             'mname' => Input::get('mname'),
                             'lname' => Input::get('lname'),
-                            'dob' => $dob_date,
+                            'dob' => Input::get('dob'),
                             'gender' => Input::get('gender'),
-                            'phone' => Input::get('phone1'),
+                            'marital' => Input::get('marital'),
+                            'education' => Input::get('education'),
+                            'occupation' => Input::get('occupation'),
+                            'phone1' => Input::get('phone1'),
                             'phone2' => Input::get('phone2'),
-                            'attend_school' => Input::get('attend_school'),
                             'region' => Input::get('region'),
                             'district' => Input::get('district'),
                             'ward' => Input::get('ward'),
                             'village' => Input::get('village'),
                             'hamlet' => Input::get('hamlet'),
                             'duration' => Input::get('duration'),
-                            'willing_contact' => Input::get('willing_contact'),
                             'location' => Input::get('location'),
                             'staff_id' => $user->data()->id,
+                            'status' => 1,
                             'status' => Input::get('status'),
-                            'reason' => Input::get('reason'),
-                            'other_reason' => Input::get('other_reason'),
-                            'death_date' => $death_date,
-                            'details' => Input::get('details'),
-                            'end_study' => Input::get('end_study'),
+                            'comments' => Input::get('comments'),
                         ));
                         $successMessage = 'Client Registered Successful';
                     } catch (Exception $e) {
@@ -199,7 +176,7 @@ if ($user->isLoggedIn()) {
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <form method="post">
+                                    <form method="post" id="validation">
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <div class="form-group">
@@ -238,12 +215,12 @@ if ($user->isLoggedIn()) {
 
                                             <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label>GENDER:</label> 
+                                                    <label>GENDER:</label>
 
                                                     <select id="gender" name="gender" class="form-control" value="" required>
                                                         <option value="">Select</option>
                                                         <?php foreach ($override->getData('gender') as $gender) { ?>
-                                                            <option value="<?= $gender['name'] ?>"><?= $gender['name'] ?></option>
+                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -252,16 +229,41 @@ if ($user->isLoggedIn()) {
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>Marital Status:</label>
-                                                    <select id="region" name="region" class="form-control" value="" required>
+                                                    <select id="marital" name="marital" class="form-control" value="" required>
                                                         <option value="">Select</option>
                                                         <?php foreach ($override->getData('marital_status') as $lt) { ?>
-                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                            <option value="<?= $lt['id'] ?>"><?= $lt['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
                                             </div>
-
                                             <div class="col-sm-3">
+                                                <!-- select -->
+                                                <div class="form-group">
+                                                    <label>Occupation:</label>
+                                                    <select id="occupation" name="occupation" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('occupation') as $lt) { ?>
+                                                            <option value="<?= $lt['id'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Education:</label>
+
+                                                    <select id="education" name="education" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('education') as $gender) { ?>
+                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">
@@ -271,18 +273,16 @@ if ($user->isLoggedIn()) {
 
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <div class="row">
-
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-4">
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>Phone2:</label>
                                                     <input type="text" name="phone2" class="form-control" pattern="\d*" minlength="10" maxlength="10" value="" />
                                                 </div>
                                             </div>
+                                        </div>
 
+                                        <div class="row">
 
                                             <div class="col-sm-2">
                                                 <!-- select -->
@@ -291,7 +291,7 @@ if ($user->isLoggedIn()) {
                                                     <select id="region" name="region" class="form-control" value="" required>
                                                         <option value="">Select</option>
                                                         <?php foreach ($override->getData('region') as $lt) { ?>
-                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                            <option value="<?= $lt['id'] ?>"><?= $lt['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -303,7 +303,7 @@ if ($user->isLoggedIn()) {
                                                     <select id="district" name="district" class="form-control" value="" required>
                                                         <option value="">Select</option>
                                                         <?php foreach ($override->getData('district') as $lt) { ?>
-                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                            <option value="<?= $lt['id'] ?>"><?= $lt['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -317,12 +317,12 @@ if ($user->isLoggedIn()) {
                                                     <select id="ward" name="ward" class="form-control" value="" required>
                                                         <option value="">Select</option>
                                                         <?php foreach ($override->getData('ward') as $lt) { ?>
-                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                            <option value="<?= $lt['id'] ?>"><?= $lt['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>VILLAGE:</label>
@@ -330,7 +330,7 @@ if ($user->isLoggedIn()) {
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>Hamlet / Kitongoji:</label>
