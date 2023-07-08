@@ -195,11 +195,11 @@ if ($user->isLoggedIn()) {
                             <!-- general form elements disabled -->
                             <div class="card card-warning">
                                 <div class="card-header">
-                                    <h3 class="card-title">Register Elements</h3>
+                                    <h3 class="card-title">Register Clients</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <form>
+                                    <form method="post">
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <div class="form-group">
@@ -238,7 +238,8 @@ if ($user->isLoggedIn()) {
 
                                             <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label>GENDER:</label>
+                                                    <label>GENDER:</label> 
+
                                                     <select id="gender" name="gender" class="form-control" value="" required>
                                                         <option value="">Select</option>
                                                         <?php foreach ($override->getData('gender') as $gender) { ?>
