@@ -118,7 +118,7 @@ if ($user->isLoggedIn()) {
                             die($e->getMessage());
                         }
                     }
-                } else {
+                } elseif($_GET['edit']) {
                     try {
                         $user->updateRecord('clients', array(
                             'registered_date' => Input::get('registered_date'),

@@ -110,7 +110,7 @@ $data_limit = 10000;
                                                         <td>Female</td>
                                                     <?php } ?>
                                                     <td>
-                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=1&cid=<?= $value['id'] ?>" class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Edit</a></div>
+                                                        <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=edit" class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Edit</a></div>
                                                     </td>
                                                 </tr>
                                             <?php
