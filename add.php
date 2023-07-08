@@ -98,8 +98,8 @@ if ($user->isLoggedIn()) {
                 $rvwr_date = date('Y-m-d', strtotime(Input::get('reviewer_date')));
                 $death_date = date('Y-m-d', strtotime(Input::get('death_date')));
 
-                $details = $override->selectData3('details', 'sensitization_no', Input::get('sensitization_no'), 'project_name', Input::get('project_id'))[0];
-                $phone = $override->selectData1('details', 'phone', Input::get('phone1'))[0];
+                // $details = $override->selectData3('details', 'sensitization_no', Input::get('sensitization_no'), 'project_name', Input::get('project_id'))[0];
+                // $phone = $override->selectData1('details', 'phone', Input::get('phone1'))[0];
                 if ($details) {
                     $errorMessage = 'Please re-check Sensitization number For That Study, Already Registered!';
                 } else {
@@ -146,7 +146,7 @@ if ($user->isLoggedIn()) {
         }
     }
 } else {
-    // Redirect::to('index.php');
+    Redirect::to('index.php');
 }
 ?>
 
@@ -195,7 +195,7 @@ if ($user->isLoggedIn()) {
                             <!-- general form elements disabled -->
                             <div class="card card-warning">
                                 <div class="card-header">
-                                    <h3 class="card-title">General Elements</h3>
+                                    <h3 class="card-title">Register Elements</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">

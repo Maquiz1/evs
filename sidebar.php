@@ -44,26 +44,26 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="./index1.php" class="nav-link active">
+                                <a href="index1.php?title=1" class="nav-link active">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Dashboard v1</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="./index2.php" class="nav-link">
+                                <a href="index2.php?title=2" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Dashboard v2</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="./index3.php" class="nav-link">
+                                <a href="index3.php?title=3" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Dashboard v3</p>
                                 </a>
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="pages/widgets.html" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
@@ -664,7 +664,7 @@
                             <i class="nav-icon far fa-circle text-info"></i>
                             <p>Informational</p>
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->
