@@ -1,4 +1,28 @@
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+<?php
+require_once 'php/core/init.php';
+$user = new User();
+$override = new OverideData();
+$pageError = null;
+$successMessage = null;
+$errorM = false;
+$errorMessage = null;
+$t_crf = 0;
+$p_crf = 0;
+$w_crf = 0;
+$s_name = null;
+$c_name = null;
+$site = null;
+$country = null;
+$study_crf = null;
+$data_limit = 10000;
+
+
+?>
+
+
+
+
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a href="index3.php" class="brand-link">
             <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -13,7 +37,7 @@
                     <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">Alexander Pierce</a>
+                    <a href="#" class="d-block"><?= $user->data()->fname ?></a>
                 </div>
             </div>
 
