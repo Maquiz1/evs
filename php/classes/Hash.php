@@ -1,4 +1,3 @@
-<?php error_reporting (E_ALL ^ E_NOTICE); ?>
 <?php
 class Hash{
     public static function make($string,$salt=''){

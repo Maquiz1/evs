@@ -2,14 +2,148 @@
 require_once 'php/core/init.php';
 $user = new User();
 $override = new OverideData();
-$email = new Email();
-$random = new Random();
-$validate = new validate();
-$successMessage = null;
 $pageError = null;
+$successMessage = null;
+$errorM = false;
 $errorMessage = null;
+$t_crf = 0;
+$p_crf = 0;
+$w_crf = 0;
+$s_name = null;
+$c_name = null;
+$site = null;
+$country = null;
+$study_crf = null;
+$data_limit = 10000;
+// $favicon = $override->get('images', 'cat', 1)[0];
+// $logo = $override->get('images', 'cat', 2)[0];
+
+//modification remove all pilot crf have been removed/deleted from study crf
 if ($user->isLoggedIn()) {
     if (Input::exists('post')) {
+        if (Input::get('register')) {
+            $validate = new validate();
+            $validate = $validate->check($_POST, array(
+                'project_id' => array(
+                    'required' => true,
+                ),
+                'initial' => array(
+                    'required' => true,
+                ),
+                'sensitization_one' => array(
+                    'required' => true,
+                ),
+                'sensitization_two' => array(
+                    'required' => true,
+                ),
+                'sensitization_no' => array(
+                    'required' => true,
+                ),
+                'client_category' => array(
+                    'required' => true,
+                ),
+                'fname' => array(
+                    'required' => true,
+                ),
+                'mname' => array(
+                    'required' => true,
+                ),
+                'lname' => array(
+                    'required' => true,
+                ),
+                'dob' => array(
+                    'required' => true,
+                ),
+                'gender' => array(
+                    'required' => true,
+                ),
+                // 'phone1' => array(
+                //     'required' => true,
+                //     // 'unique' => 'details'
+                // ),
+                'attend_school' => array(
+                    'required' => true,
+                ),
+                'region' => array(
+                    'required' => true,
+                ),
+                'district' => array(
+                    'required' => true,
+                ),
+                'ward' => array(
+                    'required' => true,
+                ),
+                'village' => array(
+                    'required' => true,
+                ),
+                'hamlet' => array(
+                    'required' => true,
+                ),
+                'duration' => array(
+                    'required' => true,
+                ),
+                'willing_contact' => array(
+                    'required' => true,
+                ),
+                'location' => array(
+                    'required' => true,
+                ),
+                'status' => array(
+                    'required' => true,
+                )
+            ));
+            if ($validate->passed()) {
+                $dob_date = date('Y-m-d', strtotime(Input::get('dob')));
+                $intwr_date = date('Y-m-d', strtotime(Input::get('interviewer_date')));
+                $rvwr_date = date('Y-m-d', strtotime(Input::get('reviewer_date')));
+                $death_date = date('Y-m-d', strtotime(Input::get('death_date')));
+
+                $details = $override->selectData3('details', 'sensitization_no', Input::get('sensitization_no'), 'project_name', Input::get('project_id'))[0];
+                $phone = $override->selectData1('details', 'phone', Input::get('phone1'))[0];
+                if ($details) {
+                    $errorMessage = 'Please re-check Sensitization number For That Study, Already Registered!';
+                } else {
+                    try {
+                        $user->createRecord('details', array(
+                            'project_name' => Input::get('project_id'),
+                            'initial' => Input::get('initial'),
+                            'sensitization_one' => Input::get('sensitization_one'),
+                            'sensitization_two' => Input::get('sensitization_two'),
+                            'sensitization_no' => Input::get('sensitization_no'),
+                            'client_category' => Input::get('client_category'),
+                            'fname' => Input::get('fname'),
+                            'mname' => Input::get('mname'),
+                            'lname' => Input::get('lname'),
+                            'dob' => $dob_date,
+                            'gender' => Input::get('gender'),
+                            'phone' => Input::get('phone1'),
+                            'phone2' => Input::get('phone2'),
+                            'attend_school' => Input::get('attend_school'),
+                            'region' => Input::get('region'),
+                            'district' => Input::get('district'),
+                            'ward' => Input::get('ward'),
+                            'village' => Input::get('village'),
+                            'hamlet' => Input::get('hamlet'),
+                            'duration' => Input::get('duration'),
+                            'willing_contact' => Input::get('willing_contact'),
+                            'location' => Input::get('location'),
+                            'staff_id' => $user->data()->id,
+                            'status' => Input::get('status'),
+                            'reason' => Input::get('reason'),
+                            'other_reason' => Input::get('other_reason'),
+                            'death_date' => $death_date,
+                            'details' => Input::get('details'),
+                            'end_study' => Input::get('end_study'),
+                        ));
+                        $successMessage = 'Client Registered Successful';
+                    } catch (Exception $e) {
+                        die($e->getMessage());
+                    }
+                }
+            } else {
+                $pageError = $validate->errors();
+            }
+        }
     }
 } else {
     // Redirect::to('index.php');
@@ -70,7 +204,7 @@ if ($user->isLoggedIn()) {
                                             <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label>Registered Date</label>
-                                                    <input type="date" class="form-control fas fa-calendar input-prefix" name="dob" id="dob" value="" required="" />
+                                                    <input type="date" class="form-control fas fa-calendar input-prefix" name="registered_date" id="registered_date" value="" required="" />
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
@@ -230,14 +364,13 @@ if ($user->isLoggedIn()) {
                                                     <label>Comments / Remarks / Notes
                                                         :
                                                     </label>
-                                                    <textarea name="location" id="location" cols="40%" rows="3" value="" required></textarea>
+                                                    <textarea name="comments" id="comments" cols="40%" rows="3" value="" required></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer justify-content-between">
                                             <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
-                                            <input type="hidden" name="id" value="<?= $staff['id'] ?>">
-                                            <input type="submit" name="Register" value="Submit" class="btn btn-success btn-clean">
+                                            <input type="submit" name="register" value="Register Client" class="btn btn-success btn-clean">
                                         </div>
                                     </form>
                                 </div>
