@@ -1,3 +1,23 @@
+<?php
+// require_once 'php/core/init.php';
+// $user = new User();
+// $override = new OverideData();
+// $email = new Email();
+// $random = new Random();
+// $validate = new validate();
+// $successMessage = null;
+// $pageError = null;
+// $errorMessage = null;
+// if ($user->isLoggedIn()) {
+//     if (Input::exists('post')) {
+       
+//     }
+// } else {
+//     Redirect::to('index.php');
+// }
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'header.php'; ?>

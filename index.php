@@ -1,3 +1,36 @@
+<?php
+require_once 'php/core/init.php';
+$user = new User();
+$override = new OverideData();
+$email = new Email();
+$random = new Random();
+
+$successMessage = null;
+$pageError = null;
+$errorMessage = null;
+$noE = 0;
+$noC = 0;
+$noD = 0;
+$users = $override->getData('user');
+if ($user->isLoggedIn()) {
+  // if (Input::exists('post')) {
+    // $validate = new validate();
+    // $data = null;
+    // $filename = null;
+    // if (Input::get('today_schedule')) {
+    //   $data = $override->getNews('visit', 'expected_date', date('Y-m-d'), 'status', 0);
+    //   $filename = 'Today Schedule Visits';
+    // }
+    // $user->exportData($data, $filename);
+  // }
+} else {
+  Redirect::to('index.php');
+}
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'header.php'; ?>
