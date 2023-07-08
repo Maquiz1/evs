@@ -13,6 +13,8 @@ $errorMessage = null;
 if (!$user->isLoggedIn()) {
   if (Input::exists('post')) {
     if (Token::check(Input::get('token'))) {
+      print_r('hi');
+
       $validate = new validate();
       $validate = $validate->check($_POST, array(
         'username' => array('required' => true),
@@ -44,7 +46,7 @@ if (!$user->isLoggedIn()) {
               } catch (Exception $e) {
               }
 
-              Redirect::to('dashboard.php');
+              Redirect::to('index1.php');
             } else {
               $usr = $override->get('user', 'username', Input::get('username'));
               if ($usr && $usr[0]['count'] < 3) {
