@@ -1,20 +1,19 @@
 <?php
-// require_once 'php/core/init.php';
-// $user = new User();
-// $override = new OverideData();
-// $email = new Email();
-// $random = new Random();
-// $validate = new validate();
-// $successMessage = null;
-// $pageError = null;
-// $errorMessage = null;
-// if ($user->isLoggedIn()) {
-//     if (Input::exists('post')) {
-       
-//     }
-// } else {
-//     Redirect::to('index.php');
-// }
+require_once 'php/core/init.php';
+$user = new User();
+$override = new OverideData();
+$email = new Email();
+$random = new Random();
+$validate = new validate();
+$successMessage = null;
+$pageError = null;
+$errorMessage = null;
+if ($user->isLoggedIn()) {
+    if (Input::exists('post')) {
+    }
+} else {
+    // Redirect::to('index.php');
+}
 ?>
 
 
@@ -82,50 +81,78 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label>Text Disabled</label>
-                                                    <input type="text" class="form-control" placeholder="Enter ..." disabled>
+                                                    <label>SENSITIZATION NUMBER:</label>
+                                                    <input type="text" class="form-control" name="sensitization_no" class="sensitization_no" pattern="\d*" minlength="3" maxlength="3" value="" required />
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label>Text Disabled</label>
-                                                    <input type="text" class="form-control" placeholder="Enter ..." disabled>
+                                                    <label>SENSITIZATION ONE:</label>
+                                                    <select id="sensitization_one" name="sensitization_one" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('yes_no_na') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label>Text Disabled</label>
-                                                    <input type="text" class="form-control" placeholder="Enter ..." disabled>
+                                                    <label>SENSITIZATION TWO:</label>
+                                                    <select id="sensitization_two" name="sensitization_two" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('yes_no_na') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-3">
                                                 <!-- text input -->
                                                 <div class="form-group">
-                                                    <label>Text</label>
-                                                    <input type="text" class="form-control" placeholder="Enter ...">
+                                                    <label>Category</label>
+                                                    <select id="client_category" name="client_category" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('client_category') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label>Text Disabled</label>
-                                                    <input type="text" class="form-control" placeholder="Enter ..." disabled>
+                                                    <label>First Name</label>
+                                                    <input type="text" name="fname" class="form-control" value="" required="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <!-- textarea -->
+                                                <div class="form-group">
+                                                    <label>Second Name</label>
+                                                    <input type="text" name="mname" class="form-control" value="" required="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label>Last Name</label>
+                                                    <input type="text" name="lname" class="form-control" value="" required="" />
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-3">
                                                 <!-- textarea -->
                                                 <div class="form-group">
-                                                    <label>Textarea</label>
-                                                    <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                                    <label>Second Name</label>
+                                                    <input type="text" name="mname" class="form-control" value="" required="" />
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label>Textarea Disabled</label>
-                                                    <textarea class="form-control" rows="3" placeholder="Enter ..." disabled></textarea>
+                                                    <label>Last Name</label>
+                                                    <input type="text" name="lname" class="form-control" value="" required="" />
                                                 </div>
                                             </div>
                                         </div>
