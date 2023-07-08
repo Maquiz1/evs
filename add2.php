@@ -68,9 +68,57 @@ if ($user->isLoggedIn()) {
                                     <form>
                                         <div class="row">
                                             <div class="col-sm-3">
+                                                <!-- text input -->
                                                 <div class="form-group">
-                                                    <label>Registered Date</label>
-                                                    <input type="text" name="fname" class="form-control" value="" required="" />
+                                                    <label>Study</label>
+                                                    <select class="form-control" id="project_id" name="project_id" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('study') as $group) { ?>
+                                                            <option value="<?= $group['name'] ?>"><?= $group['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label>SENSITIZATION NUMBER:</label>
+                                                    <input type="text" class="form-control" name="sensitization_no" class="sensitization_no" pattern="\d*" minlength="3" maxlength="3" value="" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label>SENSITIZATION ONE:</label>
+                                                    <select id="sensitization_one" name="sensitization_one" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('yes_no_na') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label>SENSITIZATION TWO:</label>
+                                                    <select id="sensitization_two" name="sensitization_two" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('yes_no_na') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Category</label>
+                                                    <select id="client_category" name="client_category" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('client_category') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
@@ -99,6 +147,17 @@ if ($user->isLoggedIn()) {
                                                 <div class="form-group">
                                                     <label>DATE OF BIRTH</label>
                                                     <input type="date" class="form-control fas fa-calendar input-prefix" name="dob" id="dob" value="" required="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label>Child attending school?:</label>
+                                                    <select id="attend_school" name="attend_school" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('yes_no_na') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
 
@@ -133,7 +192,7 @@ if ($user->isLoggedIn()) {
 
                                         <div class="row">
 
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>REGION:</label>
@@ -145,7 +204,7 @@ if ($user->isLoggedIn()) {
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>DISTRICT:</label>
@@ -159,7 +218,7 @@ if ($user->isLoggedIn()) {
                                             </div>
 
 
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>WARD:</label>
@@ -171,7 +230,7 @@ if ($user->isLoggedIn()) {
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>VILLAGE:</label>
@@ -179,7 +238,7 @@ if ($user->isLoggedIn()) {
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>Hamlet / Kitongoji:</label>
@@ -203,6 +262,19 @@ if ($user->isLoggedIn()) {
                                             </div>
 
                                             <div class="col-sm-4">
+                                                <!-- select -->
+                                                <div class="form-group">
+                                                    <label>Is the participant willing to be contacted for the next sensitization meeting?:</label>
+                                                    <select id="willing_contact" name="willing_contact" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('yes_no') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4">
                                                 <!-- textarea -->
                                                 <div class="form-group">
                                                     <label>Briefly describe participant residential location in relation to the nearest famous neighborhoods:
@@ -210,8 +282,22 @@ if ($user->isLoggedIn()) {
                                                     <textarea name="location" id="location" cols="50%" rows="3" value="" required></textarea>
                                                 </div>
                                             </div>
-
+                                        </div>
+                                        <div class="row">
                                             <div class="col-sm-4">
+                                                <!-- select -->
+                                                <div class="form-group">
+                                                    <label>Status:</label>
+                                                    <select id="status" name="status" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('status') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4 box1">
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>Reason:</label>
@@ -223,6 +309,15 @@ if ($user->isLoggedIn()) {
                                                     </select>
                                                 </div>
                                             </div>
+
+                                            <div class="col-sm-4 box2">
+                                                <!-- textarea -->
+                                                <div class="form-group">
+                                                    <label>Other reason Details:Location(SPECIFY Place of a Participant)</label>
+                                                    <textarea name="other_reason" id="other_reason" cols="50%" rows="3" value=""></textarea>
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                         <!-- input states -->
