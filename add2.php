@@ -257,21 +257,24 @@ if ($user->isLoggedIn()) {
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label>First Name</label>
-                                                    <input type="text" name="fname" class="form-control" value="" required="" />
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <!-- textarea -->
-                                                <div class="form-group">
-                                                    <label>Second Name</label>
-                                                    <input type="text" name="mname" class="form-control" value="" required="" />
+                                                    <label>SENSITIZATION ONE:</label>
+                                                    <select id="sensitization_one" name="sensitization_one" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('yes_no_na') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label>Last Name</label>
-                                                    <input type="text" name="lname" class="form-control" value="" required="" />
+                                                    <label>SENSITIZATION TWO:</label>
+                                                    <select id="sensitization_two" name="sensitization_two" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('yes_no_na') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>

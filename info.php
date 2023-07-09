@@ -142,6 +142,7 @@ $override = new OverideData();
                                                     <td>
                                                         <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=view" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> View</a></div>
                                                         <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=edit" class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Edit</a></div>
+                                                        <div class="btn-group btn-group-xs"><a href="add_sensitization.php?id=1&cid=<?= $value['id'] ?>&btn=sensitize" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Add Sensitization</a></div>
                                                     </td>
                                                 </tr>
                                             <?php

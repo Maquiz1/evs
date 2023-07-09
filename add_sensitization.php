@@ -201,12 +201,12 @@ if ($user->isLoggedIn()) {
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Register Form</h1>
+                            <h1>Sensitization Form</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                <li class="breadcrumb-item active">Register Form</li>
+                                <li class="breadcrumb-item active">Sensitization Form</li>
                             </ol>
                         </div>
                     </div>
@@ -253,269 +253,99 @@ if ($user->isLoggedIn()) {
                         <!-- left column -->
                         <div class="col-md-12">
                             <?php
-                            $client = $override->get('clients', 'id', $_GET['cid'])[0];
+                            $client = $override->get('sensitization', 'client_id', $_GET['cid'])[0];
                             ?>
 
                             <!-- general form elements disabled -->
                             <div class="card card-warning">
                                 <div class="card-header">
-                                    <h3 class="card-title">Register Clients</h3>
+                                    <h3 class="card-title">Sensitize Client</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
                                     <form id="validation" enctype="multipart/form-data" method="post" autocomplete="off">
                                         <div class="row">
-                                            <div class="col-sm-3">
-                                                <div class="form-group">
-                                                    <label>Registered Date</label>
-                                                    <input type="date" class="form-control fas fa-calendar input-prefix" name="registered_date" id="registered_date" value="<?php if ($client['registered_date']) {
-                                                                                                                                                                                print_r($client['registered_date']);
-                                                                                                                                                                            }  ?>" required="" />
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <div class="form-group">
-                                                    <label>First Name</label>
-                                                    <input type="text" name="fname" id="fname" class="form-control" value="<?php if ($client['fname']) {
-                                                                                                                                print_r($client['fname']);
-                                                                                                                            }  ?>" placeholder="Type Firstname..." onkeyup="myFunction()" required="" />
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <!-- textarea -->
-                                                <div class="form-group">
-                                                    <label>Second Name</label>
-                                                    <input type="text" name="mname" id="mname" class="form-control" value="<?php if ($client['mname']) {
-                                                                                                                                print_r($client['mname']);
-                                                                                                                            }  ?>" placeholder="Type Middlename..." onkeyup="myFunction()" required="" />
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <div class="form-group">
-                                                    <label>Last Name</label>
-                                                    <input type="text" name="lname" id="lname" class="form-control" value="<?php if ($client['lname']) {
-                                                                                                                                print_r($client['lname']);
-                                                                                                                            }  ?>" placeholder="Type Lastname..." onkeyup="myFunction()" required="" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <!-- textarea -->
-                                                <div class="form-group">
-                                                    <label>DATE OF BIRTH</label>
-                                                    <input type="date" class="form-control fas fa-calendar input-prefix" name="dob" id="dob" value="<?php if ($client['dob']) {
-                                                                                                                                                        print_r($client['dob']);
-                                                                                                                                                    }  ?>" required="" />
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-3">
-                                                <div class="form-group">
-                                                    <label>GENDER:</label>
-                                                    <?php $sex = $override->get('gender', 'id', $client['gender'])  ?>
-                                                    <select id="gender" name="gender" class="form-control" required>
-                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['gender']) {
-                                                                                                    print_r($sex[0]['name']);
-                                                                                                } else {
-                                                                                                    echo 'select';
-                                                                                                }  ?>
-                                                        </option>
-                                                        <?php foreach ($override->getData('gender') as $gender) { ?>
-                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <!-- select -->
-                                                <div class="form-group">
-                                                    <label>Marital Status:</label>
-                                                    <?php $sex = $override->get('marital_status', 'id', $client['marital'])  ?>
-                                                    <select id="marital" name="marital" class="form-control" required>
-                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['marital']) {
-                                                                                                    print_r($sex[0]['name']);
-                                                                                                } else {
-                                                                                                    echo 'select';
-                                                                                                }  ?>
-                                                        </option>
-                                                        <?php foreach ($override->getData('marital_status') as $gender) { ?>
-                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <!-- select -->
-                                                <div class="form-group">
-                                                    <label>Occupation:</label>
-                                                    <?php $sex = $override->get('occupation', 'id', $client['occupation'])  ?>
-                                                    <select id="occupation" name="occupation" class="form-control" required>
-                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['occupation']) {
-                                                                                                    print_r($sex[0]['name']);
-                                                                                                } else {
-                                                                                                    echo 'select';
-                                                                                                }  ?>
-                                                        </option>
-                                                        <?php foreach ($override->getData('occupation') as $gender) { ?>
-                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <label>Education:</label>
-                                                    <?php $sex = $override->get('education', 'id', $client['education'])  ?>
-                                                    <select id="education" name="education" class="form-control" required>
-                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['education']) {
-                                                                                                    print_r($sex[0]['name']);
-                                                                                                } else {
-                                                                                                    echo 'select';
-                                                                                                }  ?>
-                                                        </option>
-                                                        <?php foreach ($override->getData('education') as $gender) { ?>
-                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <!-- select -->
-                                                <div class="form-group">
-                                                    <label class="col-form-label" for="inputSuccess">
-                                                        <!-- <label class="col-form-label" for="inputSuccess"><i class="fas fa-check"></i><i class="far fa-bell"><i class="far fa-times-circle"></i> -->
-                                                        <!-- Phone :</label> <input type="text" name="phone1" class="form-control is-valid is-invalid is-warning" id="inputSuccess" pattern="\d*" minlength="10" maxlength="10" value="" required /> -->
-                                                        Phone :</label> <input type="text" name="phone1" class="form-control" id="inputSuccess" pattern="\d*" minlength="10" maxlength="10" value="<?php if ($client['phone1']) {
-                                                                                                                                                                                                        print_r($client['phone1']);
-                                                                                                                                                                                                    }  ?>" required />
-
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <!-- select -->
-                                                <div class="form-group">
-                                                    <label>Phone2:</label>
-                                                    <input type="text" name="phone2" class="form-control" pattern="\d*" minlength="10" maxlength="10" value="<?php if ($client['phone2']) {
-                                                                                                                                                                    print_r($client['phone2']);
-                                                                                                                                                                }  ?>" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-
                                             <div class="col-sm-2">
-                                                <!-- select -->
                                                 <div class="form-group">
-                                                    <label>REGION:</label>
-                                                    <?php $sex = $override->get('region', 'id', $client['region'])  ?>
-                                                    <select id="region" name="region" class="form-control" required>
-                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['region']) {
-                                                                                                    print_r($sex[0]['name']);
-                                                                                                } else {
-                                                                                                    echo 'select';
-                                                                                                }  ?>
-                                                        </option>
-                                                        <?php foreach ($override->getData('region') as $gender) { ?>
-                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
+                                                    <label>Sensitization Date</label>
+                                                    <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="<?php if ($client['sensitization_date']) {
+                                                                                                                                                                                        print_r($client['sensitization_date']);
+                                                                                                                                                                                    }  ?>" required="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label>Study</label>
+                                                    <select class="form-control" id="project_name" name="project_name" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('study') as $group) { ?>
+                                                            <option value="<?= $group['name'] ?>"><?= $group['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Category</label>
+                                                    <select id="client_category" name="client_category" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('client_category') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label>SENSITIZATION ONE:</label>
+                                                    <select id="sensitization_one" name="sensitization_one" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('yes_no_na') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-sm-2">
-                                                <!-- select -->
                                                 <div class="form-group">
-                                                    <label>DISTRICT:</label>
-                                                    <?php $sex = $override->get('district', 'id', $client['district'])  ?>
-                                                    <select id="district" name="district" class="form-control" required>
-                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['district']) {
-                                                                                                    print_r($sex[0]['name']);
-                                                                                                } else {
-                                                                                                    echo 'select';
-                                                                                                }  ?>
-                                                        </option>
-                                                        <?php foreach ($override->getData('district') as $gender) { ?>
-                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
+                                                    <label>SENSITIZATION TWO:</label>
+                                                    <select id="sensitization_two" name="sensitization_two" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('yes_no_na') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="col-sm-2">
-                                                <!-- select -->
-                                                <div class="form-group">
-                                                    <label>WARD:</label>
-                                                    <?php $sex = $override->get('ward', 'id', $client['district'])  ?>
-                                                    <select id="ward" name="ward" class="form-control" required>
-                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['ward']) {
-                                                                                                    print_r($sex[0]['name']);
-                                                                                                } else {
-                                                                                                    echo 'select';
-                                                                                                }  ?>
-                                                        </option>
-                                                        <?php foreach ($override->getData('ward') as $gender) { ?>
-                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <!-- select -->
-                                                <div class="form-group">
-                                                    <label>VILLAGE:</label>
-                                                    <input type="text" name="village" id="village" class="form-control" value="<?php if ($client['village']) {
-                                                                                                                                    print_r($client['village']);
-                                                                                                                                }  ?>" placeholder="Type Village..." onkeyup="myFunction()" />
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-3">
-                                                <!-- select -->
-                                                <div class="form-group">
-                                                    <label>Hamlet / Kitongoji:</label>
-                                                    <input type="text" name="hamlet" id="hamlet" class="form-control" value="<?php if ($client['hamlet']) {
-                                                                                                                                    print_r($client['hamlet']);
-                                                                                                                                }  ?>" placeholder="Type Hamlet..." onkeyup="myFunction()" />
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="row">
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label>For Bagamoyo residents, please specify the intended duration of stay in Bagamoyo:</label>
-                                                    <?php $sex = $override->get('duration', 'id', $client['duration'])  ?>
-                                                    <select id="duration" name="duration" class="form-control" required>
-                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['duration']) {
-                                                                                                    print_r($sex[0]['name']);
-                                                                                                } else {
-                                                                                                    echo 'select';
-                                                                                                }  ?>
-                                                        </option>
-                                                        <?php foreach ($override->getData('duration') as $gender) { ?>
-                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
+                                                    <label>Child attending school?:</label>
+                                                    <select id="attend_school" name="attend_school" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('yes_no_na') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <!-- select -->
+                                                <div class="form-group">
+                                                    <label>Is the participant willing to be contacted for the next sensitization meeting?:</label>
+                                                    <select id="willing_contact" name="willing_contact" class="form-control" value="" required>
+                                                        <option value="">Select</option>
+                                                        <?php foreach ($override->getData('yes_no') as $lt) { ?>
+                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <label>Briefly describe participant residential location in relation to the nearest famous neighborhoods:
-                                                    </label>
-                                                    <textarea name="location" id="location" cols="40%" rows="3" value="<?php if ($client['location']) {
-                                                                                                                            print_r($client['location']);
-                                                                                                                        }  ?>" required><?php if ($client['location']) {
-                                                                                                                                            print_r($client['location']);
-                                                                                                                                        }  ?></textarea>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label>Comments / Remarks / Notes
                                                         :
@@ -538,10 +368,10 @@ if ($user->isLoggedIn()) {
                                                                                                 echo 'add';
                                                                                             }; ?>">
                                             <?php if ($_GET['btn'] != 'view') { ?>
-                                                <input type="submit" name="register" value="<?php if ($_GET['btn'] == 'edit') {
-                                                                                                echo 'Update Client Info';
+                                                <input type="submit" name="register" value="<?php if ($_GET['btn'] == 'sensitize') {
+                                                                                                echo 'Update Client Sensitization Info';
                                                                                             } else {
-                                                                                                echo 'Register Client';
+                                                                                                echo 'Sensitize Client';
                                                                                             } ?>" class="btn btn-success btn-clean">
                                             <?php } ?>
                                         </div>
