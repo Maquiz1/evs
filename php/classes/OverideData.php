@@ -41,6 +41,13 @@ class OverideData
         return $num;
     }
 
+    public function getNo3($table, $field, $value, $field1, $value1, $field2, $value2, $field3, $value3, $field4, $value4, $field5, $value5, $field6, $value6)
+    {
+        $query = $this->_pdo->query("SELECT * FROM $table WHERE $field = '$value' AND $field1 = '$value1' AND $field2 = '$value2' AND $field3 = '$value3' AND $field4 = '$value4' AND $field5 = '$value5' AND $field6 = '$value6'");
+        $num = $query->rowCount();
+        return $num;
+    }
+
     public function getCount($table, $field, $value)
     {
         $query = $this->_pdo->query("SELECT * FROM $table WHERE $field = '$value'");
