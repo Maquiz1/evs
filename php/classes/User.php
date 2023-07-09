@@ -196,8 +196,8 @@ class User
         if ($this->_override->getCount('visit', 'client_id', $client_id) == 1) {
             $sq = $seq;
             foreach ($this->_override->getData('schedule') as $schedule) {
-                if ($sq < 7) {
-                    $sq += 7;
+                if ($sq < 29) {
+                    $sq += 28;
                     $visit_name = 'Day ' . $sq;
                     // $nxt_visit = date('Y-m-d', strtotime($nxt_visit . ' + 1 days'));
                     $last_visit_date = $this->_override->getlastRow('visit', 'client_id', $client_id, 'id')[0]['visit_date'];
@@ -212,8 +212,8 @@ class User
                         'seq_no' => $sq,
                         'status' => 0,
                     ));
-                } else if ($sq >= 7 && $sq < 14) {
-                    $sq += 7;
+                } else if ($sq >= 29 && $sq < 57) {
+                    $sq += 28;
                     $visit_name = 'Day ' . $sq;
                     $last_visit_date = $this->_override->getlastRow('visit', 'client_id', $client_id, 'id')[0]['expected_date'];
                     $nxt_visit = date('Y-m-d', strtotime($last_visit_date . ' + ' . $schedule['days'] . ' days'));
@@ -227,8 +227,8 @@ class User
                         'seq_no' => $sq,
                         'status' => 0,
                     ));
-                } else if ($sq >= 14 && $sq < 30) {
-                    $sq += 16;
+                } else if ($sq >= 57 && $sq < 215) {
+                    $sq += 158;
                     $visit_name = 'Day ' . $sq;
                     $last_visit_date = $this->_override->getlastRow('visit', 'client_id', $client_id, 'id')[0]['expected_date'];
                     $nxt_visit = date('Y-m-d', strtotime($last_visit_date . ' + ' . $schedule['days'] . ' days'));
@@ -242,39 +242,9 @@ class User
                         'seq_no' => $sq,
                         'status' => 0,
                     ));
-                } else if ($sq >= 30 && $sq < 120) {
-                    $sq += 30;
-                    $visit_name = 'Day ' . $sq;
-                    $last_visit_date = $this->_override->getlastRow('visit', 'client_id', $client_id, 'id')[0]['expected_date'];
-                    $nxt_visit = date('Y-m-d', strtotime($last_visit_date . ' + ' . $schedule['days'] . ' days'));
-                    $this->createRecord('visit', array(
-                        'visit_name' => $visit_name,
-                        'visit_code' => $schedule['visit'],
-                        'study_id' => $study_id,
-                        'expected_date' => $nxt_visit,
-                        'visit_window' => $schedule['window'],
-                        'client_id' => $client_id,
-                        'seq_no' => $sq,
-                        'status' => 0,
-                    ));
-                } else if ($sq >= 120 && $sq < 121)  {
-                    $sq += 1;
-                    $visit_name = 'STUDY TERMINATION';
-                    $last_visit_date = $this->_override->getlastRow('visit', 'client_id', $client_id, 'id')[0]['expected_date'];
-                    $nxt_visit = date('Y-m-d', strtotime($last_visit_date . ' + ' . $schedule['days'] . ' days'));
-                    $this->createRecord('visit', array(
-                        'visit_name' => $visit_name,
-                        'visit_code' => $schedule['visit'],
-                        'study_id' => $study_id,
-                        'expected_date' => $nxt_visit,
-                        'visit_window' => $schedule['window'],
-                        'client_id' => $client_id,
-                        'seq_no' => $sq,
-                        'status' => 0,
-                    ));
-                } else if ($sq >= 121){
-                    $visit_name = 'ADVERSE EVENT';
-                    $sq = 120;
+                } else if ($sq >= 215){
+                    $visit_name = 'END STUDY';
+                    $sq = 215;
                     $last_visit_date = $this->_override->getlastRow('visit', 'client_id', $client_id, 'id')[0]['expected_date'];
                     $nxt_visit = date('Y-m-d', strtotime($last_visit_date . ' + ' . $schedule['days'] . ' days'));
                     $this->createRecord('visit', array(

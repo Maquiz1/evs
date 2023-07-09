@@ -31,8 +31,8 @@ if ($user->isLoggedIn()) {
                 if (!$override->get('visit', 'client_id', $_GET['cid'])) {
                     $user->createRecord('visit', array(
                         'project_name' => Input::get('project_name'),
-                        'visit_name' => 'Day 0',
-                        'visit_code' => 'D0',
+                        'visit_name' => 'Vaccination visit 1',
+                        'visit_code' => 'D1',
                         'study_id' => $study_id,
                         'expected_date' => Input::get('enrollment_date'),
                         'visit_date' => '',

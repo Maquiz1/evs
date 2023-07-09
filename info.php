@@ -126,19 +126,19 @@ $override = new OverideData();
                                                         <td>Female</td>
                                                     <?php } ?>
                                                     <td><?= $value['dob']; ?></td>
-                                                    <?php if ($value['gender'] == 1) { ?>
-                                                        <td>Male</td>
-                                                    <?php } elseif ($value['gender'] == 2) { ?>
-                                                        <td>Female</td>
-                                                    <?php } elseif ($value['gender'] == 2) { ?>
-                                                        <td>Female</td>
-                                                    <?php } elseif ($value['gender'] == 2) { ?>
-                                                        <td>Female</td>
-                                                    <?php } elseif ($value['gender'] == 2) { ?>
-                                                        <td>Female</td>
-                                                    <?php } elseif ($value['gender'] == 2) { ?>
-                                                        <td>Female</td>
+
+                                                    <?php if ($_GET['status'] == 3) { ?>
+                                                        <?php if ($value['eligible'] == 1) { ?>
+                                                            <td>
+                                                                <div class="btn btn-default btn-clean"><span class="icon-eye-open"></span> Eligible</div>
+                                                            </td>
+                                                        <?php } else { ?>
+                                                            <td>
+                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Eligible</div>
+                                                            </td>
+                                                        <?php } ?>
                                                     <?php } ?>
+
                                                     <td>
                                                         <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=view" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> View</a></div>
                                                         <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=edit" class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Edit</a></div>
@@ -176,11 +176,11 @@ $override = new OverideData();
 
                                                             if ($value['eligible'] == 1) {
                                                         ?>
-                                                                <div class="btn-group btn-group-xs"><a href="add_enrollment.php?id=1&cid=<?= $value['id'] ?>&btn=update_enrollment" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Enrollment</a></div>
+                                                                <!-- <div class="btn-group btn-group-xs"><a href="add_enrollment.php?id=1&cid=<?= $value['id'] ?>&btn=update_enrollment" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Enrollment</a></div> -->
                                                             <?php
                                                             } else {
                                                             ?>
-                                                                <div class="btn-group btn-group-xs"><a href="add_enrollment.php?id=1&cid=<?= $value['id'] ?>&btn=add_enrollment" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Enrollment</a></div>
+                                                                <!-- <div class="btn-group btn-group-xs"><a href="add_enrollment.php?id=1&cid=<?= $value['id'] ?>&btn=add_enrollment" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Enrollment</a></div> -->
                                                         <?php
                                                             }
                                                         }

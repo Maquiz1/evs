@@ -164,12 +164,10 @@ if ($user->isLoggedIn()) {
                                                 } else {
                                                     $btnL = 'Add';
                                                 }
-                                                if ($visit['visit_code'] == 'D0') {
+                                                if ($visit['visit_code'] == 'D1') {
                                                     $v_typ = 'Enrollment';
                                                 } elseif ($visit['visit_code'] == 'END') {
                                                     $v_typ = 'END STUDY';
-                                                } elseif ($visit['visit_code'] == 'AE') {
-                                                    $v_typ = 'AE';
                                                 } else {
                                                     $v_typ = 'Follow Up';
                                                 }
