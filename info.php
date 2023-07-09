@@ -127,10 +127,34 @@ $override = new OverideData();
                                                     <?php } ?>
                                                     <td><?= $value['dob']; ?></td>
 
+                                                    <?php if ($_GET['status'] == 1) { ?>
+                                                        <?php if ($value['sensitization'] == 1) { ?>
+                                                            <td>
+                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Sensitized</div>
+                                                            </td>
+                                                        <?php } else { ?>
+                                                            <td>
+                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Sensitized</div>
+                                                            </td>
+                                                        <?php } ?>
+                                                    <?php } ?>
+
+                                                    <?php if ($_GET['status'] == 2) { ?>
+                                                        <?php if ($value['screened'] == 1) { ?>
+                                                            <td>
+                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Screened</div>
+                                                            </td>
+                                                        <?php } else { ?>
+                                                            <td>
+                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Screened</div>
+                                                            </td>
+                                                        <?php } ?>
+                                                    <?php } ?>
+
                                                     <?php if ($_GET['status'] == 3) { ?>
                                                         <?php if ($value['eligible'] == 1) { ?>
                                                             <td>
-                                                                <div class="btn btn-default btn-clean"><span class="icon-eye-open"></span> Eligible</div>
+                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Eligible</div>
                                                             </td>
                                                         <?php } else { ?>
                                                             <td>
@@ -176,11 +200,11 @@ $override = new OverideData();
 
                                                             if ($value['eligible'] == 1) {
                                                         ?>
-                                                                <!-- <div class="btn-group btn-group-xs"><a href="add_enrollment.php?id=1&cid=<?= $value['id'] ?>&btn=update_enrollment" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Enrollment</a></div> -->
+                                                                <div class="btn-group btn-group-xs"><a href="add_screening.php?id=1&cid=<?= $value['id'] ?>&btn=update_screening" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Screening</a></div>
                                                             <?php
                                                             } else {
                                                             ?>
-                                                                <!-- <div class="btn-group btn-group-xs"><a href="add_enrollment.php?id=1&cid=<?= $value['id'] ?>&btn=add_enrollment" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Enrollment</a></div> -->
+                                                                <div class="btn-group btn-group-xs"><a href="add_screening.php?id=1&cid=<?= $value['id'] ?>&btn=add_screening" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Screening</a></div>
                                                         <?php
                                                             }
                                                         }

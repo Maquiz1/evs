@@ -84,75 +84,101 @@ if (!$user->isLoggedIn()) {
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <title> Login - eVS </title>
-  <?php include 'header.php' ?>
-</head>
+<?php include 'header.php' ?>
 
-<body>
-  <h1>Welcome. Please Sign In</h1>
-  <div class="loginBlock" id="login" style="display: block;">
-    <div class="dr"><span></span></div>
-    <?php if ($errorMessage) { ?>
-      <div class="alert alert-danger">
-        <h4>Error!</h4>
-        <?= $errorMessage ?>
-      </div>
-    <?php } elseif ($pageError) { ?>
-      <div class="alert alert-danger">
-        <h4>Error!</h4>
-        <?php foreach ($pageError as $error) {
-          echo $error . ' , ';
-        } ?>
-      </div>
-    <?php } elseif ($successMessage) { ?>
-      <div class="alert alert-success">
-        <h4>Success!</h4>
-        <?= $successMessage ?>
-      </div>
-    <?php } ?>
+<?php if ($errorMessage) { ?>
+  <div class="alert alert-danger">
+    <h4>Error!</h4>
+    <?= $errorMessage ?>
+  </div>
+<?php } elseif ($pageError) { ?>
+  <div class="alert alert-danger">
+    <h4>Error!</h4>
+    <?php foreach ($pageError as $error) {
+      echo $error . ' , ';
+    } ?>
+  </div>
+<?php } elseif ($successMessage) { ?>
+  <div class="alert alert-success">
+    <h4>Success!</h4>
+    <?= $successMessage ?>
+  </div>
+<?php } ?>
 
-    <!-- Main content -->
-    <div class="loginForm">
-      <section class="content">
-        <div class="container-fluid">
-          <div class="row">
-            <!-- left column -->
-            <div class="col-md-6">
-              <!-- general form elements -->
-              <div class="card card-primary">
-                <div class="card-header">
-                  <h3 class="card-title">Volunterr Database</h3>
-                </div>
-                <!-- /.card-header -->
-                <!-- form start -->
-                <form class="form-horizontal" method="post" id="validation">
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">User Name</label>
-                      <input type="text" name="username" id="username" placeholder="Username" class="form-control validate[required]" />
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputPassword1">Password</label>
-                      <input type="password" name="password" id="password" placeholder="Password" class="form-control validate[required]" />
-                    </div>
-                  </div>
-                  <!-- /.card-body -->
+<body class="hold-transition login-page">
+  <div class="login-box">
+    <div class="login-logo">
+      <a href="#"><b>Volunteer</b>Database</a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="card">
+      <div class="card-body login-card-body">
+        <p class="login-box-msg">Sign in to start your session</p>
 
-                  <div class="card-footer">
-                    <input type="hidden" name="token" value="<?= Token::generate(); ?>">
-                    <input type="submit" value="Sign in" class="btn btn-default btn-block">
-                  </div>
-                </form>
+        <form class="form-horizontal" method="post" id="validation">
+          <div class="input-group mb-3">
+            <input type="text" name="username" id="username" placeholder="Username" class="form-control validate[required]" />
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+          <div class="input-group mb-3">
+            <input type="password" name="password" id="password" placeholder="Password" class="form-control validate[required]" />
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <!-- <div class="col-8">
+              <div class="icheck-primary">
+                <input type="checkbox" id="remember">
+                <label for="remember">
+                  Remember Me
+                </label>
+              </div>
+            </div> -->
+            <!-- /.col -->
+            <div class="col-4">
+              <input type="hidden" name="token" value="<?= Token::generate(); ?>">
+              <input type="submit" value="Sign in" class="btn btn-primary btn-block">
+            </div>
+            <!-- /.col -->
+          </div>
+        </form>
+
+        <!-- <div class="social-auth-links text-center mb-3">
+          <p>- OR -</p>
+          <a href="#" class="btn btn-block btn-primary">
+            <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+          </a>
+          <a href="#" class="btn btn-block btn-danger">
+            <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+          </a>
+        </div> -->
+        <!-- /.social-auth-links -->
+
+        <!-- <p class="mb-1">
+          <a href="forgot-password.html">I forgot my password</a>
+        </p>
+        <p class="mb-0">
+          <a href="register.html" class="text-center">Register a new membership</a>
+        </p> -->
+      </div>
+      <!-- /.login-card-body -->
     </div>
+  </div>
+  <!-- /.login-box -->
 
-
-    <!-- /.card -->
+  <!-- jQuery -->
+  <script src="../../plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="../../dist/js/adminlte.min.js"></script>
 </body>
 
 </html>
