@@ -64,7 +64,7 @@ if ($user->isLoggedIn()) {
         <div class="container-fluid">
           <!-- Small boxes (Stat box) -->
           <div class="row">
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-2 col-6">
               <!-- small box -->
               <div class="small-box bg-info">
                 <div class="inner">
@@ -78,14 +78,29 @@ if ($user->isLoggedIn()) {
                 <a href="info.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
+            <div class="col-lg-2 col-6">
+              <!-- small box -->
+              <div class="small-box bg-warning">
+                <div class="inner">
+                  <h3><?= $override->getNo('clients'); ?></h3>
+
+                  <p>On Sensitization</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+                <a href="info.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+
             <!-- ./col -->
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-2 col-6">
               <!-- small box -->
               <div class="small-box bg-success">
                 <div class="inner">
-                  <h3>53<sup style="font-size: 20px">%</sup></h3>
+                  <h3><?= $override->getNo('clients'); ?><sup style="font-size: 20px">%</sup></h3>
 
-                  <p>Screened</p>
+                  <p>On Screening</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
@@ -93,12 +108,26 @@ if ($user->isLoggedIn()) {
                 <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-2 col-6">
               <!-- small box -->
-              <div class="small-box bg-warning">
+              <div class="small-box bg-info">
                 <div class="inner">
-                  <h3>44</h3>
+                  <h3><?= $override->getNo('clients'); ?></h3>
+
+                  <p>Eligible</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+                <a href="info.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-2 col-6">
+              <!-- small box -->
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3><?= $override->getNo('clients'); ?></h3>
 
                   <p>Enrolled</p>
                 </div>
@@ -109,11 +138,11 @@ if ($user->isLoggedIn()) {
               </div>
             </div>
             <!-- ./col -->
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-2 col-6">
               <!-- small box -->
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3>65</h3>
+                  <h3><?= $override->getNo('clients'); ?></h3>
 
                   <p>Terminated</p>
                 </div>

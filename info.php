@@ -2,19 +2,19 @@
 require_once 'php/core/init.php';
 $user = new User();
 $override = new OverideData();
-$pageError = null;
-$successMessage = null;
-$errorM = false;
-$errorMessage = null;
-$t_crf = 0;
-$p_crf = 0;
-$w_crf = 0;
-$s_name = null;
-$c_name = null;
-$site = null;
-$country = null;
-$study_crf = null;
-$data_limit = 10000;
+// $pageError = null;
+// $successMessage = null;
+// $errorM = false;
+// $errorMessage = null;
+// $t_crf = 0;
+// $p_crf = 0;
+// $w_crf = 0;
+// $s_name = null;
+// $c_name = null;
+// $site = null;
+// $country = null;
+// $study_crf = null;
+// $data_limit = 10000;
 
 ?>
 
@@ -40,6 +40,36 @@ $data_limit = 10000;
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <div class="container-fluid">
+                    <!-- <div class="row mb-2">
+                        <div class="col-sm-12">
+                            <h1>
+                                <?php if ($errorMessage) { ?>
+                                    <div class="block">
+                                        <div class="alert alert-danger">
+                                            <b>Error!</b> <?= $errorMessage ?>
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                        </div>
+                                    </div>
+                                <?php } elseif ($pageError) { ?>
+                                    <div class="block col-md-12">
+                                        <div class="alert alert-danger">
+                                            <b>Error!</b> <?php foreach ($pageError as $error) {
+                                                                echo $error . ' , ';
+                                                            } ?>
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                        </div>
+                                    </div>
+                                <?php } elseif ($successMessage) { ?>
+                                    <div class="block">
+                                        <div class="alert alert-success">
+                                            <b>Success!</b> <?= $successMessage ?>
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                            </h1>
+                        </div>
+                    </div> -->
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1>DataTables</h1>
@@ -110,6 +140,7 @@ $data_limit = 10000;
                                                         <td>Female</td>
                                                     <?php } ?>
                                                     <td>
+                                                        <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=view" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> View</a></div>
                                                         <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=edit" class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Edit</a></div>
                                                     </td>
                                                 </tr>

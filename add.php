@@ -6,15 +6,15 @@ $pageError = null;
 $successMessage = null;
 $errorM = false;
 $errorMessage = null;
-$t_crf = 0;
-$p_crf = 0;
-$w_crf = 0;
-$s_name = null;
-$c_name = null;
-$site = null;
-$country = null;
-$study_crf = null;
-$data_limit = 10000;
+// $t_crf = 0;
+// $p_crf = 0;
+// $w_crf = 0;
+// $s_name = null;
+// $c_name = null;
+// $site = null;
+// $country = null;
+// $study_crf = null;
+// $data_limit = 10000;
 // $favicon = $override->get('images', 'cat', 1)[0];
 // $logo = $override->get('images', 'cat', 2)[0];
 
@@ -83,9 +83,41 @@ if ($user->isLoggedIn()) {
                 $rvwr_date = date('Y-m-d', strtotime(Input::get('reviewer_date')));
                 $death_date = date('Y-m-d', strtotime(Input::get('death_date')));
 
-                $clients = $override->getClient('clients', 'fname', Input::get('fname'), 'mname', Input::get('mname'), 'lname', Input::get('lname'));
-                if (Input::get('btn_add_edit') == 'add') {
-                    if ($clients) {
+                if ($_GET['btn'] == 'edit') {
+                    try {
+                        $user->updateRecord('clients', array(
+                            'registered_date' => Input::get('registered_date'),
+                            'fname' => Input::get('fname'),
+                            'mname' => Input::get('mname'),
+                            'lname' => Input::get('lname'),
+                            'dob' => $dob_date,
+                            'gender' => Input::get('gender'),
+                            'marital' => Input::get('marital'),
+                            'education' => Input::get('education'),
+                            'occupation' => Input::get('occupation'),
+                            'phone1' => Input::get('phone1'),
+                            'phone2' => Input::get('phone2'),
+                            'region' => Input::get('region'),
+                            'district' => Input::get('district'),
+                            'ward' => Input::get('ward'),
+                            'village' => Input::get('village'),
+                            'hamlet' => Input::get('hamlet'),
+                            'duration' => Input::get('duration'),
+                            'location' => Input::get('location'),
+                            'staff_id' => $user->data()->id,
+                            'site_id' => $user->data()->site_id,
+                            'status' => 1,
+                            'comments' => Input::get('comments'),
+                        ), Input::get('cid'));
+                        $successMessage = 'Client Updated Successful';
+                        // Redirect::to('info.php');
+                    } catch (Exception $e) {
+                        die($e->getMessage());
+                    }
+                } else {
+                    $clients = $override->getClient('clients', 'fname', Input::get('fname'), 'mname', Input::get('mname'), 'lname', Input::get('lname'));
+
+                    if ($clients > 0) {
                         $errorMessage = Input::get('fname') . ' - ' . Input::get('mname') . ' - ' . Input::get('lname') . ' Already Registered!';
                     } else {
                         try {
@@ -109,44 +141,16 @@ if ($user->isLoggedIn()) {
                                 'duration' => Input::get('duration'),
                                 'location' => Input::get('location'),
                                 'staff_id' => $user->data()->id,
+                                'site_id' => $user->data()->site_id,
                                 'status' => 1,
-                                'status' => Input::get('status'),
                                 'comments' => Input::get('comments'),
                             ));
                             $successMessage = 'Client Registered Successful';
+
+                            // Redirect::to('info.php');
                         } catch (Exception $e) {
                             die($e->getMessage());
                         }
-                    }
-                } elseif (Input::get('btn_add_edit') == 'edit') {
-                    try {
-                        $user->updateRecord('clients', array(
-                            'registered_date' => Input::get('registered_date'),
-                            'fname' => Input::get('fname'),
-                            'mname' => Input::get('mname'),
-                            'lname' => Input::get('lname'),
-                            'dob' => $dob_date,
-                            'gender' => Input::get('gender'),
-                            'marital' => Input::get('marital'),
-                            'education' => Input::get('education'),
-                            'occupation' => Input::get('occupation'),
-                            'phone1' => Input::get('phone1'),
-                            'phone2' => Input::get('phone2'),
-                            'region' => Input::get('region'),
-                            'district' => Input::get('district'),
-                            'ward' => Input::get('ward'),
-                            'village' => Input::get('village'),
-                            'hamlet' => Input::get('hamlet'),
-                            'duration' => Input::get('duration'),
-                            'location' => Input::get('location'),
-                            'staff_id' => $user->data()->id,
-                            'status' => 1,
-                            'status' => Input::get('status'),
-                            'comments' => Input::get('comments'),
-                        ), Input::get('cid'));
-                        $successMessage = 'Client Updated Successful';
-                    } catch (Exception $e) {
-                        die($e->getMessage());
                     }
                 }
             } else {
@@ -197,6 +201,39 @@ if ($user->isLoggedIn()) {
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
+                    <!-- <div class="container-fluid"> -->
+                        <div class="row mb-2">
+                            <div class="col-sm-12">
+                                <h1>
+                                    <?php if ($errorMessage) { ?>
+                                        <div class="block">
+                                            <div class="alert alert-danger">
+                                                <b>Error!</b> <?= $errorMessage ?>
+                                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            </div>
+                                        </div>
+                                    <?php } elseif ($pageError) { ?>
+                                        <div class="block col-md-12">
+                                            <div class="alert alert-danger">
+                                                <b>Error!</b> <?php foreach ($pageError as $error) {
+                                                                    echo $error . ' , ';
+                                                                } ?>
+                                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            </div>
+                                        </div>
+                                    <?php } elseif ($successMessage) { ?>
+                                        <div class="block">
+                                            <div class="alert alert-success">
+                                                <b>Success!</b> <?= $successMessage ?>
+                                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </h1>
+                            </div>
+                        </div>
+                    <!-- </div> -->
+                    <!-- /.container-fluid -->
                     <div class="row">
                         <!-- left column -->
                         <div class="col-md-12">
@@ -211,7 +248,7 @@ if ($user->isLoggedIn()) {
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <form method="post" id="validation">
+                                    <form id="validation" enctype="multipart/form-data" method="post" autocomplete="off">
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <div class="form-group">
@@ -224,26 +261,26 @@ if ($user->isLoggedIn()) {
                                             <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label>First Name</label>
-                                                    <input type="text" name="fname" class="form-control" value="<?php if ($client['fname']) {
-                                                                                                                    print_r($client['fname']);
-                                                                                                                }  ?>" required="" />
+                                                    <input type="text" name="fname" id="fname" class="form-control" value="<?php if ($client['fname']) {
+                                                                                                                                print_r($client['fname']);
+                                                                                                                            }  ?>" placeholder="Type Firstname..." onkeyup="myFunction()" required="" />
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <!-- textarea -->
                                                 <div class="form-group">
                                                     <label>Second Name</label>
-                                                    <input type="text" name="mname" class="form-control" value="<?php if ($client['mname']) {
-                                                                                                                    print_r($client['mname']);
-                                                                                                                }  ?>" required="" />
+                                                    <input type="text" name="mname" id="mname" class="form-control" value="<?php if ($client['mname']) {
+                                                                                                                                print_r($client['mname']);
+                                                                                                                            }  ?>" placeholder="Type Middlename..." onkeyup="myFunction()" required="" />
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label>Last Name</label>
-                                                    <input type="text" name="lname" class="form-control" value="<?php if ($client['lname']) {
-                                                                                                                    print_r($client['lname']);
-                                                                                                                }  ?>" required="" />
+                                                    <input type="text" name="lname" id="lname" class="form-control" value="<?php if ($client['lname']) {
+                                                                                                                                print_r($client['lname']);
+                                                                                                                            }  ?>" placeholder="Type Lastname..." onkeyup="myFunction()" required="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -262,12 +299,12 @@ if ($user->isLoggedIn()) {
                                                 <div class="form-group">
                                                     <label>GENDER:</label>
                                                     <?php $sex = $override->get('gender', 'id', $client['gender'])  ?>
-                                                    <select id="gender" name="gender" class="form-control" value="" required>
+                                                    <select id="gender" name="gender" class="form-control" required>
                                                         <option value="<?= $sex[0]['id'] ?>"><?php if ($client['gender']) {
-                                                                                                        print_r($sex[0]['name']);
-                                                                                                    } else {
-                                                                                                        echo 'select';
-                                                                                                    }  ?>
+                                                                                                    print_r($sex[0]['name']);
+                                                                                                } else {
+                                                                                                    echo 'select';
+                                                                                                }  ?>
                                                         </option>
                                                         <?php foreach ($override->getData('gender') as $gender) { ?>
                                                             <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
@@ -279,15 +316,16 @@ if ($user->isLoggedIn()) {
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>Marital Status:</label>
-                                                    <select id="marital" name="marital" class="form-control" value="" required>
-                                                        <option value="">
-                                                            <?php if ($client['gender']) {
-                                                                print_r($client['gender']);
-                                                            } else {
-                                                                echo 'select';
-                                                            }  ?> </option>
-                                                        <?php foreach ($override->getData('marital_status') as $lt) { ?>
-                                                            <option value="<?= $lt['id'] ?>"><?= $lt['name'] ?></option>
+                                                    <?php $sex = $override->get('marital_status', 'id', $client['marital'])  ?>
+                                                    <select id="marital" name="marital" class="form-control" required>
+                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['marital']) {
+                                                                                                    print_r($sex[0]['name']);
+                                                                                                } else {
+                                                                                                    echo 'select';
+                                                                                                }  ?>
+                                                        </option>
+                                                        <?php foreach ($override->getData('marital_status') as $gender) { ?>
+                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -296,15 +334,16 @@ if ($user->isLoggedIn()) {
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>Occupation:</label>
-                                                    <select id="occupation" name="occupation" class="form-control" value="" required>
-                                                        <option value="">
-                                                            <?php if ($client['gender']) {
-                                                                print_r($client['gender']);
-                                                            } else {
-                                                                echo 'select';
-                                                            }  ?> </option>
-                                                        <?php foreach ($override->getData('occupation') as $lt) { ?>
-                                                            <option value="<?= $lt['id'] ?>"><?= $lt['name'] ?></option>
+                                                    <?php $sex = $override->get('occupation', 'id', $client['occupation'])  ?>
+                                                    <select id="occupation" name="occupation" class="form-control" required>
+                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['occupation']) {
+                                                                                                    print_r($sex[0]['name']);
+                                                                                                } else {
+                                                                                                    echo 'select';
+                                                                                                }  ?>
+                                                        </option>
+                                                        <?php foreach ($override->getData('occupation') as $gender) { ?>
+                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -314,14 +353,14 @@ if ($user->isLoggedIn()) {
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Education:</label>
-
-                                                    <select id="education" name="education" class="form-control" value="" required>
-                                                        <option value="">
-                                                            <?php if ($client['gender']) {
-                                                                print_r($client['gender']);
-                                                            } else {
-                                                                echo 'select';
-                                                            }  ?> </option>
+                                                    <?php $sex = $override->get('education', 'id', $client['education'])  ?>
+                                                    <select id="education" name="education" class="form-control" required>
+                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['education']) {
+                                                                                                    print_r($sex[0]['name']);
+                                                                                                } else {
+                                                                                                    echo 'select';
+                                                                                                }  ?>
+                                                        </option>
                                                         <?php foreach ($override->getData('education') as $gender) { ?>
                                                             <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
                                                         <?php } ?>
@@ -357,15 +396,16 @@ if ($user->isLoggedIn()) {
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>REGION:</label>
-                                                    <select id="region" name="region" class="form-control" value="" required>
-                                                        <option value="">
-                                                            <?php if ($client['gender']) {
-                                                                print_r($client['gender']);
-                                                            } else {
-                                                                echo 'select';
-                                                            }  ?> </option>
-                                                        <?php foreach ($override->getData('region') as $lt) { ?>
-                                                            <option value="<?= $lt['id'] ?>"><?= $lt['name'] ?></option>
+                                                    <?php $sex = $override->get('region', 'id', $client['region'])  ?>
+                                                    <select id="region" name="region" class="form-control" required>
+                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['region']) {
+                                                                                                    print_r($sex[0]['name']);
+                                                                                                } else {
+                                                                                                    echo 'select';
+                                                                                                }  ?>
+                                                        </option>
+                                                        <?php foreach ($override->getData('region') as $gender) { ?>
+                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -374,15 +414,16 @@ if ($user->isLoggedIn()) {
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>DISTRICT:</label>
-                                                    <select id="district" name="district" class="form-control" value="" required>
-                                                        <option value="">
-                                                            <?php if ($client['gender']) {
-                                                                print_r($client['gender']);
-                                                            } else {
-                                                                echo 'select';
-                                                            }  ?> </option>
-                                                        <?php foreach ($override->getData('district') as $lt) { ?>
-                                                            <option value="<?= $lt['id'] ?>"><?= $lt['name'] ?></option>
+                                                    <?php $sex = $override->get('district', 'id', $client['district'])  ?>
+                                                    <select id="district" name="district" class="form-control" required>
+                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['district']) {
+                                                                                                    print_r($sex[0]['name']);
+                                                                                                } else {
+                                                                                                    echo 'select';
+                                                                                                }  ?>
+                                                        </option>
+                                                        <?php foreach ($override->getData('district') as $gender) { ?>
+                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -393,15 +434,16 @@ if ($user->isLoggedIn()) {
                                                 <!-- select -->
                                                 <div class="form-group">
                                                     <label>WARD:</label>
-                                                    <select id="ward" name="ward" class="form-control" value="" required>
-                                                        <option value="">
-                                                            <?php if ($client['gender']) {
-                                                                print_r($client['gender']);
-                                                            } else {
-                                                                echo 'select';
-                                                            }  ?> </option>
-                                                        <?php foreach ($override->getData('ward') as $lt) { ?>
-                                                            <option value="<?= $lt['id'] ?>"><?= $lt['name'] ?></option>
+                                                    <?php $sex = $override->get('ward', 'id', $client['district'])  ?>
+                                                    <select id="ward" name="ward" class="form-control" required>
+                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['ward']) {
+                                                                                                    print_r($sex[0]['name']);
+                                                                                                } else {
+                                                                                                    echo 'select';
+                                                                                                }  ?>
+                                                        </option>
+                                                        <?php foreach ($override->getData('ward') as $gender) { ?>
+                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -431,15 +473,16 @@ if ($user->isLoggedIn()) {
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>For Bagamoyo residents, please specify the intended duration of stay in Bagamoyo:</label>
-                                                    <select id="duration" name="duration" class="form-control" value="" required>
-                                                        <option value="<?= $client['duration'] ?>">
-                                                            <?php if ($client['gender']) {
-                                                                print_r($client['gender']);
-                                                            } else {
-                                                                echo 'select';
-                                                            }  ?> </option>
-                                                        <?php foreach ($override->getData('duration') as $lt) { ?>
-                                                            <option value="<?= $lt['name'] ?>"><?= $lt['name'] ?></option>
+                                                    <?php $sex = $override->get('duration', 'id', $client['duration'])  ?>
+                                                    <select id="duration" name="duration" class="form-control" required>
+                                                        <option value="<?= $sex[0]['id'] ?>"><?php if ($client['duration']) {
+                                                                                                    print_r($sex[0]['name']);
+                                                                                                } else {
+                                                                                                    echo 'select';
+                                                                                                }  ?>
+                                                        </option>
+                                                        <?php foreach ($override->getData('duration') as $gender) { ?>
+                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -472,13 +515,20 @@ if ($user->isLoggedIn()) {
                                         </div>
                                         <div class="modal-footer justify-content-between">
                                             <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+
                                             <input type="hidden" name="cid" value="<?= $_GET['cid']; ?>">
-                                            <input type="hidden" name="btn_add_edit" value="<? if ($_GET['btn'] == 'edit') {
+                                            <input type="hidden" name="btn_add_edit" value="<?php if ($_GET['btn'] == 'edit') {
                                                                                                 echo 'edit';
                                                                                             } else {
                                                                                                 echo 'add';
                                                                                             }; ?>">
-                                            <input type="submit" name="register" value="Register Client" class="btn btn-success btn-clean">
+                                            <?php if ($_GET['btn'] != 'view') { ?>
+                                                <input type="submit" name="register" value="<?php if ($_GET['btn'] == 'edit') {
+                                                                                                echo 'Update Client Info';
+                                                                                            } else {
+                                                                                                echo 'Register Client';
+                                                                                            } ?>" class="btn btn-success btn-clean">
+                                            <?php } ?>
                                         </div>
                                     </form>
                                 </div>
@@ -519,6 +569,290 @@ if ($user->isLoggedIn()) {
     <script>
         $(function() {
             bsCustomFileInput.init();
+        });
+
+        function autocomplete(inp, arr) {
+            /*the autocomplete function takes two arguments,
+            the text field element and an array of possible autocompleted values:*/
+            var currentFocus;
+            /*execute a function when someone writes in the text field:*/
+            inp.addEventListener("input", function(e) {
+                var a, b, i, val = this.value;
+                /*close any already open lists of autocompleted values*/
+                closeAllLists();
+                if (!val) {
+                    return false;
+                }
+                currentFocus = -1;
+                /*create a DIV element that will contain the items (values):*/
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                /*append the DIV element as a child of the autocomplete container:*/
+                this.parentNode.appendChild(a);
+                /*for each item in the array...*/
+                for (i = 0; i < arr.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        /*create a DIV element for each matching element:*/
+                        b = document.createElement("DIV");
+                        /*make the matching letters bold:*/
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].substr(val.length);
+                        /*insert a input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        /*execute a function when someone clicks on the item value (DIV element):*/
+                        b.addEventListener("click", function(e) {
+                            /*insert the value for the autocomplete text field:*/
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            /*close the list of autocompleted values,
+                            (or any other open lists of autocompleted values:*/
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            /*execute a function presses a key on the keyboard:*/
+            inp.addEventListener("keydown", function(e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    /*If the arrow DOWN key is pressed,
+                    increase the currentFocus variable:*/
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 38) { //up
+                    /*If the arrow UP key is pressed,
+                    decrease the currentFocus variable:*/
+                    currentFocus--;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        /*and simulate a click on the "active" item:*/
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+
+            function addActive(x) {
+                /*a function to classify an item as "active":*/
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+
+            function closeAllLists(elmnt) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", function(e) {
+                closeAllLists(e.target);
+            });
+        }
+
+        /*An array containing all the country names in the world:*/
+        // var countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla", "Antigua & Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia & Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central Arfrican Republic", "Chad", "Chile", "China", "Colombia", "Congo", "Cook Islands", "Costa Rica", "Cote D Ivoire", "Croatia", "Cuba", "Curacao", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Polynesia", "French West Indies", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauro", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Pierre & Miquelon", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "St Kitts & Nevis", "St Lucia", "St Vincent", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor L'Este", "Togo", "Tonga", "Trinidad & Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks & Caicos", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Virgin Islands (US)", "Yemen", "Zambia", "Zimbabwe"];
+        // var getUid = $(this).val();
+        function myFunction() {
+
+            fetch('fetch_firstname.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Process the data received from the PHP script
+                    // console.log(data);
+                    autocomplete(document.getElementById("fname"), data);
+                })
+                .catch(error => {
+                    // Handle any errors that occurred during the fetch request
+                    console.error('Error:', error);
+                });
+
+            fetch('fetch_middlename.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Process the data received from the PHP script
+                    // console.log(data);
+                    autocomplete(document.getElementById("mname"), data);
+                })
+                .catch(error => {
+                    // Handle any errors that occurred during the fetch request
+                    console.error('Error:', error);
+                });
+
+
+            fetch('fetch_lastname.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Process the data received from the PHP script
+                    autocomplete(document.getElementById("lname"), data);
+                })
+                .catch(error => {
+                    // Handle any errors that occurred during the fetch request
+                    console.error('Error:', error);
+                });
+        }
+
+
+
+
+        $(document).ready(function() {
+
+            $("#add_crf6").click(function(e) {
+                // if ($("#validation")[0].checkValidity()) {
+                //   PREVENT PAGE TO REFRESH
+                // e.preventDefault();
+
+
+
+                // if($("#FDATE").val() == ''){
+                //     $("#FDATEError").text('* Date is empty');
+                // };
+                // if($("#cDATE").val() == ''){
+                //     $("#cDATEError").text('* Date is empty');
+                // };
+                // if($("#cpersid").val() == ''){
+                //     $("#cpersidError").text('* NAME is empty');
+                // };
+
+
+                if ($("#renal_urea").val() == '') {
+                    $("#renal_ureaError").text('* Renal Urea is empty');
+                };
+
+                if ($("#renal_urea_units").val() == '') {
+                    $("#renal_urea_unitsError").text('* Renal Urea Units is empty');
+                };
+
+                // if ($("#password1").val() != $("#password2").val()) {
+                //     $("#passError").text('* Passowrd do not match');
+                //     //console.log("Not matched"); 
+                //     $("#register-btn").val('Sign Up');
+                // }
+                // }
+            });
+
+            $('#weight, #height').on('input', function() {
+                setTimeout(function() {
+                    var weight = $('#weight').val();
+                    var height = $('#height').val() / 100; // Convert cm to m
+                    var bmi = weight / (height * height);
+                    $('#bmi').text(bmi.toFixed(2));
+                }, 1);
+            });
+
+            $("#one").on("input", null, null, function(e) {
+                if ($("#one").val().length == 2) {
+                    setTimeout(function() {
+                        $("#two").focus();
+                    }, 1);
+                }
+            });
+            $("#three").click(function() {
+                $("#four").focus();
+            });
+            $("#five").on("input", null, null, function() {
+                if ($("#five").val().length == 2) {
+                    $("#six").val("It works!");
+                }
+            });
+
+
+            $('#fl_wait').hide();
+            $('#wait_ds').hide();
+            $('#region').change(function() {
+                var getUid = $(this).val();
+                $('#wait_ds').show();
+                $.ajax({
+                    url: "process.php?cnt=region",
+                    method: "GET",
+                    data: {
+                        getUid: getUid
+                    },
+                    success: function(data) {
+                        $('#ds_data').html(data);
+                        $('#wait_ds').hide();
+                    }
+                });
+            });
+            $('#wait_wd').hide();
+            $('#ds_data').change(function() {
+                $('#wait_wd').hide();
+                var getUid = $(this).val();
+                $.ajax({
+                    url: "process.php?cnt=district",
+                    method: "GET",
+                    data: {
+                        getUid: getUid
+                    },
+                    success: function(data) {
+                        $('#wd_data').html(data);
+                        $('#wait_wd').hide();
+                    }
+                });
+
+            });
+
+            $('#a_cc').change(function() {
+                var getUid = $(this).val();
+                $('#wait').show();
+                $.ajax({
+                    url: "process.php?cnt=payAc",
+                    method: "GET",
+                    data: {
+                        getUid: getUid
+                    },
+                    success: function(data) {
+                        $('#cus_acc').html(data);
+                        $('#wait').hide();
+                    }
+                });
+
+            });
+
+            $('#study_id').change(function() {
+                var getUid = $(this).val();
+                var type = $('#type').val();
+                $('#fl_wait').show();
+                $.ajax({
+                    url: "process.php?cnt=study",
+                    method: "GET",
+                    data: {
+                        getUid: getUid,
+                        type: type
+                    },
+
+                    success: function(data) {
+                        console.log(data);
+                        $('#s2_2').html(data);
+                        $('#fl_wait').hide();
+                    }
+                });
+
+            });
+
         });
     </script>
 </body>
