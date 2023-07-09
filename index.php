@@ -13,8 +13,6 @@ $errorMessage = null;
 if (!$user->isLoggedIn()) {
   if (Input::exists('post')) {
     if (Token::check(Input::get('token'))) {
-      print_r('hi');
-
       $validate = new validate();
       $validate = $validate->check($_POST, array(
         'username' => array('required' => true),
