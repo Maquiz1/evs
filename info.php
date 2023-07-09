@@ -71,13 +71,13 @@ $override = new OverideData();
                         </div>
                     </div> -->
                     <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1>DataTables</h1>
+                        <div class="col-sm-8">
+                            <h1>Volunteer Database ( KINGANI CLINICAL TRIAL FACILITY )</h1>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
-                                <li class="breadcrumb-item active">DataTables</li>
+                                <li class="breadcrumb-item active">KCTF</li>
                             </ol>
                         </div>
                     </div>
@@ -91,7 +91,22 @@ $override = new OverideData();
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">DataTable with default features</h3>
+                                    <h3 class="card-title">
+                                        <?php if ($_GET['status'] == 2) { ?>
+                                            List of Registered Clients
+                                        <?php } elseif ($_GET['status'] == 2) { ?>
+                                            List of Sensitized Clients
+
+                                        <?php } elseif ($_GET['status'] == 2) { ?>
+                                            List of SCreened Clients
+
+                                        <?php } elseif ($_GET['status'] == 2) { ?>
+                                            List of Eligible Clients
+
+                                        <?php } elseif ($_GET['status'] == 2) { ?>
+                                            List of Enrolled Clients
+
+                                        <?php } ?>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
@@ -159,6 +174,30 @@ $override = new OverideData();
                                                         <?php } else { ?>
                                                             <td>
                                                                 <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Eligible</div>
+                                                            </td>
+                                                        <?php } ?>
+                                                    <?php } ?>
+
+                                                    <?php if ($_GET['status'] == 4) { ?>
+                                                        <?php if ($value['enrolled'] == 1) { ?>
+                                                            <td>
+                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Enrolled</div>
+                                                            </td>
+                                                        <?php } else { ?>
+                                                            <td>
+                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Enrolled</div>
+                                                            </td>
+                                                        <?php } ?>
+                                                    <?php } ?>
+
+                                                    <?php if ($_GET['status'] == 5) { ?>
+                                                        <?php if ($value['end_study'] == 1) { ?>
+                                                            <td>
+                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Active</div>
+                                                            </td>
+                                                        <?php } else { ?>
+                                                            <td>
+                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Active</div>
                                                             </td>
                                                         <?php } ?>
                                                     <?php } ?>
