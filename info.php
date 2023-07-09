@@ -269,11 +269,11 @@ $override = new OverideData();
 
                                                             if ($value['enrolled'] >= 1) {
                                                         ?>
-                                                                <div class="btn-group btn-group-xs"><a href="follow_up.php?id=1&cid=<?= $value['id'] ?>&btn=update_enrollment" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Visit Date</a></div>
+                                                                <div class="btn-group btn-group-xs"><a href="follow_up.php?id=1&cid=<?= $value['id'] ?>&btn=update_enrollment" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Schedule</a></div>
                                                             <?php
                                                             } else {
                                                             ?>
-                                                                <div class="btn-group btn-group-xs"><a href="follow_up.php?id=1&cid=<?= $value['id'] ?>&btn=add_enrollment" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Visit Date</a></div>
+                                                                <div class="btn-group btn-group-xs"><a href="follow_up.php?id=1&cid=<?= $value['id'] ?>&btn=add_enrollment" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Schedule</a></div>
                                                         <?php
                                                             }
                                                         }
