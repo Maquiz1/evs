@@ -68,28 +68,28 @@ if ($user->isLoggedIn()) {
               <!-- small box -->
               <div class="small-box bg-info">
                 <div class="inner">
-                  <h3><?= $override->getNo3('clients', 'status', 1, 'sensitization', 0, 'screened', 0, 'eligible', 0, 'enrolled', 0, 'end_study', 0, 'free', 0); ?></h3>
+                  <h3><?= $override->getCount('clients', 'status', 1); ?></h3>
 
                   <p>Registered</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-bag"></i>
                 </div>
-                <a href="info.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="info.php?status=1" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <div class="col-lg-2 col-6">
               <!-- small box -->
               <div class="small-box bg-warning">
                 <div class="inner">
-                  <h3><?= $override->getNo3('clients', 'status', 1, 'sensitization', 1, 'screened', 0, 'eligible', 0, 'enrolled', 0, 'end_study', 0, 'free', 0); ?></h3>
+                  <h3><?= $override->getCount1('clients', 'status', 1, 'sensitization', 1); ?></h3>
 
                   <p>On Sensitization</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-bag"></i>
                 </div>
-                <a href="info.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="info.php?status=2" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
 
@@ -99,7 +99,7 @@ if ($user->isLoggedIn()) {
               <div class="small-box bg-success">
                 <div class="inner">
                   <!-- <h3> -->
-                  <h3><?= $override->getNo3('clients', 'status', 1, 'sensitization', 1, 'screened', 1, 'eligible', 0, 'enrolled', 0, 'end_study', 0, 'free', 0); ?></h3>
+                  <h3><?= $override->getCount2('clients', 'status', 1, 'sensitization', 1, 'screening1', 1); ?></h3>
                   <!-- <sup style="font-size: 20px">%</sup> -->
                   <!-- </h3> -->
 
@@ -108,21 +108,21 @@ if ($user->isLoggedIn()) {
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="info.php?status=3" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <div class="col-lg-2 col-6">
               <!-- small box -->
               <div class="small-box bg-info">
                 <div class="inner">
-                  <h3><?= $override->getNo3('clients', 'status', 1, 'sensitization', 1, 'screened', 1, 'eligible', 1, 'enrolled', 0, 'end_study', 0, 'free', 0); ?></h3>
+                  <h3><?= $override->getCount3('clients', 'status', 1, 'sensitization', 1, 'screened', 1, 'eligible', 1); ?></h3>
 
                   <p>Eligible</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-bag"></i>
                 </div>
-                <a href="info.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="info.php?status=4" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <!-- ./col -->
@@ -130,14 +130,14 @@ if ($user->isLoggedIn()) {
               <!-- small box -->
               <div class="small-box bg-success">
                 <div class="inner">
-                  <h3><?= $override->getNo3('clients', 'status', 1, 'sensitization', 1, 'screened', 1, 'eligible', 1, 'enrolled', 1, 'end_study', 0, 'free', 0); ?></h3>
+                  <h3><?= $override->getCount4('clients', 'status', 1, 'sensitization', 1, 'screened', 1, 'eligible', 1, 'enrolled', 1); ?></h3>
 
                   <p>Enrolled</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-person-add"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="info.php?status=5" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <!-- ./col -->
@@ -145,14 +145,14 @@ if ($user->isLoggedIn()) {
               <!-- small box -->
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3><?= $override->getNo3('clients', 'status', 1, 'sensitization', 1, 'screened', 1, 'eligible', 1, 'enrolled', 1, 'end_study', 1, 'free', 0); ?></h3>
+                  <h3><?= $override->getCount5('clients', 'status', 1, 'sensitization', 1, 'screened', 1, 'eligible', 1, 'enrolled', 1, 'end_study', 1); ?></h3>
 
                   <p>Terminated</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-pie-graph"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="info.php?status=6" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <!-- ./col -->

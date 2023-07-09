@@ -143,14 +143,46 @@ $override = new OverideData();
                                                         <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=view" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> View</a></div>
                                                         <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=edit" class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Edit</a></div>
                                                         <?php
-                                                        if ($value['sensitization1'] == 1) {
+                                                        if ($_GET['status'] == 1) {
+                                                            if ($value['sensitization1'] == 1) {
                                                         ?>
-                                                            <div class="btn-group btn-group-xs"><a href="add_sensitization.php?id=1&cid=<?= $value['id'] ?>&btn=update_sensitize" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Sensitization</a></div>
+                                                                <div class="btn-group btn-group-xs"><a href="add_sensitization.php?id=1&cid=<?= $value['id'] ?>&btn=update_sensitize" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Sensitization</a></div>
+                                                            <?php
+                                                            } else {
+                                                            ?>
+                                                                <div class="btn-group btn-group-xs"><a href="add_sensitization.php?id=1&cid=<?= $value['id'] ?>&btn=add_sensitize" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Sensitization</a></div>
                                                         <?php
-                                                        }else{
+                                                            }
+                                                        }
                                                         ?>
-                                                        <div class="btn-group btn-group-xs"><a href="add_sensitization.php?id=1&cid=<?= $value['id'] ?>&btn=add_sensitize" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Sensitization</a></div>
-                                                        <?php 
+
+                                                        <?php
+                                                        if ($_GET['status'] == 2) {
+
+                                                            if ($value['screening1'] == 1) {
+                                                        ?>
+                                                                <div class="btn-group btn-group-xs"><a href="add_screening.php?id=1&cid=<?= $value['id'] ?>&btn=update_screening" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Screening</a></div>
+                                                            <?php
+                                                            } else {
+                                                            ?>
+                                                                <div class="btn-group btn-group-xs"><a href="add_screening.php?id=1&cid=<?= $value['id'] ?>&btn=add_screening" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Screening</a></div>
+                                                        <?php
+                                                            }
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($_GET['status'] == 3) {
+
+                                                            if ($value['eligible'] == 1) {
+                                                        ?>
+                                                                <div class="btn-group btn-group-xs"><a href="add_enrollment.php?id=1&cid=<?= $value['id'] ?>&btn=update_enrollment" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Enrollment</a></div>
+                                                            <?php
+                                                            } else {
+                                                            ?>
+                                                                <div class="btn-group btn-group-xs"><a href="add_enrollment.php?id=1&cid=<?= $value['id'] ?>&btn=add_enrollment" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Enrollment</a></div>
+                                                        <?php
+                                                            }
                                                         }
                                                         ?>
                                                     </td>

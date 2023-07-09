@@ -64,7 +64,28 @@ class OverideData
 
     public function getCount2($table, $field, $value, $field1, $value1, $field2, $value2)
     {
-        $query = $this->_pdo->query("SELECT * FROM $table WHERE $field = '$value' AND $field1 = '$value1' OR $field2 = '$value2'");
+        $query = $this->_pdo->query("SELECT * FROM $table WHERE $field = '$value' AND $field1 = '$value1' AND $field2 = '$value2'");
+        $num = $query->rowCount();
+        return $num;
+    }
+
+    public function getCount3($table, $field, $value, $field1, $value1, $field2, $value2, $field3, $value3)
+    {
+        $query = $this->_pdo->query("SELECT * FROM $table WHERE $field = '$value' AND $field1 = '$value1' AND $field2 = '$value2' AND $field3 = '$value3'");
+        $num = $query->rowCount();
+        return $num;
+    }
+
+    public function getCount4($table, $field, $value, $field1, $value1, $field2, $value2, $field3, $value3,$field4, $value4)
+    {
+        $query = $this->_pdo->query("SELECT * FROM $table WHERE $field = '$value' AND $field1 = '$value1' AND $field2 = '$value2' AND $field3 = '$value3' AND $field4 = '$value4'");
+        $num = $query->rowCount();
+        return $num;
+    }
+
+    public function getCount5($table, $field, $value, $field1, $value1, $field2,$value2, $field3, $value3, $field4,$value4, $field5, $value5)
+    {
+        $query = $this->_pdo->query("SELECT * FROM $table WHERE $field = '$value' AND $field1 = '$value1' AND $field2 = '$value2' AND $field3 = '$value3' AND $field4 = '$value4' AND $field5 = '$value5'");
         $num = $query->rowCount();
         return $num;
     }
