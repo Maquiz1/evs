@@ -185,6 +185,36 @@ $override = new OverideData();
                                                             }
                                                         }
                                                         ?>
+
+                                                        <?php
+                                                        if ($_GET['status'] == 4) {
+
+                                                            if ($value['enrolled'] >= 1) {
+                                                        ?>
+                                                                <div class="btn-group btn-group-xs"><a href="add_enrollment.php?id=1&cid=<?= $value['id'] ?>&btn=update_enrollment" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Enrollment</a></div>
+                                                            <?php
+                                                            } else {
+                                                            ?>
+                                                                <div class="btn-group btn-group-xs"><a href="add_enrollment.php?id=1&cid=<?= $value['id'] ?>&btn=add_enrollment" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Enrollment</a></div>
+                                                        <?php
+                                                            }
+                                                        }
+                                                        ?>
+
+                                                        <?php
+                                                        if ($_GET['status'] == 5) {
+
+                                                            if ($value['enrolled'] >= 1) {
+                                                        ?>
+                                                                <div class="btn-group btn-group-xs"><a href="follow_up.php?id=1&cid=<?= $value['id'] ?>&btn=update_enrollment" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Visit Date</a></div>
+                                                            <?php
+                                                            } else {
+                                                            ?>
+                                                                <div class="btn-group btn-group-xs"><a href="follow_up.php?id=1&cid=<?= $value['id'] ?>&btn=add_enrollment" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Visit Date</a></div>
+                                                        <?php
+                                                            }
+                                                        }
+                                                        ?>
                                                     </td>
                                                 </tr>
                                             <?php
