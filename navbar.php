@@ -13,6 +13,12 @@
             <li class="nav-item d-none d-sm-inline-block">
                 <a href="add_user.php" class="nav-link">Add Staff</a>
             </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="add_site.php" class="nav-link">Add Site</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="add_study.php" class="nav-link">Add Study</a>
+            </li>
         </ul>
 
         <!-- Right navbar links -->

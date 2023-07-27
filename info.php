@@ -174,7 +174,7 @@ $numRec = 15;
                                                     <td><?= $value['fname']; ?></td>
                                                     <td><?= $value['mname']; ?></td>
                                                     <td><?= $value['lname']; ?></td>
-                                                    
+
                                                     <?php if ($value['gender'] == 1) { ?>
                                                         <td>Male</td>
                                                     <?php } elseif ($value['gender'] == 2) { ?>
@@ -185,13 +185,13 @@ $numRec = 15;
 
                                                     <?php if ($_GET['status'] == 1) { ?>
                                                         <?php if ($value['sensitization'] == 1) { ?>
-                                                            <td>
+                                                            <!-- <td>
                                                                 <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Sensitized</div>
-                                                            </td>
+                                                            </td> -->
                                                         <?php } else { ?>
-                                                            <td>
+                                                            <!-- <td>
                                                                 <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Sensitized</div>
-                                                            </td>
+                                                            </td> -->
                                                         <?php } ?>
                                                     <?php } ?>
 
@@ -239,6 +239,18 @@ $numRec = 15;
                                                         <?php } else { ?>
                                                             <td>
                                                                 <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Active</div>
+                                                            </td>
+                                                        <?php } ?>
+                                                    <?php } ?>
+
+                                                    <?php if ($_GET['status'] == 6) { ?>
+                                                        <?php if ($value['sensitization'] == 1) { ?>
+                                                            <td>
+                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Sensitized</div>
+                                                            </td>
+                                                        <?php } else { ?>
+                                                            <td>
+                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Sensitized</div>
                                                             </td>
                                                         <?php } ?>
                                                     <?php } ?>
@@ -327,11 +339,13 @@ $numRec = 15;
 
                                                             if ($value['available'] >= 1) {
                                                         ?>
-                                                                <!-- <div class="btn-group btn-group-xs"><a href="follow_up.php?id=1&cid=<?= $value['id'] ?>&btn=update_enrollment" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Schedule</a></div> -->
+                                                                <div class="btn-group btn-group-xs"><a href="add_sensitization.php?id=1&cid=<?= $value['id'] ?>&btn=add_sensitize" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Sensitization</a></div>
+
                                                             <?php
                                                             } else {
                                                             ?>
-                                                                <!-- <div class="btn-group btn-group-xs"><a href="follow_up.php?id=1&cid=<?= $value['id'] ?>&btn=add_enrollment" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Schedule</a></div> -->
+                                                                <div class="btn-group btn-group-xs"><a href="add_sensitization.php?id=1&cid=<?= $value['id'] ?>&btn=update_sensitize" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Sensitization</a></div>
+
                                                         <?php
                                                             }
                                                         }
