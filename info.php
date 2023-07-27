@@ -131,7 +131,6 @@ $numRec = 15;
 
                                 if ($_GET['status'] == 1) {
                                     $clients = $override->getWithLimit1('clients', 'status', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-
                                 } elseif ($_GET['status'] == 2) {
 
                                     $clients = $override->getWithLimit3('clients', 'status', 1, 'sensitization', 1, 'site_id', $user->data()->site_id, $page, $numRec);
@@ -144,7 +143,7 @@ $numRec = 15;
                                 } elseif ($_GET['status'] == 5) {
                                     $clients = $override->getWithLimit3('clients', 'status', 1, 'enrolled', 1, 'site_id', $user->data()->site_id, $page, $numRec);
                                 } elseif ($_GET['status'] == 6) {
-                                    $clients = $override->getWithLimit5('clients', 'status',1, 'sensitization', 0, 'screened', 0,'eligible', 0, 'enrolled', 0, 'site_id', $user->data()->site_id, $page, $numRec);
+                                    $clients = $override->getWithLimit5('clients', 'status', 1, 'sensitization', 0, 'screened', 0, 'eligible', 0, 'enrolled', 0, 'site_id', $user->data()->site_id, $page, $numRec);
                                 } elseif ($_GET['status'] == 7) {
 
                                     $clients = $override->getWithLimit1('clients', 'status', 0, 'site_id', $user->data()->site_id, $page, $numRec);
@@ -169,6 +168,9 @@ $numRec = 15;
                                             <?php
                                             $x = 1;
                                             foreach ($clients as $value) {
+                                                $dob = $value['dob'];
+                                                $age = $user->dateDiffYears(date('Y-m-d'), $dob);
+
                                             ?>
                                                 <tr>
                                                     <td><?= $x; ?></td>
@@ -182,18 +184,23 @@ $numRec = 15;
                                                         <td>Female</td>
                                                     <?php } ?>
 
-                                                    <td><?= $value['dob']; ?></td>
+                                                    <td><?= $age; ?></td>
 
                                                     <?php if ($_GET['status'] == 1) { ?>
-                                                        <?php if ($value['sensitization'] == 1) { ?>
-                                                            <!-- <td>
-                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Sensitized</div>
-                                                            </td> -->
+                                                        <?php if ($value['status'] == 1) { ?>
+                                                            <td>
+                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Active</div>
+                                                            </td>
                                                         <?php } else { ?>
-                                                            <!-- <td>
-                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Sensitized</div>
-                                                            </td> -->
+                                                            <td>
+                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Active</div>
+                                                            </td>
                                                         <?php } ?>
+
+                                                        <td>
+                                                            <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=view" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> View</a></div>
+                                                            <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=edit" class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Edit</a></div>
+                                                        </td>
                                                     <?php } ?>
 
                                                     <?php if ($_GET['status'] == 2) { ?>
@@ -257,22 +264,6 @@ $numRec = 15;
                                                     <?php } ?>
 
                                                     <td>
-                                                        <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=view" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> View</a></div>
-                                                        <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=edit" class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Edit</a></div>
-                                                        <?php
-                                                        if ($_GET['status'] == 1) {
-                                                            if ($value['sensitization1'] == 1) {
-                                                        ?>
-                                                                <div class="btn-group btn-group-xs"><a href="add_sensitization.php?id=1&cid=<?= $value['id'] ?>&btn=update_sensitize" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Sensitization</a></div>
-                                                            <?php
-                                                            } else {
-                                                            ?>
-                                                                <div class="btn-group btn-group-xs"><a href="add_sensitization.php?id=1&cid=<?= $value['id'] ?>&btn=add_sensitize" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Sensitization</a></div>
-                                                        <?php
-                                                            }
-                                                        }
-                                                        ?>
-
                                                         <?php
                                                         if ($_GET['status'] == 2) {
 
