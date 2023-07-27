@@ -118,6 +118,13 @@ class OverideData
         return $num;
     }
 
+    public function countData5($table, $field, $value, $field1, $value1, $field2, $value2, $field3, $value3, $field4, $value4, $field5, $value5)
+    {
+        $query = $this->_pdo->query("SELECT * FROM $table WHERE $field = '$value' AND $field1 = '$value1' AND $field2 = '$value2' AND $field3 = '$value3' AND $field4 = '$value4' AND $field5 = '$value5'");
+        $num = $query->rowCount();
+        return $num;
+    }
+
     public function getData($table)
     {
         $query = $this->_pdo->query("SELECT * FROM $table");
@@ -290,6 +297,13 @@ class OverideData
     public function getWithLimit4($table, $where, $id, $where2, $id2, $where3, $id3, $where4, $id4, $page, $numRec)
     {
         $query = $this->_pdo->query("SELECT * FROM $table WHERE $where = '$id' AND $where2 = '$id2' AND $where3 = '$id3' OR $where4 = '$id4' limit $page,$numRec");
+        $result = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function getWithLimit5($table, $where, $id, $where1, $id1,$where2, $id2, $where3, $id3, $where4, $id4, $where5, $id5, $page, $numRec)
+    {
+        $query = $this->_pdo->query("SELECT * FROM $table WHERE $where = '$id' AND $where1 = '$id1' AND $where2 = '$id2' AND $where3 = '$id3' AND $where4 = '$id4'  AND $where5 = '$id5' limit $page,$numRec");
         $result = $query->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }

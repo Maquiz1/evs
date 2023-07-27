@@ -97,7 +97,6 @@ $numRec = 15;
                                         <?php } elseif ($_GET['status'] == 6) { ?>
                                             List of Available Clients
 
-
                                         <?php } elseif ($_GET['status'] == 7) { ?>
 
                                         <?php } ?>
@@ -109,20 +108,17 @@ $numRec = 15;
                                 if ($_GET['status'] == 1) {
                                     $pagNum = $override->countData('clients', 'status', 1, 'site_id', $user->data()->site_id);
                                 } elseif ($_GET['status'] == 2) {
-                                    $pagNum = $override->countData2('clients', 'status', 1, 'sensitization1', 1, 'site_id', $user->data()->site_id);
+                                    $pagNum = $override->countData2('clients', 'status', 1, 'sensitization', 1, 'site_id', $user->data()->site_id);
                                 } elseif ($_GET['status'] == 3) {
                                     $pagNum = $override->countData2('clients', 'status', 1, 'screened', 1, 'site_id', $user->data()->site_id);
-
-
-                                    $pagNum = $override->countData2('clients', 'status', 1, 'eligible', 1, 'site_id', $user->data()->site_id);
                                 } elseif ($_GET['status'] == 4) {
-                                    $pagNum = $override->countData2('clients', 'status', 1, 'enrolled', 1, 'site_id', $user->data()->site_id);
+                                    $pagNum = $override->countData2('clients', 'status', 1, 'eligible', 1, 'site_id', $user->data()->site_id);
                                 } elseif ($_GET['status'] == 5) {
-                                    $pagNum = $override->countData2('clients', 'status', 1, 'available', 1, 'site_id', $user->data()->site_id);
+                                    $pagNum = $override->countData2('clients', 'status', 1, 'enrolled', 1, 'site_id', $user->data()->site_id);
                                 } elseif ($_GET['status'] == 6) {
-                                    $pagNum = $override->countData('clients', 'status', 0, 'site_id', $user->data()->site_id);
+                                    $pagNum = $override->countData5('clients', 'status', 1, 'sensitization', 0, 'screened', 0, 'eligible', 0, 'enrolled', 0, 'available', 1, 'site_id', $user->data()->site_id);
                                 } elseif ($_GET['status'] == 7) {
-                                    $pagNum = $override->getCount('clients', 'site_id', $user->data()->site_id);
+                                    $pagNum = $override->countData('clients', 'status', 0, 'site_id', $user->data()->site_id, $page, $numRec);
                                 }
 
                                 $pages = ceil($pagNum / $numRec);
@@ -134,18 +130,23 @@ $numRec = 15;
 
 
                                 if ($_GET['status'] == 1) {
-                                    $clients = $override->getWithLimit('clients', 'site_id', $user->data()->site_id, $page, $numRec);
+                                    $clients = $override->getWithLimit1('clients', 'status', 1, 'site_id', $user->data()->site_id, $page, $numRec);
+
                                 } elseif ($_GET['status'] == 2) {
-                                    $clients = $override->getWithLimit3('clients', 'status', 1, 'screened', 1, 'site_id', $user->data()->site_id, $page, $numRec);
+
+                                    $clients = $override->getWithLimit3('clients', 'status', 1, 'sensitization', 1, 'site_id', $user->data()->site_id, $page, $numRec);
                                 } elseif ($_GET['status'] == 3) {
-                                    $clients = $override->getWithLimit3('clients', 'status', 1, 'sensitization1', 1, 'site_id', $user->data()->site_id, $page, $numRec);
+
+                                    $clients = $override->getWithLimit3('clients', 'status', 1, 'screened', 1, 'site_id', $user->data()->site_id, $page, $numRec);
                                 } elseif ($_GET['status'] == 4) {
+
                                     $clients = $override->getWithLimit3('clients', 'status', 1, 'eligible', 1, 'site_id', $user->data()->site_id, $page, $numRec);
                                 } elseif ($_GET['status'] == 5) {
                                     $clients = $override->getWithLimit3('clients', 'status', 1, 'enrolled', 1, 'site_id', $user->data()->site_id, $page, $numRec);
                                 } elseif ($_GET['status'] == 6) {
-                                    $clients = $override->getWithLimit3('clients', 'status', 1, 'available', 1, 'site_id', $user->data()->site_id, $page, $numRec);
+                                    $clients = $override->getWithLimit5('clients', 'status',1, 'sensitization', 0, 'screened', 0,'eligible', 0, 'enrolled', 0, 'site_id', $user->data()->site_id, $page, $numRec);
                                 } elseif ($_GET['status'] == 7) {
+
                                     $clients = $override->getWithLimit1('clients', 'status', 0, 'site_id', $user->data()->site_id, $page, $numRec);
                                 }
                                 ?>

@@ -145,7 +145,7 @@ if ($user->isLoggedIn()) {
               <!-- small box -->
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3><?= $override->getNo1('clients', 'status', 1, 'available', 1); ?></h3>
+                  <h3><?= $override->countData5('clients', 'status', 1, 'sensitization', 0, 'screened', 0, 'eligible', 0, 'enrolled', 0, 'available', 1); ?></h3>
 
                   <p>Available</p>
                 </div>

@@ -56,7 +56,7 @@ $override = new OverideData();
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="info.php?status=1" class="nav-link active">
+                            <a href="info.php?status=6" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Available</p>
                             </a>
