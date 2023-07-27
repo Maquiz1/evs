@@ -145,9 +145,9 @@ if ($user->isLoggedIn()) {
               <!-- small box -->
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3><?= $override->getCount5('clients', 'status', 1, 'sensitization', 1, 'screened', 1, 'eligible', 1, 'enrolled', 1, 'end_study', 1); ?></h3>
+                  <h3><?= $override->getNo1('clients', 'status', 1, 'available', 1); ?></h3>
 
-                  <p>Terminated</p>
+                  <p>Available</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-pie-graph"></i>
@@ -205,7 +205,7 @@ if ($user->isLoggedIn()) {
   <!-- AdminLTE App -->
   <script src="dist/js/adminlte.js"></script>
   <!-- AdminLTE for demo purposes -->
-  <script src="dist/js/demo.js"></script>
+  <!-- <script src="dist/js/demo.js"></script> -->
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
   <script src="dist/js/pages/dashboard.js"></script>
 </body>

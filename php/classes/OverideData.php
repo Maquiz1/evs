@@ -253,6 +253,13 @@ class OverideData
         return $result;
     }
 
+    // public function getWithLimit3($table, $where, $id, $where2, $id2, $where3, $id3, $page, $numRec)
+    // {
+    //     $query = $this->_pdo->query("SELECT * FROM $table WHERE $where = '$id' AND $where2 = '$id2' AND $where3 = '$id3' limit $page,$numRec");
+    //     $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    //     return $result;
+    // }
+
     public function getWithLimit2($table, $field, $value, $field1, $value1, $value2, $field2, $page, $numRec)
     {
         $query = $this->_pdo->query("SELECT * FROM $table WHERE $field = '$value' AND $field1 = '$value1' AND $value2 = '$field2' limit $page,$numRec");

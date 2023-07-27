@@ -2,19 +2,7 @@
 require_once 'php/core/init.php';
 $user = new User();
 $override = new OverideData();
-// $pageError = null;
-// $successMessage = null;
-// $errorM = false;
-// $errorMessage = null;
-// $t_crf = 0;
-// $p_crf = 0;
-// $w_crf = 0;
-// $s_name = null;
-// $c_name = null;
-// $site = null;
-// $country = null;
-// $study_crf = null;
-// $data_limit = 10000;
+$numRec = 15;
 
 ?>
 
@@ -92,23 +80,76 @@ $override = new OverideData();
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">
-                                        <?php if ($_GET['status'] == 2) { ?>
+                                        <?php if ($_GET['status'] == 1) { ?>
                                             List of Registered Clients
                                         <?php } elseif ($_GET['status'] == 2) { ?>
                                             List of Sensitized Clients
 
-                                        <?php } elseif ($_GET['status'] == 2) { ?>
-                                            List of SCreened Clients
+                                        <?php } elseif ($_GET['status'] == 3) { ?>
+                                            List of Screened Clients
 
-                                        <?php } elseif ($_GET['status'] == 2) { ?>
+                                        <?php } elseif ($_GET['status'] == 4) { ?>
                                             List of Eligible Clients
 
-                                        <?php } elseif ($_GET['status'] == 2) { ?>
+                                        <?php } elseif ($_GET['status'] == 5) { ?>
                                             List of Enrolled Clients
+
+                                        <?php } elseif ($_GET['status'] == 6) { ?>
+                                            List of Available Clients
+
+
+                                        <?php } elseif ($_GET['status'] == 7) { ?>
 
                                         <?php } ?>
                                 </div>
                                 <!-- /.card-header -->
+
+                                <?php
+                                $pagNum = 0;
+                                if ($_GET['status'] == 1) {
+                                    $pagNum = $override->countData('clients', 'status', 1, 'site_id', $user->data()->site_id);
+                                } elseif ($_GET['status'] == 2) {
+                                    $pagNum = $override->countData2('clients', 'status', 1, 'sensitization1', 1, 'site_id', $user->data()->site_id);
+                                } elseif ($_GET['status'] == 3) {
+                                    $pagNum = $override->countData2('clients', 'status', 1, 'screened', 1, 'site_id', $user->data()->site_id);
+
+
+                                    $pagNum = $override->countData2('clients', 'status', 1, 'eligible', 1, 'site_id', $user->data()->site_id);
+                                } elseif ($_GET['status'] == 4) {
+                                    $pagNum = $override->countData2('clients', 'status', 1, 'enrolled', 1, 'site_id', $user->data()->site_id);
+                                } elseif ($_GET['status'] == 5) {
+                                    $pagNum = $override->countData2('clients', 'status', 1, 'available', 1, 'site_id', $user->data()->site_id);
+                                } elseif ($_GET['status'] == 6) {
+                                    $pagNum = $override->countData('clients', 'status', 0, 'site_id', $user->data()->site_id);
+                                } elseif ($_GET['status'] == 7) {
+                                    $pagNum = $override->getCount('clients', 'site_id', $user->data()->site_id);
+                                }
+
+                                $pages = ceil($pagNum / $numRec);
+                                if (!$_GET['page'] || $_GET['page'] == 1) {
+                                    $page = 0;
+                                } else {
+                                    $page = ($_GET['page'] * $numRec) - $numRec;
+                                }
+
+
+                                if ($_GET['status'] == 1) {
+                                    $clients = $override->getWithLimit('clients', 'site_id', $user->data()->site_id, $page, $numRec);
+                                } elseif ($_GET['status'] == 2) {
+                                    $clients = $override->getWithLimit3('clients', 'status', 1, 'screened', 1, 'site_id', $user->data()->site_id, $page, $numRec);
+                                } elseif ($_GET['status'] == 3) {
+                                    $clients = $override->getWithLimit3('clients', 'status', 1, 'sensitization1', 1, 'site_id', $user->data()->site_id, $page, $numRec);
+                                } elseif ($_GET['status'] == 4) {
+                                    $clients = $override->getWithLimit3('clients', 'status', 1, 'eligible', 1, 'site_id', $user->data()->site_id, $page, $numRec);
+                                } elseif ($_GET['status'] == 5) {
+                                    $clients = $override->getWithLimit3('clients', 'status', 1, 'enrolled', 1, 'site_id', $user->data()->site_id, $page, $numRec);
+                                } elseif ($_GET['status'] == 6) {
+                                    $clients = $override->getWithLimit3('clients', 'status', 1, 'available', 1, 'site_id', $user->data()->site_id, $page, $numRec);
+                                } elseif ($_GET['status'] == 7) {
+                                    $clients = $override->getWithLimit1('clients', 'status', 0, 'site_id', $user->data()->site_id, $page, $numRec);
+                                }
+                                ?>
+
                                 <div class="card-body">
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
@@ -126,20 +167,20 @@ $override = new OverideData();
                                         <tbody>
                                             <?php
                                             $x = 1;
-                                            foreach ($override->getData('clients') as $value) {
-                                                // $client = $override->get('clients', 'id', $value['client_id']);
-                                                // $group = $override->get('patient_group', 'id', $client[0]['pt_group'])[0]['name'];
+                                            foreach ($clients as $value) {
                                             ?>
                                                 <tr>
                                                     <td><?= $x; ?></td>
                                                     <td><?= $value['fname']; ?></td>
                                                     <td><?= $value['mname']; ?></td>
                                                     <td><?= $value['lname']; ?></td>
+                                                    
                                                     <?php if ($value['gender'] == 1) { ?>
                                                         <td>Male</td>
                                                     <?php } elseif ($value['gender'] == 2) { ?>
                                                         <td>Female</td>
                                                     <?php } ?>
+
                                                     <td><?= $value['dob']; ?></td>
 
                                                     <?php if ($_GET['status'] == 1) { ?>
@@ -278,6 +319,23 @@ $override = new OverideData();
                                                             }
                                                         }
                                                         ?>
+
+
+
+                                                        <?php
+                                                        if ($_GET['status'] == 6) {
+
+                                                            if ($value['available'] >= 1) {
+                                                        ?>
+                                                                <!-- <div class="btn-group btn-group-xs"><a href="follow_up.php?id=1&cid=<?= $value['id'] ?>&btn=update_enrollment" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Schedule</a></div> -->
+                                                            <?php
+                                                            } else {
+                                                            ?>
+                                                                <!-- <div class="btn-group btn-group-xs"><a href="follow_up.php?id=1&cid=<?= $value['id'] ?>&btn=add_enrollment" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Schedule</a></div> -->
+                                                        <?php
+                                                            }
+                                                        }
+                                                        ?>
                                                     </td>
                                                 </tr>
                                             <?php
@@ -342,7 +400,7 @@ $override = new OverideData();
     <!-- AdminLTE App -->
     <script src="dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="dist/js/demo.js"></script>
+    <!-- <script src="dist/js/demo.js"></script> -->
     <!-- Page specific script -->
     <script>
         $(function() {

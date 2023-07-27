@@ -10,6 +10,9 @@
             <li class="nav-item d-none d-sm-inline-block">
                 <a href="add.php" class="nav-link">Register New</a>
             </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="add_user.php" class="nav-link">Add Staff</a>
+            </li>
         </ul>
 
         <!-- Right navbar links -->
