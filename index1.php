@@ -82,7 +82,7 @@ if ($user->isLoggedIn()) {
               <!-- small box -->
               <div class="small-box bg-warning">
                 <div class="inner">
-                  <h3><?= $override->getCount1('clients', 'status', 1, 'sensitization', 1); ?></h3>
+                  <h3><?= $override->getCount1('clients', 'status', 1, 'sensitization1', 1); ?></h3>
 
                   <p>On Sensitization</p>
                 </div>
@@ -99,7 +99,7 @@ if ($user->isLoggedIn()) {
               <div class="small-box bg-success">
                 <div class="inner">
                   <!-- <h3> -->
-                  <h3><?= $override->getCount2('clients', 'status', 1, 'sensitization', 1, 'screening1', 1); ?></h3>
+                  <h3><?= $override->getCount2('clients', 'status', 1, 'sensitization1', 1, 'screening1', 1); ?></h3>
                   <!-- <sup style="font-size: 20px">%</sup> -->
                   <!-- </h3> -->
 
@@ -115,7 +115,7 @@ if ($user->isLoggedIn()) {
               <!-- small box -->
               <div class="small-box bg-info">
                 <div class="inner">
-                  <h3><?= $override->getCount3('clients', 'status', 1, 'sensitization', 1, 'screened', 1, 'eligible', 1); ?></h3>
+                  <h3><?= $override->getCount3('clients', 'status', 1, 'sensitization1', 1, 'screening1', 1, 'eligible', 1); ?></h3>
 
                   <p>Eligible</p>
                 </div>
@@ -130,7 +130,7 @@ if ($user->isLoggedIn()) {
               <!-- small box -->
               <div class="small-box bg-success">
                 <div class="inner">
-                  <h3><?= $override->getCount4('clients', 'status', 1, 'sensitization', 1, 'screened', 1, 'eligible', 1, 'enrolled', 1); ?></h3>
+                  <h3><?= $override->getCount4('clients', 'status', 1, 'sensitization1', 1, 'screened', 1, 'eligible', 1, 'enrolled', 1); ?></h3>
 
                   <p>Enrolled</p>
                 </div>
@@ -145,7 +145,7 @@ if ($user->isLoggedIn()) {
               <!-- small box -->
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3><?= $override->countData5('clients', 'status', 1, 'sensitization', 0, 'screened', 0, 'eligible', 0, 'enrolled', 0, 'available', 1); ?></h3>
+                  <h3><?= $override->countData5('clients', 'status', 1, 'sensitization1', 0, 'screened', 0, 'eligible', 0, 'enrolled', 0, 'available', 1); ?></h3>
 
                   <p>Available</p>
                 </div>

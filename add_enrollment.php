@@ -19,6 +19,7 @@ if ($user->isLoggedIn()) {
                 ),
             ));
             if ($validate->passed()) {
+                print_r($_POST);
                 $client_study = $override->getNews('clients', 'id', $_GET['cid'], 'status', 1)[0];
                 $std_id = $override->getNews('study_id', 'site_id', $user->data()->site_id, 'status', 0)[0];
                 // $screening_id = $override->getNews('screening', 'client_id', Input::get('id'), 'status', 1)[0];

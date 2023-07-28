@@ -12,84 +12,54 @@ if ($user->isLoggedIn()) {
         if (Input::get('register')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                'screening_date' => array(
+                'screening2_date' => array(
                     'required' => true,
                 ),
             ));
             if ($validate->passed()) {
-                $screening_date = date('Y-m-d', strtotime(Input::get('screening_date')));
-                $conset_date = date('Y-m-d', strtotime(Input::get('conset_date')));
+                $screening2_date = date('Y-m-d', strtotime(Input::get('screening2_date')));
 
-                if ($_GET['btn'] == 'add_screening') {
-                    try {
-                        $user->createRecord('screening', array(
-                            'screening_date' => $screening_date,
-                            'screening1' => 1,
-                            'conset' => Input::get('conset'),
-                            'conset_date' => $conset_date,
-                            // 'screened' => $screened,
-                            // 'eligible1' => $eligible,
-                            // 'eligible2' => $eligible,
-                            // 'eligible' => Input::get('eligible'),
-                            'comments' => Input::get('comments'),
-                            'status' => 1,
-                            'staff_id' => $user->data()->id,
-                            'client_id' => Input::get('cid'),
-                            'site_id' => $user->data()->site_id,
-                        ));
+                $eligible = 0;
+                if (Input::get('screening2') == 1 && Input::get('eligible') == 1) {
+                    $eligible = 1;
+                }
 
-                        $client = $override->get('clients', 'id', Input::get('cid'))[0];
+                $screening = $override->get('screening', 'client_id', Input::get('cid'))[0];
+                try {
+                    $user->updateRecord('screening', array(
+                        'screening2' => Input::get('screening2'),
+                        'screening2_date' => $screening2_date,
+                        'screened' => $screened,
+                        'eligible1' => Input::get('eligible'),
+                        'eligible2' => $eligible,
+                        'eligible' =>  $eligible,
+                        'comments' => Input::get('comments'),
+                        'status' => 1,
+                        'staff_id' => $user->data()->id,
+                        'client_id' => Input::get('cid'),
+                        'site_id' => $user->data()->site_id,
+                    ), $screening['id']);
 
-                        $user->updateRecord('clients', array(
-                            'screening1' => 1,
-                            // 'screened' => $screened,
-                            // 'eligible1' => $eligible,
-                            // 'eligible1' => $eligible,
-                            // 'eligible' => Input::get('eligible'),
-                        ), $client['id']);
 
-                        $successMessage = 'Client Screening Added Successful';
-                        // Redirect::to('info.php');
-                    } catch (Exception $e) {
-                        die($e->getMessage());
+
+                    $client = $override->get('clients', 'id', Input::get('cid'))[0];
+                    $screened = 0;
+                    if (Input::get('screening1') == 1 || Input::get('screening2') == 1) {
+                        $screened = 1;
                     }
-                } elseif ($_GET['btn'] == 'update_screening') {
-                    $screening = $override->get('screening', 'client_id', Input::get('cid'))[0];
-                    try {
-                        $user->updateRecord('screening', array(
-                            'screening_date' => $screening_date,
-                            'screening1' => 1,
-                            'conset' => Input::get('conset'),
-                            'conset_date' => $conset_date,
-                            // 'screened' => $screened,
-                            // 'eligible1' => $eligible,
-                            // 'eligible2' => $eligible,
-                            // 'eligible' => Input::get('eligible'),
-                            'comments' => Input::get('comments'),
-                            'status' => 1,
-                            'staff_id' => $user->data()->id,
-                            'client_id' => Input::get('cid'),
-                            'site_id' => $user->data()->site_id,
-                        ), $screening['id']);
 
+                    $user->updateRecord('clients', array(
+                        'screening2' => Input::get('screening2'),
+                        'screened' => $screened,
+                        'eligible1' => Input::get('eligible'),
+                        'eligible' =>  $eligible,
+                        'eligible' => Input::get('eligible'),
+                    ), $client['id']);
+                    $successMessage = 'Client Screening Updated Successful';
 
-
-                        $client = $override->get('clients', 'id', Input::get('cid'))[0];
-
-                        $user->updateRecord('clients', array(
-                            'screening1' => 1,
-                            // 'screening2' => Input::get('screening2'),
-                            // 'screened' => $screened,
-                            // 'eligible1' => $eligible,
-                            // 'eligible2' => $eligible,
-                            // 'eligible' => Input::get('eligible'),
-                        ), $client['id']);
-                        $successMessage = 'Client Screening Updated Successful';
-
-                        // Redirect::to('info.php');
-                    } catch (Exception $e) {
-                        die($e->getMessage());
-                    }
+                    // Redirect::to('info.php');
+                } catch (Exception $e) {
+                    die($e->getMessage());
                 }
             } else {
                 $pageError = $validate->errors();
@@ -187,14 +157,16 @@ if ($user->isLoggedIn()) {
                                 <!-- /.card-header -->
                                 <div class="card-body">
                                     <form id="validation" enctype="multipart/form-data" method="post" autocomplete="off">
+
                                         <div class="row">
-                                            <div class="col-sm-6">
+
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
-                                                    <label>Screening One</label>
+                                                    <label>Screening Two</label>
                                                     <?php
-                                                    $value = $override->get('yes_no', 'id', $screening['screening1'])[0]  ?>
-                                                    <select id="screening1" name="screening1" class="form-control" required>
-                                                        <option value="<?= $value['id'] ?>"><?php if ($screening['screening1']) {
+                                                    $value = $override->get('yes_no', 'id', $screening['screening2'])[0]  ?>
+                                                    <select id="screening2" name="screening2" class="form-control" required>
+                                                        <option value="<?= $value['id'] ?>"><?php if ($screening['screening2']) {
                                                                                                 print_r($value['name']);
                                                                                             } else {
                                                                                                 echo 'select';
@@ -207,16 +179,35 @@ if ($user->isLoggedIn()) {
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
-                                                    <label>Screening One Date</label>
-                                                    <input type="date" class="form-control fas fa-calendar input-prefix" name="screening_date" id="screening_date" value="<?php if ($screening['screening_date']) {
-                                                                                                                                                                                print_r($screening['screening_date']);
-                                                                                                                                                                            }  ?>" required />
+                                                    <label>Screening Two Date</label>
+                                                    <input type="date" class="form-control fas fa-calendar input-prefix" name="screening2_date" id="screening2_date" value="<?php if ($screening['screening2_date']) {
+                                                                                                                                                                                print_r($screening['screening2_date']);
+                                                                                                                                                                            }  ?>" />
                                                 </div>
                                             </div>
-                                        </div>                                 
-                                        
+
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Eligible ?</label>
+                                                    <?php
+                                                    $value = $override->get('yes_no', 'id', $screening['eligible'])[0];
+                                                    ?>
+                                                    <select id="eligible" name="eligible" class="form-control" required>
+                                                        <option value="<?= $value['id'] ?>"><?php if ($screening['eligible']) {
+                                                                                                print_r($value['name']);
+                                                                                            } else {
+                                                                                                echo 'select';
+                                                                                            }  ?>
+                                                        </option>
+                                                        <?php foreach ($override->getData('yes_no') as $gender) { ?>
+                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
 
 
 
