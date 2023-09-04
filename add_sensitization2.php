@@ -1,4 +1,5 @@
 <?php
+
 require_once 'php/core/init.php';
 $user = new User();
 $override = new OverideData();
@@ -11,21 +12,32 @@ if ($user->isLoggedIn()) {
         if (Input::get('register')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                'sensitization_date' => array(
+                'sensitization2_date' => array(
                     'required' => true,
                 ),
             ));
             if ($validate->passed()) {
+
                 $sensitization_date = date('Y-m-d', strtotime(Input::get('sensitization_date')));
                 $eligible = 0;
                 if (Input::get('sensitization_two') == 1 && Input::get('eligible') == 1) {
                     $eligible = 1;
                 }
+
                 $sensitization = $override->get('sensitization', 'client_id', Input::get('cid'))[0];
+
+                $pt_status = 0;
+                if (Input::get('sensitization2_status') == 1) {
+                    $pt_status = 1;
+                } elseif (Input::get('sensitization2_status') == 2) {
+                    $pt_status = 2;
+                }
+
                 try {
+                    
                     $user->updateRecord('sensitization', array(
                         'sensitization_date2' => Input::get('sensitization_date'),
-                        'sensitization_two' => Input::get('sensitization_two'),
+                        'sensitization_two' => 1,
                         'eligible' => Input::get('eligible'),
                         'staff_id' => $user->data()->id,
                         'client_id' => Input::get('cid'),
@@ -39,11 +51,22 @@ if ($user->isLoggedIn()) {
                     if (Input::get('sensitization_two') == 1) {
                         $sensitization = 1;
                     }
+
                     $user->updateRecord('clients', array(
                         'sensitization' => $sensitization,
-                        'sensitization2' => Input::get('sensitization_two'),
+                        'sensitization2' => 1,
                         'screening1' => $eligible,
                     ), $client['id']);
+
+                    $progres = $override->get('progres', 'client_id', Input::get('cid'))[0];
+
+                    $user->updateRecord('progres', array(
+                        'sensitization2' => 1,
+                        'sensitization2_date' => Input::get('sensitization2_date'),
+                        'sensitization2_status' => Input::get('sensitization2_status'),
+                        'comments' => Input::get('comments'),
+                        'pt_status' => $pt_status,
+                    ), $progres['id']);
 
                     $successMessage = 'Client Sensitization Updated Successful';
 
@@ -148,40 +171,22 @@ if ($user->isLoggedIn()) {
                                 <div class="card-body">
                                     <form id="validation" enctype="multipart/form-data" method="post" autocomplete="off">
                                         <div class="row">
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Sensitization 2 Date</label>
-                                                    <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="<?php if ($sensitization['sensitization_date2']) {
-                                                                                                                                                                                        print_r($sensitization['sensitization_date2']);
+                                                    <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization2_date" id="sensitization2_date" value="<?php if ($sensitization['sensitization2_date']) {
+                                                                                                                                                                                        print_r($sensitization['sensitization2_date']);
                                                                                                                                                                                     }  ?>" required="" />
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-3">
-                                                <div class="form-group">
-                                                    <label>SENSITIZATION TWO:</label>
-                                                    <?php $value = $override->get('yes_no_na', 'id', $sensitization['sensitization_two'])[0]  ?>
-                                                    <select id="sensitization_two" name="sensitization_two" class="form-control" required>
-                                                        <option value="<?= $value['id'] ?>"><?php if ($sensitization['sensitization_two']) {
-                                                                                                print_r($value['name']);
-                                                                                            } else {
-                                                                                                echo 'select';
-                                                                                            }  ?>
-                                                        </option>
-                                                        <?php foreach ($override->getData('yes_no_na') as $gender) { ?>
-                                                            <option value="<?= $gender['id'] ?>"><?= $gender['name'] ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Eligible:</label>
                                                     <?php $value = $override->get('yes_no_na', 'id', $sensitization['eligible'])[0]  ?>
-                                                    <select id="eligible" name="eligible" class="form-control" required>
-                                                        <option value="<?= $value['id'] ?>"><?php if ($sensitization['eligible']) {
-                                                                                                print_r($value['name']);
+                                                    <select id="sensitization2_status" name="sensitization2_status" class="form-control" required>
+                                                        <option value="<?= $value['id'] ?>"><?php if ($sensitization['sensitization2_status']) {
+                                                                                                print_r($value['sensitization2_status']);
                                                                                             } else {
                                                                                                 echo 'select';
                                                                                             }  ?>
@@ -193,7 +198,7 @@ if ($user->isLoggedIn()) {
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Comments / Remarks / Notes
                                                         :

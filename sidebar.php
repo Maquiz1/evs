@@ -2,12 +2,24 @@
 require_once 'php/core/init.php';
 $user = new User();
 $override = new OverideData();
+
+$now = date('Y-m-d');
+$nxt_day = date('Y-m-d', strtotime($now . ' + 1 days'));
+// $nxt_day = date('Y-m-d', strtotime($last_visit_date . ' + ' . $schedule['days'] . ' days'));
+
+// $available = $override->getCount1('clients', 'status', 1, 'site_id', $user->data()->site_id);
+$available = $override->getNoAvailable('progres', 'status', 1, 'pt_status', 0, 'pt_status', 2);
+$registered = $override->getCount1('clients', 'status', 1, 'site_id', $user->data()->site_id);
+$today = $override->getCount2('visit', 'expected_date', date('Y-m-d'), 'status', 0, 'site_id', $user->data()->site_id);
+$pending = $override->getNo2('visit', 'expected_date', date('Y-m-d'), 'status', 0, 'site_id', $user->data()->site_id);
+$missing = $override->getNo2('visit', 'expected_date', date('Y-m-d'), 'status', 0, 'site_id', $user->data()->site_id);
+$tomorrow = $override->getCount2('visit', 'expected_date', $nxt_day, 'status', 0, 'site_id', $user->data()->site_id);
 ?>
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.php" class="brand-link">
-        <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="dist/img/AdminLTELogo.png" alt="evs LOGO" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">Volunteer Database</span>
     </a>
 
@@ -58,27 +70,45 @@ $override = new OverideData();
                         <li class="nav-item">
                             <a href="index1.php?title=1" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Dashboard v1</p>
+                                <p>Home </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="info.php?status=1" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Registered<span class="badge badge-info right"><?= $registered ?></span></p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="info.php?status=6" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Available</p>
+                                <p>Available<span class="badge badge-info right"><?= $available ?></span></p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="info.php?status=6" class="nav-link active">
+                            <a href="today.php" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Pending Visit</p>
+                                <p>Toady Visits<span class="badge badge-info right"><?= $today ?></span></p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="info.php?status=6" class="nav-link active">
+                            <a href="tomorrow.php" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Missed Visit</p>
+                                <p>Tommorow Visits<span class="badge badge-info right"><?= $tomorrow ?></span></p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="pending.php" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Pending Visits<span class="badge badge-info right"><?= $pending ?></span></p>
+                            </a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a href="info.php?status=6" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Missed Visit<span class="badge badge-info right">6</span></p>
+                            </a>
+                        </li> -->
                         <!-- <li class="nav-item">
                                 <a href="index2.php?title=2" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
@@ -102,7 +132,7 @@ $override = new OverideData();
                         </p>
                     </a>
                 </li> -->
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
                         <p>
@@ -694,7 +724,7 @@ $override = new OverideData();
                         <i class="nav-icon far fa-circle text-info"></i>
                         <p>Informational</p>
                     </a>
-                </li>
+                </li> -->
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

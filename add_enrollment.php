@@ -19,9 +19,10 @@ if ($user->isLoggedIn()) {
                 ),
             ));
             if ($validate->passed()) {
-                print_r($_POST);
                 $client_study = $override->getNews('clients', 'id', $_GET['cid'], 'status', 1)[0];
                 $std_id = $override->getNews('study_id', 'site_id', $user->data()->site_id, 'status', 0)[0];
+                $schedule = $override->getData('schedule')[0];
+
                 // $screening_id = $override->getNews('screening', 'client_id', Input::get('id'), 'status', 1)[0];
                 // $lab_id = $override->getNews('lab', 'client_id', Input::get('id'), 'status', 1)[0];
                 if (!$client_study['study_id']) {
@@ -32,18 +33,22 @@ if ($user->isLoggedIn()) {
                 if (!$override->get('visit', 'client_id', $_GET['cid'])) {
                     $user->createRecord('visit', array(
                         'project_name' => Input::get('project_name'),
-                        'visit_name' => 'Vaccination visit 1',
+                        'visit_name' => 'Vaccination 1',
                         'visit_code' => 'D1',
                         'study_id' => $study_id,
                         'expected_date' => Input::get('enrollment_date'),
                         'visit_date' => '',
                         'visit_window' => 2,
+                        'window1' => $schedule['window1'],
+                        'window2' => $schedule['window2'],
                         'status' => 0,
                         'client_id' => $_GET['cid'],
                         'created_on' => date('Y-m-d'),
                         'seq_no' => 0,
                         'redcap' => 0,
                         'comments' => Input::get('comments'),
+                        'site_id' => $user->data()->site_id,
+                        'staff_id' => $user->data()->id,
                         'visit_status' => 0
                     ));
 
@@ -55,11 +60,11 @@ if ($user->isLoggedIn()) {
                 if ($override->getCount('visit', 'client_id', $_GET['cid']) == 1) {
                     try {
                         if (!$client_study['study_id']) {
-                            $user->visit2($_GET['cid'], 0, $std_id['study_id']);
+                            $user->visit3($_GET['cid'], 1, $std_id['study_id'], $user->data()->site_id, Input::get('project_name'), $user->data()->id);
                             $user->updateRecord('study_id', array('status' => 1, 'client_id' => $_GET['cid']), $std_id['id']);
                             $user->updateRecord('clients', array('study_id' => $std_id['study_id']), $_GET['cid']);
                         } else {
-                            $user->visit2($_GET['cid'], 0, $client_study['study_id']);
+                            $user->visit3($_GET['cid'], 1, $client_study['study_id'], $user->data()->site_id, Input::get('project_name'), $user->data()->id);
                         }
                     } catch (Exception $e) {
                         die($e->getMessage());
@@ -85,25 +90,28 @@ if ($user->isLoggedIn()) {
             ));
             if ($validate->passed()) {
                 $std_id = $override->getNews('study_id', 'site_id', $user->data()->site_id, 'status', 0)[0];
-                // $enrollment_date = $override->get('clients', 'id', Input::get('id'))[0];
                 $visit_date = $override->firstRow('visit', 'visit_date', 'id', 'client_id', $_GET['cid'])[0];
                 if ($override->get('visit', 'client_id', $_GET['cid'])) {
                     if (Input::get('enrollment_date') != $visit_date['visit_date']) {
                         $user->deleteRecord('visit', 'client_id', $_GET['cid']);
                         $user->createRecord('visit', array(
                             'project_name' => Input::get('project_name'),
-                            'visit_name' => 'Day 0',
-                            'visit_code' => 'D0',
+                            'visit_name' => 'Day 1',
+                            'visit_code' => 'D1',
                             'study_id' => $study_id,
                             'expected_date' => Input::get('enrollment_date'),
                             'visit_date' => '',
                             'visit_window' => 2,
+                            'window1' => $schedule['window1'],
+                            'window2' => $schedule['window2'],
                             'status' => 0,
                             'client_id' => $_GET['cid'],
                             'created_on' => date('Y-m-d'),
-                            'seq_no' => 0,
+                            'seq_no' => 1,
                             'redcap' => 0,
                             'comments' => Input::get('comments'),
+                            'site_id' => $user->data()->site_id,
+                            'staff_id' => $user->data()->id,
                             'visit_status' => 0
                         ));
                     }
@@ -114,8 +122,7 @@ if ($user->isLoggedIn()) {
                 }
                 if ($override->getCount('visit', 'client_id', $_GET['cid']) == 1) {
                     try {
-                        // $user->visit(Input::get('id'), 0);
-                        $user->visit2($_GET['cid'], 0, $std_id['study_id']);
+                        $user->visit3($_GET['cid'], 1, $std_id['study_id'], $user->data()->site_id, Input::get('project_name'), $user->data()->id);
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }

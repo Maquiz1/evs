@@ -106,7 +106,7 @@ if (!$user->isLoggedIn()) {
 <body class="hold-transition login-page">
   <div class="login-box">
     <div class="login-logo">
-      <a href="#"><b>Volunteer</b>Database</a>
+      <a href="#"><b>Electronic Clinical Trial Volunteer Management</b>System</a>
     </div>
     <!-- /.login-logo -->
     <div class="card">

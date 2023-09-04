@@ -5,7 +5,7 @@
                       <h1 class="m-0">
                           <?php
                             if ($_GET['title'] == 1) {
-                                echo 'Dashboard v1';
+                                echo 'Home';
                             } elseif ($_GET['title'] == 2) {
                                 echo 'Dashboard v2';
                             } elseif ($_GET['title'] == 3) {

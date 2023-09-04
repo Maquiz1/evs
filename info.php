@@ -60,7 +60,7 @@ $numRec = 15;
                     </div> -->
                     <div class="row mb-2">
                         <div class="col-sm-8">
-                            <h1>Volunteer Database ( KINGANI CLINICAL TRIAL FACILITY )</h1>
+                            <h1>Electronic Clinical Trial Volunteer Management System</h1>
                         </div>
                         <div class="col-sm-4">
                             <ol class="breadcrumb float-sm-right">
@@ -116,7 +116,7 @@ $numRec = 15;
                                 } elseif ($_GET['status'] == 5) {
                                     $pagNum = $override->countData2('clients', 'status', 1, 'enrolled', 1, 'site_id', $user->data()->site_id);
                                 } elseif ($_GET['status'] == 6) {
-                                    $pagNum = $override->countData5('clients', 'status', 1, 'sensitization1', 0, 'screened', 0, 'eligible', 0, 'enrolled', 0, 'available', 1, 'site_id', $user->data()->site_id);
+                                    $pagNum = $override->getNoAvailable('progres', 'status', 1, 'pt_status', 0, 'pt_status', 2);
                                 } elseif ($_GET['status'] == 7) {
                                     $pagNum = $override->countData('clients', 'status', 0, 'site_id', $user->data()->site_id, $page, $numRec);
                                 }
@@ -142,7 +142,7 @@ $numRec = 15;
                                 } elseif ($_GET['status'] == 5) {
                                     $clients = $override->getWithLimit3('clients', 'status', 1, 'enrolled', 1, 'site_id', $user->data()->site_id, $page, $numRec);
                                 } elseif ($_GET['status'] == 6) {
-                                    $clients = $override->getWithLimit5('clients', 'status', 1, 'sensitization1', 0, 'screened', 0, 'eligible', 0, 'enrolled', 0, 'site_id', $user->data()->site_id, $page, $numRec);
+                                    $clients = $override->getAvailable('progres', 'status', 1, 'pt_status', 0, 'pt_status', 2);
                                 } elseif ($_GET['status'] == 7) {
 
                                     $clients = $override->getWithLimit1('clients', 'status', 0, 'site_id', $user->data()->site_id, $page, $numRec);
@@ -159,7 +159,7 @@ $numRec = 15;
                                                 <th>Last Name</th>
                                                 <th>SEX</th>
                                                 <th>AGE</th>
-                                                <?php if ($_GET['status'] != 1) { ?>
+                                                <?php if ($_GET['status'] == 2 || $_GET['status'] == 3 || $_GET['status'] == 4 || $_GET['status'] == 5) { ?>
                                                     <th>STUDY</th>
                                                 <?php } ?>
 
@@ -182,28 +182,32 @@ $numRec = 15;
                                                 $dob = $value['dob'];
                                                 $age = $user->dateDiffYears(date('Y-m-d'), $dob);
                                                 $project_name = $override->get('study', 'id', $value['project_name'])[0];
+                                                $client = $override->get('clients', 'id', $value['client_id'])[0];
+
                                             ?>
                                                 <tr>
                                                     <td><?= $x; ?></td>
-                                                    <td><?= $value['fname']; ?></td>
-                                                    <td><?= $value['mname']; ?></td>
-                                                    <td><?= $value['lname']; ?></td>
-                                                    <?php if ($value['gender'] == 1) { ?>
+                                                    <td><?= $client['fname']; ?></td>
+                                                    <td><?= $client['mname']; ?></td>
+                                                    <td><?= $client['lname']; ?></td>
+
+                                                    <?php if ($client['gender'] == 1) { ?>
                                                         <td>Male</td>
-                                                    <?php } elseif ($value['gender'] == 2) { ?>
+                                                    <?php } elseif ($client['gender'] == 2) { ?>
                                                         <td>Female</td>
                                                     <?php } ?>
+
                                                     <td><?= $age; ?></td>
-                                                    <?php if ($_GET['status'] != 1) { ?>
+                                                    <?php if ($_GET['status'] == 2 || $_GET['status'] == 3 || $_GET['status'] == 4 || $_GET['status'] == 5) { ?>
                                                         <td><?= $project_name['name']; ?></td>
                                                     <?php } ?>
-                                                    <td><?= $value['phone1']; ?></td>
-                                                    <?php if ($_GET['status'] == 3) { ?>
-                                                        <?php if ($value['screening1'] == 1) { ?>
-                                                            <td>Done</td>
-                                                        <?php } elseif ($value['screening1'] == 2) { ?>
-                                                            <td>Not Done</td>
-                                                        <?php } ?>
+
+                                                    <td><?= $client['phone1']; ?></td>
+
+                                                    <?php if ($_GET['status'] == 1 || $_GET['status'] == 6) { ?>
+                                                        <td>Active</td>
+                                                    <?php } else { ?>
+                                                        <td>Not Active</td>
                                                     <?php } ?>
 
                                                     <?php if ($_GET['status'] == 3) { ?>
@@ -214,85 +218,21 @@ $numRec = 15;
                                                         <?php } ?>
                                                     <?php } ?>
 
-
-                                                    <?php if ($_GET['status'] == 1) { ?>
-                                                        <?php if ($value['status'] == 1) { ?>
-                                                            <td>
-                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Active</div>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                            <td>
-                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Active</div>
-                                                            </td>
-                                                        <?php } ?>
-
-                                                        <td>
-                                                            <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=view" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> View</a></div>
-                                                            <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=edit" class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Edit</a></div>
-                                                        </td>
-                                                    <?php } ?>
-
-                                                    <?php if ($_GET['status'] == 2) { ?>
-                                                        <?php if ($value['eligible'] == 1) { ?>
-                                                            <td>
-                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Eligible</div>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                            <td>
-                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Eligible</div>
-                                                            </td>
-                                                        <?php } ?>
-                                                    <?php } ?>
-
-                                                    <?php if ($_GET['status'] == 3) { ?>
-                                                        <?php if ($value['screening1'] == 1) { ?>
-                                                            <td>
-                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Screened</div>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                            <td>
-                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Screened</div>
-                                                            </td>
-                                                        <?php } ?>
-                                                    <?php } ?>
-
                                                     <?php if ($_GET['status'] == 4) { ?>
                                                         <?php if ($value['enrolled'] == 1) { ?>
-                                                            <td>
-                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Enrolled</div>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                            <td>
-                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Enrolled</div>
-                                                            </td>
-                                                        <?php } ?>
-                                                    <?php } ?>
-
-                                                    <?php if ($_GET['status'] == 5) { ?>
-                                                        <?php if ($value['end_study'] == 1) { ?>
-                                                            <td>
-                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Active</div>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                            <td>
-                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Active</div>
-                                                            </td>
-                                                        <?php } ?>
-                                                    <?php } ?>
-
-                                                    <?php if ($_GET['status'] == 6) { ?>
-                                                        <?php if ($value['sensitization'] == 1) { ?>
-                                                            <td>
-                                                                <div class="btn btn-info btn-clean"><span class="icon-eye-open"></span> Sensitized</div>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                            <td>
-                                                                <div class="btn btn-danger btn-clean"><span class="icon-eye-open"></span> Not Sensitized</div>
-                                                            </td>
+                                                            <td>Enrolled</td>
+                                                        <?php } elseif ($value['enrolled'] == 2) { ?>
+                                                            <td>Not Enrolled</td>
                                                         <?php } ?>
                                                     <?php } ?>
 
                                                     <td>
+                                                        <?php
+                                                        if ($_GET['status'] == 1) { ?>
+                                                            <div class="btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=update_client" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> Edit</a></div>
+                                                        <?php }
+                                                        ?>
+
                                                         <?php
                                                         if ($_GET['status'] == 2) {
 
@@ -373,12 +313,12 @@ $numRec = 15;
                                                         <?php
                                                         if ($_GET['status'] == 6) {
 
-                                                            if ($value['available'] >= 1) {
+                                                            if ($value['sensitization1'] != 1) {
                                                         ?>
                                                                 <div class="btn-group btn-group-xs"><a href="add_sensitization.php?id=1&cid=<?= $value['id'] ?>&btn=add_sensitize" class="btn btn-warning btn-clean"><span class="icon-eye-open"></span> Add Sensitization</a></div>
 
                                                             <?php
-                                                            } else {
+                                                            } elseif($value['sensitization2'] == 1) {
                                                             ?>
                                                                 <div class="btn-group btn-group-xs"><a href="add_sensitization.php?id=1&cid=<?= $value['id'] ?>&btn=update_sensitize" class="btn btn-success btn-clean"><span class="icon-eye-open"></span> Update Sensitization</a></div>
 
@@ -400,7 +340,7 @@ $numRec = 15;
                                                 <th>Last Name</th>
                                                 <th>SEX</th>
                                                 <th>AGE</th>
-                                                <?php if ($_GET['status'] != 1) { ?>
+                                                <?php if ($_GET['status'] == 2 || $_GET['status'] == 3 || $_GET['status'] == 4 || $_GET['status'] == 5) { ?>
                                                     <th>STUDY</th>
                                                 <?php } ?>
 

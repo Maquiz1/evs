@@ -64,39 +64,9 @@ if ($user->isLoggedIn()) {
         <div class="container-fluid">
           <!-- Small boxes (Stat box) -->
           <div class="row">
-            <div class="col-lg-2 col-6">
+            <div class="col-lg-3 col-6">
               <!-- small box -->
-              <div class="small-box bg-info">
-                <div class="inner">
-                  <h3><?= $override->getCount('clients', 'status', 1); ?></h3>
-
-                  <p>Active Registered</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-bag"></i>
-                </div>
-                <a href="info.php?status=1" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-              </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-2 col-6">
-              <!-- small box -->
-              <div class="small-box bg-danger">
-                <div class="inner">
-                  <h3><?= $override->countData5('clients', 'status', 1, 'sensitization1', 0, 'screened', 0, 'eligible', 0, 'enrolled', 0, 'available', 1); ?></h3>
-
-                  <p>Currently Available</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-pie-graph"></i>
-                </div>
-                <a href="info.php?status=6" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-              </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-2 col-6">
-              <!-- small box -->
-              <div class="small-box bg-warning">
+              <div class="small-box bg-default">
                 <div class="inner">
                   <h3><?= $override->getCount1('clients', 'status', 1, 'sensitization1', 1); ?></h3>
 
@@ -108,11 +78,10 @@ if ($user->isLoggedIn()) {
                 <a href="info.php?status=2" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
-
             <!-- ./col -->
-            <div class="col-lg-2 col-6">
+            <div class="col-lg-3 col-6">
               <!-- small box -->
-              <div class="small-box bg-success">
+              <div class="small-box bg-warning">
                 <div class="inner">
                   <!-- <h3> -->
                   <h3><?= $override->getCount2('clients', 'status', 1, 'sensitization1', 1, 'screening1', 1); ?></h3>
@@ -127,7 +96,8 @@ if ($user->isLoggedIn()) {
                 <a href="info.php?status=3" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
-            <div class="col-lg-2 col-6">
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
               <!-- small box -->
               <div class="small-box bg-info">
                 <div class="inner">
@@ -142,7 +112,7 @@ if ($user->isLoggedIn()) {
               </div>
             </div>
             <!-- ./col -->
-            <div class="col-lg-2 col-6">
+            <div class="col-lg-3 col-6">
               <!-- small box -->
               <div class="small-box bg-success">
                 <div class="inner">

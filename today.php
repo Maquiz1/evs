@@ -2,13 +2,12 @@
 require_once 'php/core/init.php';
 $user = new User();
 $override = new OverideData();
-$email = new Email();
-$random = new Random();
-
-$successMessage = null;
-$pageError = null;
-$errorMessage = null;
 $numRec = 15;
+$now = date('Y-m-d');
+$nxt_day = date('Y-m-d', strtotime($now . ' + 1 days'));
+$today = $override->getCount2News('visit', 'expected_date', $now, 'status', 0, 'site_id', $user->data()->site_id);
+
+
 if ($user->isLoggedIn()) {
     if (Input::exists('post')) {
         $validate = new validate();
@@ -21,7 +20,6 @@ if ($user->isLoggedIn()) {
             if ($validate->passed()) {
                 try {
                     $user->updateRecord('visit', array(
-                        'study_id' => Input::get('study_id'),
                         'visit_date' => Input::get('visit_date'),
                         'status' => 1,
                         'visit_status' => 1,
@@ -94,13 +92,13 @@ if ($user->isLoggedIn()) {
                         </div>
                     </div> -->
                     <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1>DataTables</h1>
+                        <div class="col-sm-8">
+                            <h1>Today Visits</h1>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
-                                <li class="breadcrumb-item active">DataTables</li>
+                                <li class="breadcrumb-item active">KCTF</li>
                             </ol>
                         </div>
                     </div>
@@ -114,101 +112,104 @@ if ($user->isLoggedIn()) {
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">DataTable with default features</h3>
+                                    <h3 class="card-title">
+                                        <?php if ($_GET['status'] == 1) { ?>
+                                            List of Registered Clients
+                                        <?php } elseif ($_GET['status'] == 2) { ?>
+                                            List of Sensitized Clients
+
+                                        <?php } elseif ($_GET['status'] == 3) { ?>
+                                            List of Screened Clients
+
+                                        <?php } elseif ($_GET['status'] == 4) { ?>
+                                            List of Eligible Clients
+
+                                        <?php } elseif ($_GET['status'] == 5) { ?>
+                                            List of Enrolled Clients
+
+                                        <?php } elseif ($_GET['status'] == 6) { ?>
+                                            List of Available Clients
+
+                                        <?php } elseif ($_GET['status'] == 7) { ?>
+
+                                        <?php } ?>
                                 </div>
                                 <!-- /.card-header -->
+
+                                <?php
+                                $pagNum = 0;
+                                $pagNum = $override->getCount2('visit', 'expected_date', date('Y-m-d'), 'status', 0, 'site_id', $user->data()->site_id);
+
+                                $pages = ceil($pagNum / $numRec);
+                                if (!$_GET['page'] || $_GET['page'] == 1) {
+                                    $page = 0;
+                                } else {
+                                    $page = ($_GET['page'] * $numRec) - $numRec;
+                                }
+                                $visit = $override->getCount2News('visit', 'expected_date', date('Y-m-d'), 'status', 0, 'site_id', $user->data()->site_id);
+                                ?>
+
                                 <div class="card-body">
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th width="2%">#</th>
-                                                <th width="8%">Visit Name</th>
-                                                <th width="3%">Visit Code</th>
-                                                <th width="10%">Visit Type</th>
-                                                <th width="10%">Day</th>
-                                                <th width="10%">Expected Date</th>
-                                                <th width="10%">Visit Date</th>
-                                                <th width="5%">Status</th>
-                                                <th width="15%">Action</th>
+                                                <th>No.</th>
+                                                <th>Day.</th>
+                                                <th>Date.</th>
+                                                <th>First Name</th>
+                                                <th>Middle Name</th>
+                                                <th>Last Name</th>
+                                                <th>SEX</th>
+                                                <th>AGE</th>
+                                                <th>STUDY</th>
+                                                <th>Phone</th>
+                                                <th>STATUS</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php $x = 1;
-                                            foreach ($override->get('visit', 'client_id', $_GET['cid']) as $visit) {
-                                                $crf1 = $override->get1('crf1', 'patient_id', $_GET['cid'], 'vcode', $visit['visit_code'])[0];
-                                                $sc = $override->get('screening', 'client_id', $_GET['cid'])[0];
-                                                $cntV = $override->getCount('visit', 'client_id', $visit['client_id']);
-                                                $client = $override->get('clients', 'id', $_GET['cid'])[0];
-                                                $study_id = $override->get1('clients', 'id', $_GET['cid'], 'status', 1)[0];
-
-                                                $visit_status = 0;
-                                                if ($visit['visit_status']) {
-                                                }
-
-
-                                                // print_r($visit['visit_status']);
-                                                if ($visit['status'] == 0) {
-                                                    $btnV = 'Add';
-                                                } elseif ($visit['status'] == 1) {
-                                                    $btnV = 'Edit';
-                                                    // if ($x == 1) {
-                                                    //     $btnV = 'Add';
-                                                    // }
-                                                }
-                                                if ($sc) {
-                                                    $btnS = 'Edit';
-                                                } else {
-                                                    $btnS = 'Add';
-                                                }
-                                                if ($lb) {
-                                                    $btnL = 'Edit';
-                                                } else {
-                                                    $btnL = 'Add';
-                                                }
-                                                if ($visit['visit_code'] == 'D1') {
-                                                    $v_typ = 'Enrollment';
-                                                } elseif ($visit['visit_code'] == 'END') {
-                                                    $v_typ = 'END STUDY';
-                                                } else {
-                                                    $v_typ = 'Follow Up';
-                                                }
-
-                                                if ($x == 1 || ($x > 1 && $sc['eligibility'] == 1 && $lb['eligibility'] == 1)) {
-                                                }
-
+                                            <?php
+                                            $x = 1;
+                                            foreach ($visit as $value) {
+                                                $dob = $value['dob'];
+                                                $age = $user->dateDiffYears(date('Y-m-d'), $dob);
+                                                $project_name = $override->get('study', 'id', $value['project_name'])[0];
+                                                $name = $override->get('clients', 'id', $value['client_id'])[0];
+                                                $gender = $override->get('clients', 'id', $value['client_id'])[0];
+                                                $lname = $override->get('user', 'id', $user->data()->id)[0];
+                                                $project_name = $override->get('study', 'id', $value['project_name'])[0];
                                             ?>
                                                 <tr>
-                                                    <td><?= $x ?></td>
-                                                    <td> <?= $visit['visit_name'] ?></td>
-                                                    <td> <?= $visit['visit_code'] ?></td>
-                                                    <td> <?= $v_typ ?></td>
-                                                    <td> <?= date('l', strtotime($visit['expected_date'])) ?> </td>
-                                                    <td> <?= $visit['expected_date'] ?></td>
-                                                    <td> <?= $visit['visit_date'] ?></td>
+                                                    <td><?= $x; ?></td>
+                                                    <td><?= $value['visit_code']; ?></td>
+                                                    <td><?= $value['expected_date']; ?></td>
+                                                    <td><?= $name['fname']; ?></td>
+                                                    <td><?= $name['mname']; ?></td>
+                                                    <td><?= $name['lname']; ?></td>
+                                                    <?php if ($name['gender'] == 1) { ?>
+                                                        <td>Male</td>
+                                                    <?php } elseif ($name['gender'] == 2) { ?>
+                                                        <td>Female</td>
+                                                    <?php } ?>
+                                                    <td><?= $age; ?></td>
+                                                    <td><?= $project_name['name']; ?></td>
+                                                    <td><?= $name['phone1']; ?></td>
+                                                    <?php if ($value['status'] == 1) { ?>
+                                                        <td>Done</td>
+                                                    <?php } else {
+                                                    ?>
+                                                        <td>Pending</td>
+
+                                                    <?php
+                                                    } ?>
 
                                                     <td>
-                                                        <?php if ($visit['status'] == 1) { ?>
-                                                            <a href="#" role="button" class="btn btn-success">Done</a>
-                                                        <?php } elseif ($visit['status'] == 0) { ?>
-                                                            <a href="#" role="button" class="btn btn-warning">Pending</a>
-                                                        <?php } ?>
+                                                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#addVisit<?= $value['id'] ?>">
+                                                            Add Visit
+                                                        </button>
                                                     </td>
-                                                    <td>
-                                                        <?php if ($visit['seq_no'] >= 0) { ?>
-                                                            <?php if ($btnV == 'Add') { ?>
-                                                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#addVisit<?= $visit['id'] ?>">
-                                                                    <?= $btnV ?>Visit
-                                                                </button>
-                                                            <?php } else { ?>
-                                                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addVisit<?= $visit['id'] ?>">
-                                                                    <?= $btnV ?>Visit
-                                                                </button>
-                                                            <?php }
-                                                            ?>
-                                                    </td>
-                                                <?php } ?>
                                                 </tr>
-                                                <div class="modal fade" id="addVisit<?= $visit['id'] ?>">
+                                                <div class="modal fade" id="addVisit<?= $value['id'] ?>">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <form id="validation" method="post">
@@ -223,8 +224,8 @@ if ($user->isLoggedIn()) {
                                                                         <div class="col-sm-6">
                                                                             <div class="form-group">
                                                                                 <label>Follow Up Date</label>
-                                                                                <input value="<?php if ($visit['status'] != 0) {
-                                                                                                    echo $visit['visit_date'];
+                                                                                <input value="<?php if ($value['status'] != 0) {
+                                                                                                    echo $value['visit_date'];
                                                                                                 } ?>" class="validate[required,custom[date]]" type="text" name="visit_date" id="visit_date" />
                                                                                 <span>Example: 2010-12-01</span>
                                                                             </div>
@@ -235,17 +236,16 @@ if ($user->isLoggedIn()) {
                                                                                 <label>Comments / Remarks / Notes
                                                                                     :
                                                                                 </label>
-                                                                                <textarea name="comments" id="comments" cols="20%" rows="3" placeholder="Type Comments..." onkeyup="myFunction()" required><?php if ($visit['comments']) {
-                                                                                                                                                                                                                print_r($visit['comments']);
+                                                                                <textarea name="comments" id="comments" cols="20%" rows="3" placeholder="Type Comments..." onkeyup="myFunction()" required><?php if ($value['comments']) {
+                                                                                                                                                                                                                print_r($value['comments']);
                                                                                                                                                                                                             }  ?></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer justify-content-between">
-                                                                    <input type="hidden" name="id" value="<?= $visit['id'] ?>">
-                                                                    <input type="hidden" name="vc" value="<?= $visit['visit_code'] ?>">
-                                                                    <input type="hidden" name="study_id" value="<?= $study_id['study_id'] ?>">
+                                                                    <input type="hidden" name="id" value="<?= $value['id'] ?>">
+                                                                    <input type="hidden" name="vc" value="<?= $value['visit_code'] ?>">
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                                     <input type="submit" name="add_visit" class="btn btn-warning" value="Save">
                                                                 </div>
@@ -253,21 +253,24 @@ if ($user->isLoggedIn()) {
                                                         </div>
                                                         <!-- /.modal-content -->
                                                     </div>
-
                                                 <?php
                                                 $x++;
                                             } ?>
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th width="2%">#</th>
-                                                <th width="8%">Visit Name</th>
-                                                <th width="3%">Visit Code</th>
-                                                <th width="10%">Visit Type</th>
-                                                <th width="10%">Expected Date</th>
-                                                <th width="10%">Visit Date</th>
-                                                <th width="5%">Status</th>
-                                                <th width="15%">Action</th>
+                                                <th>No.</th>
+                                                <th>Day.</th>
+                                                <th>Date.</th>
+                                                <th>First Name</th>
+                                                <th>Middle Name</th>
+                                                <th>Last Name</th>
+                                                <th>SEX</th>
+                                                <th>AGE</th>
+                                                <th>STUDY</th>
+                                                <th>Phone</th>
+                                                <th>STATUS</th>
+                                                <th>Action</th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -316,7 +319,7 @@ if ($user->isLoggedIn()) {
     <!-- AdminLTE App -->
     <script src="dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="dist/js/demo.js"></script>
+    <!-- <script src="dist/js/demo.js"></script> -->
     <!-- Page specific script -->
     <script>
         $(function() {
