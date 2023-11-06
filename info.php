@@ -46,6 +46,40 @@ if ($user->isLoggedIn()) {
             } else {
                 $pageError = $validate->errors();
             }
+        } elseif (Input::get('RemoveSensitization')) {
+            $validate = new validate();
+            $validate = $validate->check($_POST, array(
+                'select_date' => array(
+                    'required' => true,
+                ),
+                'project_id' => array(
+                    'required' => true,
+                ),
+            ));
+            if ($validate->passed()) {
+                if (count(Input::get('checkname')) >= 1) {
+                    try {
+                        $i = 0;
+                        foreach (Input::get('checkname') as $value) {
+                            if (Input::get('checkname')[$i]) {
+                                $user->updateRecord('clients', array(
+                                    'project_id' => 0,
+                                    'available' => 1,
+                                    'sensitization' => 0,
+                                ), $value);
+                            }
+                            $i++;
+                        }
+                        $successMessage = 'Client Selected Successful';
+                    } catch (Exception $e) {
+                        die($e->getMessage());
+                    }
+                } else {
+                    $errorMessage = 'Please select ataleast One Patient to Submit';
+                }
+            } else {
+                $pageError = $validate->errors();
+            }
         } elseif (Input::get('AddSensitization1')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
@@ -66,6 +100,38 @@ if ($user->isLoggedIn()) {
                                     'available' => 0,
                                     'sensitization' => 0,
                                     'sensitization1' => 1,
+                                ), $value);
+                            }
+                            $i++;
+                        }
+                        $successMessage = 'Client Sensitization 1 Added Successful';
+                    } catch (Exception $e) {
+                        die($e->getMessage());
+                    }
+                } else {
+                    $errorMessage = 'Please select ataleast One Patient to Submit';
+                }
+            } else {
+                $pageError = $validate->errors();
+            }
+        } elseif (Input::get('RemoveSensitization1')) {
+            $validate = new validate();
+            $validate = $validate->check($_POST, array(
+                'sensitization_date' => array(
+                    'required' => true,
+                ),
+            ));
+            if ($validate->passed()) {
+                if (Input::get('checkname')) {
+                    try {
+                        $i = 0;
+                        foreach (Input::get('checkname') as $value) {
+                            if (Input::get('checkname')[$i]) {
+                                $user->updateRecord('clients', array(
+                                    'project_id' => 0,
+                                    'available' => 1,
+                                    'sensitization' => 0,
+                                    'sensitization1' => 0,
                                 ), $value);
                             }
                             $i++;
@@ -638,7 +704,13 @@ if ($user->isLoggedIn()) {
                                                     <div class="col-sm-2">
                                                         <div class="form-group">
                                                             <label>Submit </label>
-                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="SelectSensitization" value="Select for sensitization">
+                                                            <input type="submit" class="form-control btn btn-info btn-clean" name="SelectSensitization" value="Select for sensitization">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Discard </label>
+                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveSensitization" value="Remove">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -654,7 +726,13 @@ if ($user->isLoggedIn()) {
                                                     <div class="col-sm-2">
                                                         <div class="form-group">
                                                             <label>Submit </label>
-                                                            <input type="submit" class="btn btn-warning btn-clean" name="AddSensitization1" value="Add sensitization 1">
+                                                            <input type="submit" class="btn btn-info btn-clean" name="AddSensitization1" value="Add sensitization 1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Discard </label>
+                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveSensitization1" value="Remove">
                                                         </div>
                                                     </div>
                                                 </div>
