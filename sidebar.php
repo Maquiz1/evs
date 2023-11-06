@@ -6,10 +6,19 @@ $override = new OverideData();
 $now = date('Y-m-d');
 $nxt_day = date('Y-m-d', strtotime($now . ' + 1 days'));
 // $nxt_day = date('Y-m-d', strtotime($last_visit_date . ' + ' . $schedule['days'] . ' days'));
-
-// $available = $override->getCount1('clients', 'status', 1, 'site_id', $user->data()->site_id);
-$available = $override->getNoAvailable('progres', 'status', 1, 'pt_status', 0, 'pt_status', 2);
 $registered = $override->getCount1('clients', 'status', 1, 'site_id', $user->data()->site_id);
+$available = $override->getCount2('clients', 'status', 1, 'available', 1, 'site_id', $user->data()->site_id);
+// $available = $override->getNoAvailable('progres', 'status', 1, 'pt_status', 0, 'pt_status', 2);
+// $Selected = $override->getCount4('clients', 'status', 1, 'sensitization', 1, 'site_id', $user->data()->site_id);
+$Selected = $override->getCount2('clients', 'status', 1, 'sensitization', 1, 'site_id', $user->data()->site_id);
+$sensitization1 = $override->getCount2('clients', 'status', 1, 'sensitization1', 1, 'site_id', $user->data()->site_id);
+$sensitization2 = $override->getCount2('clients', 'status', 1, 'sensitization2', 1, 'site_id', $user->data()->site_id);
+$screening = $override->getCount2('clients', 'status', 1, 'screening', 1, 'site_id', $user->data()->site_id);
+$screening1 = $override->getCount2('clients', 'status', 1, 'screening1', 1, 'site_id', $user->data()->site_id);
+$screening2 = $override->getCount2('clients', 'status', 1, 'screening2', 1, 'site_id', $user->data()->site_id);
+$Enrollment = $override->getCount2('clients', 'status', 1, 'enrollment', 1, 'site_id', $user->data()->site_id);
+$Enrolled = $override->getCount2('clients', 'status', 1, 'enrolled', 1, 'site_id', $user->data()->site_id);
+$Locked = $override->getCount2('clients', 'status', 1, 'locked', 1, 'site_id', $user->data()->site_id);
 $today = $override->getCount2('visit', 'expected_date', date('Y-m-d'), 'status', 0, 'site_id', $user->data()->site_id);
 $pending = $override->getNo2('visit', 'expected_date', date('Y-m-d'), 'status', 0, 'site_id', $user->data()->site_id);
 $missing = $override->getNo2('visit', 'expected_date', date('Y-m-d'), 'status', 0, 'site_id', $user->data()->site_id);
@@ -68,39 +77,21 @@ $tomorrow = $override->getCount2('visit', 'expected_date', $nxt_day, 'status', 0
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="index1.php?title=1" class="nav-link active">
+                            <a href="index1.php?title=1" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Home </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="info.php?status=1" class="nav-link active">
+                            <a href="info.php?id=1&status=1" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Registered<span class="badge badge-info right"><?= $registered ?></span></p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="info.php?status=6" class="nav-link active">
+                            <a href="info.php?id=1&status=2" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Available<span class="badge badge-info right"><?= $available ?></span></p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="today.php" class="nav-link active">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Toady Visits<span class="badge badge-info right"><?= $today ?></span></p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="tomorrow.php" class="nav-link active">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tommorow Visits<span class="badge badge-info right"><?= $tomorrow ?></span></p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pending.php" class="nav-link active">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Pending Visits<span class="badge badge-info right"><?= $pending ?></span></p>
                             </a>
                         </li>
                         <!-- <li class="nav-item">
@@ -132,67 +123,127 @@ $tomorrow = $override->getCount2('visit', 'expected_date', $nxt_day, 'status', 0
                         </p>
                     </a>
                 </li> -->
-                <!-- <li class="nav-item">
+                <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
                         <p>
-                            Layout Options
+                            Sensitizations
                             <i class="fas fa-angle-left right"></i>
-                            <span class="badge badge-info right">6</span>
+                            <span class="badge badge-info right"><?= $Sensitizations ?></span>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="pages/layout/top-nav.html" class="nav-link">
+                            <a href="info.php?id=1&status=3" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Top Navigation</p>
+                                <p>Selected<span class="badge badge-info right"><?= $Selected ?></span></p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
+                            <a href="info.php?id=1&status=4" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Top Navigation + Sidebar</p>
+                                <p>Sensitizations 1<span class="badge badge-info right"><?= $sensitization1 ?></span></p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/layout/boxed.html" class="nav-link">
+                            <a href="info.php?id=1&status=5" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Boxed</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/fixed-sidebar.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Fixed Sidebar</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/fixed-sidebar-custom.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Fixed Sidebar <small>+ Custom Area</small></p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/fixed-topnav.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Fixed Navbar</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/fixed-footer.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Fixed Footer</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/collapsed-sidebar.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Collapsed Sidebar</p>
+                                <p>Sensitizations 2<span class="badge badge-info right"><?= $sensitization2 ?></span></p>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            Screening
+                            <i class="fas fa-angle-left right"></i>
+                            <span class="badge badge-info right"><?= $Sensitizations ?></span>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="info.php?id=1&status=6" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Selected<span class="badge badge-info right"><?= $screening ?></span></p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="info.php?id=1&status=7" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Screening 1<span class="badge badge-info right"><?= $screening1 ?></span></p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="info.php?id=1&status=8" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Screening 2<span class="badge badge-info right"><?= $screening2 ?></span></p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            Enrollment
+                            <i class="fas fa-angle-left right"></i>
+                            <span class="badge badge-info right"><?= $Sensitizations ?></span>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="info.php?id=1&status=9" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Selected<span class="badge badge-info right"><?= $Enrollment ?></span></p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="info.php?id=1&status=10" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Enrolled<span class="badge badge-info right"><?= $Enrolled ?></span></p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="info.php?id=1&status=11" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Locked<span class="badge badge-info right"><?= $Locked ?></span></p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-chart-pie"></i>
+                        <p>
+                            Schedules
+                            <i class="fas fa-angle-left right"></i>
+                            <span class="badge badge-info right"><?= $Schedules ?></span>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="today.php" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Toady Visits<span class="badge badge-info right"><?= $today ?></span></p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="tomorrow.php" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Tommorow Visits<span class="badge badge-info right"><?= $tomorrow ?></span></p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pending.php" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Pending Visits<span class="badge badge-info right"><?= $pending ?></span></p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-chart-pie"></i>
                         <p>
@@ -726,6 +777,7 @@ $tomorrow = $override->getCount2('visit', 'expected_date', $nxt_day, 'status', 0
                     </a>
                 </li> -->
             </ul>
+
         </nav>
         <!-- /.sidebar-menu -->
     </div>

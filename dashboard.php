@@ -15,10 +15,10 @@ $users = $override->getData('user');
 if ($user->isLoggedIn()) {
    if($user->data()->power == 1){
        $screened = $override->getCount('clients', 'status', 1);
-       $enrolled = $override->getCount1('clients', 'enrollment_status', 1,'status', 1);
+       $enrolled = $override->getCount1('clients', 'enrolled', 1,'status', 1);
    }else{
        $screened = $override->countData('clients', 'status', 1,'site_id', $user->data()->site_id);
-       $enrolled = $override->countData1('clients', 'enrollment_status',1,'status', 1,'site_id', $user->data()->site_id);
+       $enrolled = $override->countData1('clients', 'enrolled',1,'status', 1,'site_id', $user->data()->site_id);
    }
 } else {
     Redirect::to('index.php');

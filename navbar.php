@@ -8,7 +8,7 @@
                 <a href="index1.php" class="nav-link">Home</a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="add.php" class="nav-link">Register New</a>
+                <a href="add.php?id=1&btn=Add" class="nav-link">Register New</a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
                 <a href="add_user.php" class="nav-link">Add Staff</a>
