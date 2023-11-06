@@ -178,6 +178,39 @@ if ($user->isLoggedIn()) {
             } else {
                 $pageError = $validate->errors();
             }
+        } elseif (Input::get('RemoveSensitization2')) {
+            $validate = new validate();
+            $validate = $validate->check($_POST, array(
+                'sensitization_date' => array(
+                    'required' => true,
+                ),
+            ));
+            if ($validate->passed()) {
+                if (Input::get('checkname')) {
+                    try {
+                        $i = 0;
+                        foreach (Input::get('checkname') as $value) {
+                            if (Input::get('checkname')[$i]) {
+                                $user->updateRecord('clients', array(
+                                    'project_id' => 0,
+                                    'available' => 1,
+                                    'sensitization' => 0,
+                                    'sensitization1' => 0,
+                                    'sensitization2' => 0,
+                                ), $value);
+                            }
+                            $i++;
+                        }
+                        $successMessage = 'Client Sensitization 1 Added Successful';
+                    } catch (Exception $e) {
+                        die($e->getMessage());
+                    }
+                } else {
+                    $errorMessage = 'Please select ataleast One Patient to Submit';
+                }
+            } else {
+                $pageError = $validate->errors();
+            }
         } elseif (Input::get('SelectScreening')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
@@ -202,6 +235,40 @@ if ($user->isLoggedIn()) {
                             $i++;
                         }
                         $successMessage = 'Client Selection for Screening Successful';
+                    } catch (Exception $e) {
+                        die($e->getMessage());
+                    }
+                } else {
+                    $errorMessage = 'Please select ataleast One Patient to Submit';
+                }
+            } else {
+                $pageError = $validate->errors();
+            }
+        } elseif (Input::get('RemoveScreening')) {
+            $validate = new validate();
+            $validate = $validate->check($_POST, array(
+                // 'sensitization_date' => array(
+                //     'required' => true,
+                // ),
+            ));
+            if ($validate->passed()) {
+                if (Input::get('checkname')) {
+                    try {
+                        $i = 0;
+                        foreach (Input::get('checkname') as $value) {
+                            if (Input::get('checkname')[$i]) {
+                                $user->updateRecord('clients', array(
+                                    'project_id' => 0,
+                                    'available' => 1,
+                                    'sensitization' => 0,
+                                    'sensitization1' => 0,
+                                    'sensitization2' => 0,
+                                    'screening' => 0,
+                                ), $value);
+                            }
+                            $i++;
+                        }
+                        $successMessage = 'Client Sensitization 1 Added Successful';
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -236,6 +303,41 @@ if ($user->isLoggedIn()) {
                             $i++;
                         }
                         $successMessage = 'Client screening 1 Added Successful';
+                    } catch (Exception $e) {
+                        die($e->getMessage());
+                    }
+                } else {
+                    $errorMessage = 'Please select ataleast One Patient to Submit';
+                }
+            } else {
+                $pageError = $validate->errors();
+            }
+        } elseif (Input::get('RemoveScreening1')) {
+            $validate = new validate();
+            $validate = $validate->check($_POST, array(
+                // 'sensitization_date' => array(
+                //     'required' => true,
+                // ),
+            ));
+            if ($validate->passed()) {
+                if (Input::get('checkname')) {
+                    try {
+                        $i = 0;
+                        foreach (Input::get('checkname') as $value) {
+                            if (Input::get('checkname')[$i]) {
+                                $user->updateRecord('clients', array(
+                                    'project_id' => 0,
+                                    'available' => 1,
+                                    'sensitization' => 0,
+                                    'sensitization1' => 0,
+                                    'sensitization2' => 0,
+                                    'screening' => 0,
+                                    'screening1' => 0,
+                                ), $value);
+                            }
+                            $i++;
+                        }
+                        $successMessage = 'Client Sensitization 1 Added Successful';
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -284,6 +386,42 @@ if ($user->isLoggedIn()) {
             } else {
                 $pageError = $validate->errors();
             }
+        } elseif (Input::get('RemoveScreening2')) {
+            $validate = new validate();
+            $validate = $validate->check($_POST, array(
+                // 'sensitization_date' => array(
+                //     'required' => true,
+                // ),
+            ));
+            if ($validate->passed()) {
+                if (Input::get('checkname')) {
+                    try {
+                        $i = 0;
+                        foreach (Input::get('checkname') as $value) {
+                            if (Input::get('checkname')[$i]) {
+                                $user->updateRecord('clients', array(
+                                    'project_id' => 0,
+                                    'available' => 1,
+                                    'sensitization' => 0,
+                                    'sensitization1' => 0,
+                                    'sensitization2' => 0,
+                                    'screening' => 0,
+                                    'screening1' => 0,
+                                    'screening2' => 0,
+                                ), $value);
+                            }
+                            $i++;
+                        }
+                        $successMessage = 'Client Sensitization 1 Added Successful';
+                    } catch (Exception $e) {
+                        die($e->getMessage());
+                    }
+                } else {
+                    $errorMessage = 'Please select ataleast One Patient to Submit';
+                }
+            } else {
+                $pageError = $validate->errors();
+            }
         } elseif (Input::get('SelectEnrollment')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
@@ -314,6 +452,43 @@ if ($user->isLoggedIn()) {
                             $i++;
                         }
                         $successMessage = 'Client Selection for Enrollment Successful';
+                    } catch (Exception $e) {
+                        die($e->getMessage());
+                    }
+                } else {
+                    $errorMessage = 'Please select ataleast One Patient to Submit';
+                }
+            } else {
+                $pageError = $validate->errors();
+            }
+        } elseif (Input::get('RemoveEnrollment')) {
+            $validate = new validate();
+            $validate = $validate->check($_POST, array(
+                // 'sensitization_date' => array(
+                //     'required' => true,
+                // ),
+            ));
+            if ($validate->passed()) {
+                if (Input::get('checkname')) {
+                    try {
+                        $i = 0;
+                        foreach (Input::get('checkname') as $value) {
+                            if (Input::get('checkname')[$i]) {
+                                $user->updateRecord('clients', array(
+                                    'project_id' => 0,
+                                    'available' => 1,
+                                    'sensitization' => 0,
+                                    'sensitization1' => 0,
+                                    'sensitization2' => 0,
+                                    'screening' => 0,
+                                    'screening1' => 0,
+                                    'screening2' => 0,
+                                    'enrollment' => 0,
+                                ), $value);
+                            }
+                            $i++;
+                        }
+                        $successMessage = 'Client Sensitization 1 Added Successful';
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -737,21 +912,169 @@ if ($user->isLoggedIn()) {
                                                     </div>
                                                 </div>
                                             <?php } elseif ($_GET['status'] == 4) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="AddSensitization2" value="Add sensitization 2">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <!-- text input -->
+                                                        <div class="form-group">
+                                                            <label>Date </label>
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Submit </label>
+                                                            <input type="submit" class="btn btn-warning btn-clean" name="AddSensitization2" value="Add sensitization 2">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Discard </label>
+                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveSensitization2" value="Remove">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             <?php } elseif ($_GET['status'] == 5) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="SelectScreening" value="Select for Screening">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <!-- text input -->
+                                                        <div class="form-group">
+                                                            <label>Date </label>
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Submit </label>
+                                                            <input type="submit" class="btn btn-warning btn-clean" name="SelectScreening" value="Select for Screening">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Discard </label>
+                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveScreening" value="Remove">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             <?php } elseif ($_GET['status'] == 6) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="AddScreening1" value="Add Screening 1">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <!-- text input -->
+                                                        <div class="form-group">
+                                                            <label>Date </label>
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Submit </label>
+                                                            <input type="submit" class="btn btn-info btn-clean" name="AddScreening1" value="Add Screening 1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Discard </label>
+                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveScreening1" value="Remove">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             <?php } elseif ($_GET['status'] == 7) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="AddScreening2" value="Add Screening 2">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <!-- text input -->
+                                                        <div class="form-group">
+                                                            <label>Date </label>
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Submit </label>
+                                                            <input type="submit" class="btn btn-info btn-clean" name="AddScreening2" value="Add Screening 2">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Discard </label>
+                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveScreening2" value="Remove">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             <?php } elseif ($_GET['status'] == 8) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="SelectEnrollment" value="Select for Enrollment">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <!-- text input -->
+                                                        <div class="form-group">
+                                                            <label>Date </label>
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Submit </label>
+                                                            <input type="submit" class="btn btn-info btn-clean" name="SelectEnrollment" value="Select for Enrollment">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Discard </label>
+                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveEnrollment" value="Remove">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             <?php } elseif ($_GET['status'] == 9) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="AddEnrollment" value="Add Enrollment">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <!-- text input -->
+                                                        <div class="form-group">
+                                                            <label>Date </label>
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Submit </label>
+                                                            <input type="submit" class="btn btn-info btn-clean" name="AddEnrollment" value="Add Enrollment">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Discard </label>
+                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveScreening1" value="Remove">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             <?php } elseif ($_GET['status'] == 10) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="EndEnrollment" value="End Enrollment / Study">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <!-- text input -->
+                                                        <div class="form-group">
+                                                            <label>Date </label>
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Submit </label>
+                                                            <input type="submit" class="btn btn-warning btn-clean" name="EndEnrollment" value="End Enrollment / Study">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             <?php } elseif ($_GET['status'] == 11) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="UnLock" value="UnLock Clients">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <!-- text input -->
+                                                        <div class="form-group">
+                                                            <label>Date </label>
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Submit </label>
+                                                            <input type="submit" class="btn btn-warning btn-clean" name="UnLock" value="UnLock Clients">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             <?php } ?>
                                             <table id="example1" class="table table-bordered table-striped">
                                                 <thead>
