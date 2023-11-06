@@ -13,15 +13,14 @@ if ($user->isLoggedIn()) {
         if (Input::get('SelectSensitization')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                'select_date' => array(
-                    'required' => true,
-                ),
-                'project_id' => array(
-                    'required' => true,
-                ),
+                // 'select_date' => array(
+                //     'required' => true,
+                // ),
+                // 'project_id' => array(
+                //     'required' => true,
+                // ),
             ));
             if ($validate->passed()) {
-                // print_r(count(Input::get('sensitization')));
                 if (count(Input::get('checkname')) >= 1) {
                     try {
                         $i = 0;
@@ -36,7 +35,6 @@ if ($user->isLoggedIn()) {
                             $i++;
                         }
                         $successMessage = 'Client Updated Successful';
-                        // Redirect::to('info.php?id=1&status=3');
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -54,9 +52,6 @@ if ($user->isLoggedIn()) {
                 // ),
             ));
             if ($validate->passed()) {
-                // print_r(count(Input::get('checkname')));
-
-                // print_r(Input::get('checkname'));
                 if (Input::get('checkname')) {
                     try {
                         $i = 0;
@@ -71,7 +66,6 @@ if ($user->isLoggedIn()) {
                             $i++;
                         }
                         $successMessage = 'Client Sensitization 1 Added Successful';
-                        // Redirect::to('info.php?id=1&status=3');
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -89,9 +83,6 @@ if ($user->isLoggedIn()) {
                 // ),
             ));
             if ($validate->passed()) {
-                // print_r(count(Input::get('checkname')));
-
-                // print_r(Input::get('checkname'));
                 if (Input::get('checkname')) {
                     try {
                         $i = 0;
@@ -107,7 +98,6 @@ if ($user->isLoggedIn()) {
                             $i++;
                         }
                         $successMessage = 'Client Sensitization 2 Added Successful';
-                        // Redirect::to('info.php?id=1&status=3');
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -125,9 +115,6 @@ if ($user->isLoggedIn()) {
                 // ),
             ));
             if ($validate->passed()) {
-                // print_r(count(Input::get('checkname')));
-
-                // print_r(Input::get('checkname'));
                 if (Input::get('checkname')) {
                     try {
                         $i = 0;
@@ -144,7 +131,6 @@ if ($user->isLoggedIn()) {
                             $i++;
                         }
                         $successMessage = 'Client Selection for Screening Successful';
-                        // Redirect::to('info.php?id=1&status=3');
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -162,9 +148,6 @@ if ($user->isLoggedIn()) {
                 // ),
             ));
             if ($validate->passed()) {
-                // print_r(count(Input::get('checkname')));
-
-                // print_r(Input::get('checkname'));
                 if (Input::get('checkname')) {
                     try {
                         $i = 0;
@@ -182,7 +165,6 @@ if ($user->isLoggedIn()) {
                             $i++;
                         }
                         $successMessage = 'Client screening 1 Added Successful';
-                        // Redirect::to('info.php?id=1&status=3');
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -625,23 +607,23 @@ if ($user->isLoggedIn()) {
                                     ?>
 
                                     <div class="card-body">
-                                        <form method="POST">
-                                            <?php
-                                            if ($_GET['status'] == 2) {
-                                            ?>
+                                        <?php
+                                        if ($_GET['status'] == 2) {
+                                        ?>
+                                            <form id="validation" method="post">
                                                 <div class="row">
                                                     <div class="col-sm-3">
                                                         <!-- text input -->
                                                         <div class="form-group">
                                                             <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="select_date" id="select_date" value="" required />
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="select_date" id="select_date" value="" />
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-2">
                                                         <!-- text input -->
                                                         <div class="form-group">
                                                             <label>Study </label>
-                                                            <select name="project_id" class="form-control" required>
+                                                            <select name="project_id" class="form-control">
                                                                 <option value="">Select</option>
                                                                 <?php foreach ($override->getData2('study', 'status', 1) as $study) { ?>
                                                                     <option value=" <?= $study['id'] ?>"><?= $study['name'] ?></option>
@@ -656,13 +638,15 @@ if ($user->isLoggedIn()) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <?php } elseif ($_GET['status'] == 3) { ?>
+                                            </form>
+                                        <?php } elseif ($_GET['status'] == 3) { ?>
+                                            <form id="validation" method="post">
                                                 <div class="row">
                                                     <div class="col-sm-3">
                                                         <!-- text input -->
                                                         <div class="form-group">
                                                             <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" required />
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-2">
@@ -672,177 +656,177 @@ if ($user->isLoggedIn()) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <?php } elseif ($_GET['status'] == 4) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="AddSensitization2" value="Add sensitization 2">
-                                            <?php } elseif ($_GET['status'] == 5) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="SelectScreening" value="Select for Screening">
-                                            <?php } elseif ($_GET['status'] == 6) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="AddScreening1" value="Add Screening 1">
-                                            <?php } elseif ($_GET['status'] == 7) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="AddScreening2" value="Add Screening 2">
-                                            <?php } elseif ($_GET['status'] == 8) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="SelectEnrollment" value="Select for Enrollment">
-                                            <?php } elseif ($_GET['status'] == 9) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="AddEnrollment" value="Add Enrollment">
-                                            <?php } elseif ($_GET['status'] == 10) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="EndEnrollment" value="End Enrollment / Study">
-                                            <?php } elseif ($_GET['status'] == 11) { ?>
-                                                <input type="submit" class="btn btn-warning btn-clean" name="UnLock" value="UnLock Clients">
-                                            <?php } ?>
-                                            <table id="example1" class="table table-bordered table-striped">
-                                                <thead>
+                                            </form>
+                                        <?php } elseif ($_GET['status'] == 4) { ?>
+                                            <input type="submit" class="btn btn-warning btn-clean" name="AddSensitization2" value="Add sensitization 2">
+                                        <?php } elseif ($_GET['status'] == 5) { ?>
+                                            <input type="submit" class="btn btn-warning btn-clean" name="SelectScreening" value="Select for Screening">
+                                        <?php } elseif ($_GET['status'] == 6) { ?>
+                                            <input type="submit" class="btn btn-warning btn-clean" name="AddScreening1" value="Add Screening 1">
+                                        <?php } elseif ($_GET['status'] == 7) { ?>
+                                            <input type="submit" class="btn btn-warning btn-clean" name="AddScreening2" value="Add Screening 2">
+                                        <?php } elseif ($_GET['status'] == 8) { ?>
+                                            <input type="submit" class="btn btn-warning btn-clean" name="SelectEnrollment" value="Select for Enrollment">
+                                        <?php } elseif ($_GET['status'] == 9) { ?>
+                                            <input type="submit" class="btn btn-warning btn-clean" name="AddEnrollment" value="Add Enrollment">
+                                        <?php } elseif ($_GET['status'] == 10) { ?>
+                                            <input type="submit" class="btn btn-warning btn-clean" name="EndEnrollment" value="End Enrollment / Study">
+                                        <?php } elseif ($_GET['status'] == 11) { ?>
+                                            <input type="submit" class="btn btn-warning btn-clean" name="UnLock" value="UnLock Clients">
+                                        <?php } ?>
+                                        <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <?php if ($_GET['status'] != 1) { ?>
+                                                        <th></th>
+                                                    <?php } ?>
+                                                    <th>No.</th>
+                                                    <th>First Name</th>
+                                                    <th>Middle Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Sex</th>
+                                                    <th>Age</th>
+                                                    <?php if ($_GET['status'] != 1 && $_GET['status'] != 2) { ?>
+                                                        <th>Study</th>
+                                                    <?php } ?>
+                                                    <th>Phone</th>
+                                                    <?php if ($_GET['status'] == 1) { ?>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    <?php } ?>
+                                                    <?php if ($_GET['status'] == 10) { ?>
+                                                        <th>Schedules</th>
+                                                    <?php } ?>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $x = 1;
+                                                foreach ($clients as $value) {
+                                                    $dob = $value['dob'];
+                                                    $age = $user->dateDiffYears(date('Y-m-d'), $dob);
+                                                    $project_name = $override->get('study', 'id', $value['project_id'])[0];
+                                                    $client = $override->get('clients', 'id', $value['client_id'])[0];
+
+                                                ?>
                                                     <tr>
                                                         <?php if ($_GET['status'] != 1) { ?>
-                                                            <th></th>
-                                                        <?php } ?>
-                                                        <th>No.</th>
-                                                        <th>First Name</th>
-                                                        <th>Middle Name</th>
-                                                        <th>Last Name</th>
-                                                        <th>Sex</th>
-                                                        <th>Age</th>
-                                                        <?php if ($_GET['status'] != 1 && $_GET['status'] != 2) { ?>
-                                                            <th>Study</th>
-                                                        <?php } ?>
-                                                        <th>Phone</th>
-                                                        <?php if ($_GET['status'] == 1) { ?>
-                                                            <th>Status</th>
-                                                            <th>Action</th>
-                                                        <?php } ?>
-                                                        <?php if ($_GET['status'] == 10) { ?>
-                                                            <th>Schedules</th>
-                                                        <?php } ?>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php
-                                                    $x = 1;
-                                                    foreach ($clients as $value) {
-                                                        $dob = $value['dob'];
-                                                        $age = $user->dateDiffYears(date('Y-m-d'), $dob);
-                                                        $project_name = $override->get('study', 'id', $value['project_id'])[0];
-                                                        $client = $override->get('clients', 'id', $value['client_id'])[0];
-
-                                                    ?>
-                                                        <tr>
-                                                            <?php if ($_GET['status'] != 1) { ?>
-                                                                <td>
-                                                                    <div class="icheck-primary d-inline">
-                                                                        <input type="hidden" name="id[]" value="<?= $value['id']; ?>">
-                                                                        <input type="checkbox" name="checkname[]" value="<?= $value['id']; ?>">
-                                                                    </div>
-                                                                </td>
-                                                            <?php } ?>
-                                                            <td><?= $x; ?></td>
-                                                            <td><?= $value['fname']; ?></td>
-                                                            <td><?= $value['mname']; ?></td>
-                                                            <td><?= $value['lname']; ?></td>
-                                                            <?php if ($value['gender'] == 1) { ?>
-                                                                <td>Male</td>
-                                                            <?php } elseif ($value['gender'] == 2) { ?>
-                                                                <td>Female</td>
-                                                            <?php } ?>
-                                                            <td><?= $age; ?></td>
-                                                            <?php if ($_GET['status'] != 1 && $_GET['status'] != 2) { ?>
-                                                                <td><?= $project_name['name']; ?></td>
-                                                            <?php } ?>
-                                                            <td><?= $value['phone1']; ?></td>
-                                                            <?php if ($_GET['status'] == 1) { ?>
-                                                                <?php if ($value['status'] == 1) { ?>
-                                                                    <td>Active</td>
-                                                                <?php } else { ?>
-                                                                    <td>Not Active</td>
-                                                                <?php } ?>
-                                                                <td>
-                                                                    <div class=" btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=Edit" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> Edit</a>
-                                                                    </div>
-                                                                </td>
-                                                            <?php } ?>
-                                                            <?php if ($_GET['status'] == 10) { ?>
-                                                                <td>
-                                                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addSchedule<?= $value['id'] ?>">
-                                                                        Add
-                                                                    </button>
-                                                                    <div class="btn-group btn-group-xs"><a href="info.php?id=2&cid=<?= $value['id'] ?>" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> View</a>
-                                                                    </div>
-                                                                </td>
-                                                            <?php } ?>
-                                                        </tr>
-                                                        <div class="modal fade" id="addSchedule<?= $value['id'] ?>">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <form id="validation" method="post">
-                                                                        <div class="modal-header">
-                                                                            <h4 class="modal-title">Add Schedule</h4>
-                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                <span aria-hidden="true">&times;</span>
-                                                                            </button>
-                                                                        </div>
-                                                                        <div class="modal-body">
-                                                                            <div class="col-sm-6">
-                                                                                <div class="form-group">
-                                                                                    <label>Enrollment Date( Dose 1)</label>
-                                                                                    <input type="date" class="form-control fas fa-calendar input-prefix" name="enrollment_date" id="enrollment_date" value="" required />
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-sm-6">
-                                                                                <div class="form-group">
-                                                                                    <label>Study ID</label>
-                                                                                    <input type="text" class="form-control fas fa-calendar input-prefix" name="study_id" id="study_id" value="" required />
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-sm-6">
-                                                                                <div class="form-group">
-                                                                                    <label>Comments / Remarks / Notes
-                                                                                        :
-                                                                                    </label>
-                                                                                    <textarea name="comments" id="comments" cols="20%" rows="3" placeholder="Type Comments..."></textarea>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="modal-footer justify-content-between">
-                                                                            <input type="hidden" name="cid" value="<?= $value['id'] ?>" />
-                                                                            <input type="hidden" name="project_id" value="<?= $value['project_id'] ?>" />
-                                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                                            <input type="submit" class="btn btn-primary" name="addSchedule" value="Save changes" />
-                                                                        </div>
-                                                                    </form>
+                                                            <td>
+                                                                <div class="icheck-primary d-inline">
+                                                                    <input type="hidden" name="id[]" value="<?= $value['id']; ?>">
+                                                                    <input type="checkbox" name="checkname[]" value="<?= $value['id']; ?>">
                                                                 </div>
-                                                                <!-- /.modal-content -->
-                                                            </div>
-                                                            <!-- /.modal-dialog -->
-                                                        </div>
-                                                        <!-- /.modal -->
-                                                    <?php
-                                                        $x++;
-                                                    } ?>
-
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <?php if ($_GET['status'] != 1) { ?>
-                                                            <th></th>
-                                                        <?php } ?> <th>No.</th>
-                                                        <th>First Name</th>
-                                                        <th>Middle Name</th>
-                                                        <th>Last Name</th>
-                                                        <th>Sex</th>
-                                                        <th>Age</th>
-                                                        <?php if ($_GET['status'] != 1 && $_GET['status'] != 2) { ?>
-                                                            <th>Study</th>
+                                                            </td>
                                                         <?php } ?>
-                                                        <th>Phone</th>
+                                                        <td><?= $x; ?></td>
+                                                        <td><?= $value['fname']; ?></td>
+                                                        <td><?= $value['mname']; ?></td>
+                                                        <td><?= $value['lname']; ?></td>
+                                                        <?php if ($value['gender'] == 1) { ?>
+                                                            <td>Male</td>
+                                                        <?php } elseif ($value['gender'] == 2) { ?>
+                                                            <td>Female</td>
+                                                        <?php } ?>
+                                                        <td><?= $age; ?></td>
+                                                        <?php if ($_GET['status'] != 1 && $_GET['status'] != 2) { ?>
+                                                            <td><?= $project_name['name']; ?></td>
+                                                        <?php } ?>
+                                                        <td><?= $value['phone1']; ?></td>
                                                         <?php if ($_GET['status'] == 1) { ?>
-                                                            <th>Status</th>
-                                                            <th>Action</th>
+                                                            <?php if ($value['status'] == 1) { ?>
+                                                                <td>Active</td>
+                                                            <?php } else { ?>
+                                                                <td>Not Active</td>
+                                                            <?php } ?>
+                                                            <td>
+                                                                <div class=" btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=Edit" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> Edit</a>
+                                                                </div>
+                                                            </td>
                                                         <?php } ?>
                                                         <?php if ($_GET['status'] == 10) { ?>
-                                                            <th>Schedules</th>
+                                                            <td>
+                                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addSchedule<?= $value['id'] ?>">
+                                                                    Add
+                                                                </button>
+                                                                <div class="btn-group btn-group-xs"><a href="info.php?id=2&cid=<?= $value['id'] ?>" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> View</a>
+                                                                </div>
+                                                            </td>
                                                         <?php } ?>
                                                     </tr>
-                                                </tfoot>
-                                            </table>
-                                        </form>
+                                                    <div class="modal fade" id="addSchedule<?= $value['id'] ?>">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <form id="validation" method="post">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">Add Schedule</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-group">
+                                                                                <label>Enrollment Date( Dose 1)</label>
+                                                                                <input type="date" class="form-control fas fa-calendar input-prefix" name="enrollment_date" id="enrollment_date" value="" required />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-group">
+                                                                                <label>Study ID</label>
+                                                                                <input type="text" class="form-control fas fa-calendar input-prefix" name="study_id" id="study_id" value="" required />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-group">
+                                                                                <label>Comments / Remarks / Notes
+                                                                                    :
+                                                                                </label>
+                                                                                <textarea name="comments" id="comments" cols="20%" rows="3" placeholder="Type Comments..."></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer justify-content-between">
+                                                                        <input type="hidden" name="cid" value="<?= $value['id'] ?>" />
+                                                                        <input type="hidden" name="project_id" value="<?= $value['project_id'] ?>" />
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                        <input type="submit" class="btn btn-primary" name="addSchedule" value="Save changes" />
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <!-- /.modal-content -->
+                                                        </div>
+                                                        <!-- /.modal-dialog -->
+                                                    </div>
+                                                    <!-- /.modal -->
+                                                <?php
+                                                    $x++;
+                                                } ?>
+
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <?php if ($_GET['status'] != 1) { ?>
+                                                        <th></th>
+                                                    <?php } ?> <th>No.</th>
+                                                    <th>First Name</th>
+                                                    <th>Middle Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Sex</th>
+                                                    <th>Age</th>
+                                                    <?php if ($_GET['status'] != 1 && $_GET['status'] != 2) { ?>
+                                                        <th>Study</th>
+                                                    <?php } ?>
+                                                    <th>Phone</th>
+                                                    <?php if ($_GET['status'] == 1) { ?>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    <?php } ?>
+                                                    <?php if ($_GET['status'] == 10) { ?>
+                                                        <th>Schedules</th>
+                                                    <?php } ?>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
