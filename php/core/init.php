@@ -6,7 +6,7 @@ $GLOBALS['config'] = array(
       'host' => 'localhost',
       'username' => 'root',
       'password' => '@Subaru@2022',
-      'db' => 'evms'
+      'db' => 'ectvms'
   	),
   'remember' =>array(
       'cookie_name' => 'hash',
