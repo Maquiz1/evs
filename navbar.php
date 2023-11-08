@@ -133,11 +133,6 @@ if ($user->isLoggedIn()) {
 ?>
 
 
-
-
-
-
-
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
@@ -159,11 +154,11 @@ if ($user->isLoggedIn()) {
         <li class="nav-item d-none d-sm-inline-block">
             <a href="add_study.php" class="nav-link">Add Study</a>
         </li>
-        <!-- <li class="nav-item d-none d-sm-inline-block">
+        <li class="nav-item d-none d-sm-inline-block">
             <a href="import.php" class="nav-link">Upload Data</a>
-        </li> -->
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addVisit">
-            Upload Data </button>
+        </li>
+        <!-- <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addVisit">
+            Upload Data </button> -->
     </ul>
 
     <div class="modal fade" id="addVisit">
