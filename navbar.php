@@ -19,6 +19,9 @@
             <li class="nav-item d-none d-sm-inline-block">
                 <a href="add_study.php" class="nav-link">Add Study</a>
             </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="import.php" class="nav-link">Upload Data</a>
+            </li>
         </ul>
 
         <!-- Right navbar links -->
