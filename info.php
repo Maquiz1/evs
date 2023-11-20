@@ -731,18 +731,20 @@ if ($user->isLoggedIn()) {
                                                     </div>
                                                 </div>
                                             <?php } elseif ($_GET['status'] == 7) { ?>
+
                                                 <div class="row">
                                                     <div class="col-sm-3">
                                                         <!-- text input -->
                                                         <div class="form-group">
                                                             <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="eligible_date" id="eligible_date" value="" />
                                                         </div>
                                                     </div>
+
                                                     <div class="col-sm-2">
                                                         <div class="form-group">
                                                             <label>Submit </label>
-                                                            <input type="submit" class="btn btn-warning btn-clean" name="UnLock" value="UnLock Clients">
+                                                            <input type="submit" class="form-control btn btn-info btn-clean" name="UnLock" value="UnLock Clients">
                                                         </div>
                                                     </div>
                                                 </div>
