@@ -444,10 +444,18 @@ if ($user->isLoggedIn()) {
                     $user->updateRecord('clients', array(
                         'locked' => 1,
                     ), Input::get('cid'));
-                    if (Input::get('project_id') == 1) {
-                        $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'));
-                    } elseif (Input::get('project_id') == 2) {
-                        $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'));
+                    if (Input::get('btn') == 'Add') {
+                        if (Input::get('project_id') == 1) {
+                            $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'));
+                        } elseif (Input::get('project_id') == 2) {
+                            $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'));
+                        }
+                    } elseif (Input::get('btn') == 'Edit') {
+                        if (Input::get('project_id') == 1) {
+                            $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('dose'), Input::get('dose'), 'c', Input::get('comments'));
+                        } elseif (Input::get('project_id') == 2) {
+                            $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), Input::get('dose'), 'c', Input::get('comments'));
+                        }
                     }
                 } catch (Exception $e) {
                     die($e->getMessage());
@@ -830,10 +838,10 @@ if ($user->isLoggedIn()) {
                                                             <?php if ($_GET['status'] == 6) { ?>
                                                                 <td>
                                                                     <?php if ($value['locked'] == 1) { ?>
-                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>" class="btn btn-secondary btn-clean"><span class="icon-eye-open"></span> Add</a> </div>
+                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>&btn=Add" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> Update</a> </div>
 
                                                                     <?php } else { ?>
-                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> Add</a> </div>
+                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>&btn=Edit" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> Add</a> </div>
 
                                                                     <?php } ?>
                                                                     <div class="btn-group btn-group-xs"><a href="info.php?id=2&cid=<?= $value['id'] ?>" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> View</a>
@@ -1043,6 +1051,9 @@ if ($user->isLoggedIn()) {
                         </div>
                         <!-- /.row -->
                     <?php } elseif ($_GET['id'] == 3) { ?>
+                        <?php
+                        $schedule = $override->getNews('visit', 'patient_id', $_GET['cid'], 'project_id', $_GET['project_id'])[0];
+                        ?>
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
@@ -1058,19 +1069,50 @@ if ($user->isLoggedIn()) {
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label>Enrollment Date</label>
-                                                        <input type="date" class="form-control fas fa-calendar input-prefix" name="enrollment_date" id="enrollment_date" value="" required />
+                                                        <input type="date" class="form-control fas fa-calendar input-prefix" name="enrollment_date" id="enrollment_date" value="<?php if ($schedule['visit_date']) {
+                                                                                                                                                                                    print_r($schedule['visit_date']);
+                                                                                                                                                                                }  ?>" required />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label>Study ID</label>
-                                                        <input type="text" class="form-control fas fa-calendar input-prefix" name="study_id" id="study_id" value="" required />
+                                                        <input type="text" class="form-control fas fa-calendar input-prefix" name="study_id" id="study_id" value="<?php if ($schedule['study_id']) {
+                                                                                                                                                                        print_r($schedule['study_id']);
+                                                                                                                                                                    }  ?>" required />
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-6">
+
+                                                <?php if ($_GET['btn'] == 'Edit') { ?>
+                                                    <div class="col-sm-3">
+                                                        <!-- text input -->
+                                                        <div class="form-group">
+                                                            <label>Dose / Vaccine </label>
+                                                            <select name="dose" class="form-control">
+                                                                <option value="<?= $history['visit_group'] ?>"><?php if ($schedule['visit_group'] != 0) {
+                                                                                                                    if ($schedule['visit_group'] == 1) {
+                                                                                                                        echo '1';
+                                                                                                                    } elseif ($schedule['visit_group'] == 2) {
+                                                                                                                        echo '2';
+                                                                                                                    }
+                                                                                                                } else {
+                                                                                                                    echo 'Select';
+                                                                                                                } ?>
+                                                                </option>
+                                                                <option value="1">1</option>
+                                                                <option value="2">2</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+                                                <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label>Comments / Remarks / Notes </label>
-                                                        <textarea name="comments" id="comments" cols="20%" rows="3" placeholder="Type Comments..."></textarea>
+                                                        <textarea name="comments" id="comments" cols="20%" rows="3" placeholder="Type Comments...">
+                                                        <?php if ($schedule['comments']) {
+                                                            print_r($schedule['comments']);
+                                                        }  ?>
+                                                        </textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1078,6 +1120,7 @@ if ($user->isLoggedIn()) {
                                                 <div class="form-group">
                                                     <input type="hidden" name="cid" value="<?= $_GET['cid'] ?>" />
                                                     <input type="hidden" name="project_id" value="<?= $_GET['project_id'] ?>" />
+                                                    <input type="hidden" name="btn" value="<?= $_GET['btn'] ?>" />
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                     <input type="submit" class="btn btn-primary" name="addSchedule" value="Save changes" />
                                                 </div>

@@ -729,7 +729,7 @@ class User
         $x = $v_point;
         $arr = array();
         $y = 0;
-        $vg = 'V1';
+        $vg = $v_point;
         $nxt_visit = $enrollment_date;
         $vty = 'Clinic';
         $vc = 'S1';
@@ -742,7 +742,7 @@ class User
 
         if ($x == 1) {
             $nxt_visit = date('Y-m-d', strtotime($nxt_visit));
-            $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'visit_date' => $nxt_visit, 'expected_date' => $nxt_visit, 'comments' => $comments, 'visit_type' => $vty, 'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => 0, 'status' => 1, 'visit_status' => 0, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
+            $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'visit_date' => '', 'expected_date' => $nxt_visit, 'comments' => $comments, 'visit_type' => $vty,'visit_group' => $vg, 'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => 0, 'status' => 1, 'visit_status' => 0, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
         }
         while ($x <= 30) {
             $sq++;
@@ -760,7 +760,7 @@ class User
                     $lw = 0;
                     $hw = 0;
                 }
-                $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'expected_date' => $nxt_visit, 'visit_date' => '', 'comments' => $comments, 'visit_type' => $vty, 'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => $sq, 'visit_status' => 0, 'status' => 1, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
+                $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'expected_date' => $nxt_visit, 'visit_date' => '', 'comments' => $comments, 'visit_type' => $vty, 'visit_group' => $vg,'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => $sq, 'visit_status' => 0, 'status' => 1, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
                 $x++;
             } elseif ($x == 4) {
                 $nxt_visit = date('Y-m-d', strtotime($nxt_visit . ' + 2 days'));
@@ -771,7 +771,7 @@ class User
                 $vty = 'Clinic';
                 $lw = 0;
                 $hw = 0;
-                $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'expected_date' => $nxt_visit, 'visit_date' => '', 'comments' => $comments, 'visit_type' => $vty, 'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => $sq, 'visit_status' => 0, 'status' => 1, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
+                $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'expected_date' => $nxt_visit, 'visit_date' => '', 'comments' => $comments, 'visit_type' => $vty, 'visit_group' => $vg, 'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => $sq, 'visit_status' => 0, 'status' => 1, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
             } elseif ($x == 8) {
                 $nxt_visit = date('Y-m-d', strtotime($nxt_visit . ' + 3 days'));
                 $x += 7;
@@ -781,7 +781,7 @@ class User
                 $vty = 'Clinic';
                 $lw = 0;
                 $hw = 0;
-                $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'expected_date' => $nxt_visit, 'visit_date' => '', 'comments' => $comments, 'visit_type' => $vty, 'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => $sq, 'visit_status' => 0, 'status' => 1, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
+                $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'expected_date' => $nxt_visit, 'visit_date' => '', 'comments' => $comments, 'visit_type' => $vty, 'visit_group' => $vg,'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => $sq, 'visit_status' => 0, 'status' => 1, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
             } elseif ($x == 15) {
                 $nxt_visit = date('Y-m-d', strtotime($nxt_visit . ' + 7 days'));
                 $x += 7;
@@ -791,7 +791,7 @@ class User
                 $vty = 'Clinic';
                 $lw = 0;
                 $hw = 0;
-                $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'expected_date' => $nxt_visit, 'visit_date' => '', 'comments' => $comments, 'visit_type' => $vty, 'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => $sq, 'visit_status' => 0, 'status' => 1, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
+                $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'expected_date' => $nxt_visit, 'visit_date' => '', 'comments' => $comments, 'visit_type' => $vty, 'visit_group' => $vg, 'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => $sq, 'visit_status' => 0, 'status' => 1, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
             } elseif ($x == 22) {
                 $nxt_visit = date('Y-m-d', strtotime($nxt_visit . ' + 8 days'));
                 $x += 8;
@@ -801,7 +801,7 @@ class User
                 $vty = 'Clinic';
                 $lw = 0;
                 $hw = 0;
-                $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'expected_date' => $nxt_visit, 'visit_date' => '', 'comments' => $comments, 'visit_type' => $vty, 'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => $sq, 'visit_status' => 0, 'status' => 1, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
+                $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'expected_date' => $nxt_visit, 'visit_date' => '', 'comments' => $comments, 'visit_type' => $vty, 'visit_group' => $vg, 'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => $sq, 'visit_status' => 0, 'status' => 1, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
             } elseif ($x == 30) {
                 $nxt_visit = date('Y-m-d', strtotime($nxt_visit . ' + 8 days'));
                 $y = 30;
@@ -810,7 +810,7 @@ class User
                 $vty = 'Clinic';
                 $lw = 0;
                 $hw = 0;
-                $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'expected_date' => $nxt_visit, 'visit_date' => '', 'comments' => $comments, 'visit_type' => $vty, 'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => $sq, 'visit_status' => 0, 'status' => 1, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
+                $this->createRecord('visit', array('study_id' => $study_id, 'project_id' => $project_id, 'visit_code' => $vc, 'visit_name' => $vm, 'expected_date' => $nxt_visit, 'visit_date' => '', 'comments' => $comments, 'visit_type' => $vty, 'visit_group' => $vg, 'schedule' => $schedule, 'window1' => $lw, 'window2' => $hw, 'patient_id' => $cid, 'seq_no' => $sq, 'visit_status' => 0, 'status' => 1, 'staff_id' => $this->data()->id, 'update_id' => $this->data()->id, 'site_id' => $this->data()->site_id, 'create_on' => date('Y-m-d H:i:s'), 'update_on' => date('Y-m-d H:i:s')));
                 break;
             }
         }
