@@ -5,24 +5,6 @@ $override = new OverideData();
 
 $now = date('Y-m-d');
 $nxt_day = date('Y-m-d', strtotime($now . ' + 1 days'));
-// $nxt_day = date('Y-m-d', strtotime($last_visit_date . ' + ' . $schedule['days'] . ' days'));
-$registered = $override->getCount1('clients', 'status', 1, 'site_id', $user->data()->site_id);
-$available = $override->getCount2('clients', 'status', 1, 'available', 1, 'site_id', $user->data()->site_id);
-// $available = $override->getNoAvailable('progres', 'status', 1, 'pt_status', 0, 'pt_status', 2);
-// $Selected = $override->getCount4('clients', 'status', 1, 'sensitization', 1, 'site_id', $user->data()->site_id);
-$Selected = $override->getCount2('clients', 'status', 1, 'sensitization', 1, 'site_id', $user->data()->site_id);
-$sensitization1 = $override->getCount2('clients', 'status', 1, 'sensitization1', 1, 'site_id', $user->data()->site_id);
-$sensitization2 = $override->getCount2('clients', 'status', 1, 'sensitization2', 1, 'site_id', $user->data()->site_id);
-$screening = $override->getCount2('clients', 'status', 1, 'screening', 1, 'site_id', $user->data()->site_id);
-$screening1 = $override->getCount2('clients', 'status', 1, 'screening1', 1, 'site_id', $user->data()->site_id);
-$screening2 = $override->getCount2('clients', 'status', 1, 'screening2', 1, 'site_id', $user->data()->site_id);
-$Enrollment = $override->getCount2('clients', 'status', 1, 'enrollment', 1, 'site_id', $user->data()->site_id);
-$Enrolled = $override->getCount2('clients', 'status', 1, 'enrolled', 1, 'site_id', $user->data()->site_id);
-$Locked = $override->getCount2('clients', 'status', 1, 'locked', 1, 'site_id', $user->data()->site_id);
-$today = $override->getCount2('visit', 'expected_date', date('Y-m-d'), 'status', 0, 'site_id', $user->data()->site_id);
-$pending = $override->getNo2('visit', 'expected_date', date('Y-m-d'), 'status', 0, 'site_id', $user->data()->site_id);
-$missing = $override->getNo2('visit', 'expected_date', date('Y-m-d'), 'status', 0, 'site_id', $user->data()->site_id);
-$tomorrow = $override->getCount2('visit', 'expected_date', $nxt_day, 'status', 0, 'site_id', $user->data()->site_id);
 ?>
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -85,72 +67,59 @@ $tomorrow = $override->getCount2('visit', 'expected_date', $nxt_day, 'status', 0
                         <li class="nav-item">
                             <a href="info.php?id=1&status=1" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Registered<span class="badge badge-info right"><?= $registered ?></span></p>
+                                <p>Registered<span class="badge badge-info right"><?= $override->getCount('clients', 'status', 1) ?></span></p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="info.php?id=1&status=2" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Available<span class="badge badge-info right"><?= $available ?></span></p>
-                            </a>
-                        </li>
-                        <!-- <li class="nav-item">
-                            <a href="info.php?status=6" class="nav-link active">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Missed Visit<span class="badge badge-info right">6</span></p>
-                            </a>
-                        </li> -->
-                        <!-- <li class="nav-item">
-                                <a href="index2.php?title=2" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Dashboard v2</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="index3.php?title=3" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Dashboard v3</p>
-                                </a>
-                            </li> -->
                     </ul>
                 </li>
-                <!-- <li class="nav-item">
-                    <a href="pages/widgets.html" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
+                <li class="nav-item">
+                    <a href="info.php?id=1&status=2" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
                         <p>
-                            Widgets
-                            <span class="right badge badge-danger">New</span>
+                            Available
+                            <i class="fas fa-angle-left right"></i>
+                            <p><span class="badge badge-info right"></span></p>
                         </p>
                     </a>
-                </li> -->
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="info.php?id=1&status=2&project_id=0" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>New Studies<span class="badge badge-info right"><?= $override->getCount2('clients', 'status', 1, 'available', 1, 'project_id', 0) ?></span></p>
+                            </a>
+                        </li>
+                        <?php foreach ($override->get('study', 'status', 1) as $available) { ?>
+                            <li class="nav-item">
+                                <a href="info.php?id=1&status=2&project_id=<?= $available['id']; ?>" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p><?= $available['name'] ?><span class="badge badge-info right"><?= $override->getCount2Not('clients', 'status', 1, 'available', 1, 'project_id', $available['id']) ?></span></p>
+                                </a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
                         <p>
                             Sensitizations
                             <i class="fas fa-angle-left right"></i>
-                            <span class="badge badge-info right"><?= $Sensitizations ?></span>
+                            <span class="badge badge-info right"><?= $sensitization ?></span>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="info.php?id=1&status=3" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Selected<span class="badge badge-info right"><?= $Selected ?></span></p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="info.php?id=1&status=4" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Sensitizations 1<span class="badge badge-info right"><?= $sensitization1 ?></span></p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="info.php?id=1&status=5" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Sensitizations 2<span class="badge badge-info right"><?= $sensitization2 ?></span></p>
-                            </a>
-                        </li>
+                        <?php
+                        foreach ($override->get('study', 'status', 1) as $study1) {
+                        ?>
+                            <li class="nav-item">
+                                <a href="info.php?id=1&status=3&project_id=<?= $study1['id'] ?>" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p><?= $study1['name'] ?><span class="badge badge-info right"><?= $override->getCount2('clients', 'status', 1, 'sensitization', 1, 'project_id', $study1['id']) ?></span></p>
+                                </a>
+                            </li>
+                        <?php
+                        }
+                        ?>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -159,29 +128,47 @@ $tomorrow = $override->getCount2('visit', 'expected_date', $nxt_day, 'status', 0
                         <p>
                             Screening
                             <i class="fas fa-angle-left right"></i>
-                            <span class="badge badge-info right"><?= $Sensitizations ?></span>
+                            <span class="badge badge-info right"><?= $Screening ?></span>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="info.php?id=1&status=6" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Selected<span class="badge badge-info right"><?= $screening ?></span></p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="info.php?id=1&status=7" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Screening 1<span class="badge badge-info right"><?= $screening1 ?></span></p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="info.php?id=1&status=8" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Screening 2<span class="badge badge-info right"><?= $screening2 ?></span></p>
-                            </a>
-                        </li>
-                    </ul>
+                    <?php
+                    foreach ($override->get('study', 'status', 1) as $study2) {
+                    ?>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="info.php?id=1&status=4&project_id=<?= $study2['id'] ?>" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p><?= $study2['name'] ?><span class="badge badge-info right"><?= $override->getCount2('clients', 'status', 1, 'screening', 1, 'project_id', $study2['id']) ?></span></p>
+                                </a>
+                            </li>
+                        </ul>
+                    <?php
+                    }
+                    ?>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            ELigible
+                            <i class="fas fa-angle-left right"></i>
+                            <span class="badge badge-info right"><?= $Screening ?></span>
+                        </p>
+                    </a>
+                    <?php
+                    foreach ($override->get('study', 'status', 1) as $study3) {
+                    ?>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="info.php?id=1&status=5&project_id=<?= $study3['id'] ?>" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p><?= $study3['name'] ?><span class="badge badge-info right"><?= $override->getCount2('clients', 'status', 1, 'eligible', 1, 'project_id', $study3['id']) ?></span></p>
+                                </a>
+                            </li>
+                        </ul>
+                    <?php
+                    }
+                    ?>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
@@ -189,28 +176,47 @@ $tomorrow = $override->getCount2('visit', 'expected_date', $nxt_day, 'status', 0
                         <p>
                             Enrollment
                             <i class="fas fa-angle-left right"></i>
-                            <span class="badge badge-info right"><?= $Sensitizations ?></span>
+                            <span class="badge badge-info right"><?= $Enrollment ?></span>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="info.php?id=1&status=9" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Selected<span class="badge badge-info right"><?= $Enrollment ?></span></p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="info.php?id=1&status=10" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Enrolled<span class="badge badge-info right"><?= $Enrolled ?></span></p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="info.php?id=1&status=11" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Locked<span class="badge badge-info right"><?= $Locked ?></span></p>
-                            </a>
-                        </li>
+
+                        <?php
+                        foreach ($override->get('study', 'status', 1) as $study4) {
+                        ?>
+                            <li class="nav-item">
+                                <a href="info.php?id=1&status=6&project_id=<?= $study4['id'] ?>" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p><?= $study4['name'] ?><span class="badge badge-info right"><?= $override->getCount2('clients', 'status', 1, 'enrollment', 1, 'project_id', $study4['id']) ?></span></p>
+                                </a>
+                            </li>
+                        <?php
+                        }
+                        ?>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            Locked
+                            <i class="fas fa-angle-left right"></i>
+                            <span class="badge badge-info right"><?= $Locked ?></span>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <?php
+                        foreach ($override->get('study', 'status', 1) as $study5) {
+                        ?>
+                            <li class="nav-item">
+                                <a href="info.php?id=1&status=7&project_id=<?= $study5['id'] ?>" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p><?= $study5['name'] ?><span class="badge badge-info right"><?= $override->getCount2Not('clients', 'status', 1, 'locked', 1, 'project_id', $study5['id']) ?></span></p>
+                                </a>
+                            </li>
+                        <?php
+                        }
+                        ?>
                     </ul>
                 </li>
                 <li class="nav-item">

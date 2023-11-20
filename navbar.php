@@ -1,11 +1,6 @@
 <?php
 require_once 'php/core/init.php';
 
-require 'vendor/autoload.php';
-
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
 
 $user = new User();
 $override = new OverideData();
@@ -18,114 +13,7 @@ $errorMessage = null;
 $numRec = 30;
 if ($user->isLoggedIn()) {
     if (Input::exists('post')) {
-        $validate = new validate();
-        if (Input::get('save_excel_data')) {
-            $validate = $validate->check($_POST, array(
-                // 'name' => array(
-                //     'required' => true,
-                // ),
-            ));
-            if ($validate->passed()) {
-                try {
 
-                    $fileName = $_FILES['import_file']['name'];
-                    $file_ext = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                    $allowed_ext = ['xls', 'csv', 'xlsx'];
-
-                    if (in_array($file_ext, $allowed_ext)) {
-                        $inputFileNamePath = $_FILES['import_file']['tmp_name'];
-                        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileNamePath);
-                        $data = $spreadsheet->getActiveSheet()->toArray();
-
-                        $count = "0";
-
-                        $i = 0;
-
-
-
-                        foreach ($data as $row) {
-
-                            $dob_date = date('Y-m-d', strtotime(Input::get('dob')));
-
-                            $dob = $row['5'];
-                            $age = $user->dateDiffYears(date('Y-m-d'), $dob);
-
-
-                            if ($count > 0) {
-                                $registered_date = $row['0'];
-                                $fname = $row['1'];
-                                $mname = $row['2'];
-                                $lname = $row['3'];
-                                $dob = $row['4'];
-                                $age = $row['5'];
-                                $gender = $row['6'];
-                                $marital = $row['7'];
-                                $education = $row['8'];
-                                $occupation = $row['9'];
-                                $phone1 = $row['10'];
-                                $phone2 = $row['11'];
-                                $region = $row['12'];
-                                $district = $row['13'];
-                                $ward = $row['14'];
-                                $village = $row['15'];
-                                $hamlet = $row['16'];
-                                $duration = $row['17'];
-                                $location = $row['18'];
-                                $comments = $row['19'];
-
-                                $user->createRecord('clients', array(
-                                    'registered_date' => $registered_date,
-                                    'fname' => $fname,
-                                    'mname' => $mname,
-                                    'lname' => $lname,
-                                    'dob' => $dob,
-                                    'age' => $age,
-                                    'gender' => $gender,
-                                    'marital' => $marital,
-                                    'education' => $education,
-                                    'occupation' => $occupation,
-                                    'phone1' => $phone1,
-                                    'phone2' => $phone2,
-                                    'region' => $region,
-                                    'district' => $district,
-                                    'ward' => $ward,
-                                    'village' => $village,
-                                    'hamlet' => $hamlet,
-                                    'duration' => $duration,
-                                    'location' => $location,
-                                    'staff_id' => $user->data()->id,
-                                    'site_id' => $user->data()->site_id,
-                                    'status' => 1,
-                                    'comments' => $comments,
-                                ));
-                                $msg = true;
-                            } else {
-                                $count = "1";
-                            }
-                        }
-
-                        if ($msg) {
-                            $successMessage = 'Successfully Imported';
-                            // header('Location: import.php');
-                            // exit(0);
-                        } else {
-                            $successMessage = 'Not Imported';
-                            // header('Location: import.php');
-                            // exit(0);
-                        }
-                    } else {
-                        $successMessage = 'Invalid File';
-                        // header('Location: import.php');
-                        // exit(0);
-                    }
-                } catch (Exception $e) {
-                    die($e->getMessage());
-                }
-            } else {
-                $pageError = $validate->errors();
-            }
-        }
     }
 } else {
     Redirect::to('index.php');
@@ -157,39 +45,7 @@ if ($user->isLoggedIn()) {
         <li class="nav-item d-none d-sm-inline-block">
             <a href="import.php" class="nav-link">Upload Data</a>
         </li>
-        <!-- <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addVisit">
-            Upload Data </button> -->
     </ul>
-
-    <div class="modal fade" id="addVisit">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form id="validation" method="post" enctype="multipart/form-data">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Import Excel Data</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>File Name</label>
-                                    <input type="file" name="import_file" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <input type="submit" name="save_excel_data" class="btn btn-primary mt-3" value="Import" />
-                    </div>
-                </form>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-
 
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">

@@ -2,7 +2,7 @@
 require_once 'php/core/init.php';
 $user = new User();
 $override = new OverideData();
-$numRec = 15;
+$numRec = 3;
 
 $successMessage = null;
 $errorM = false;
@@ -13,7 +13,7 @@ if ($user->isLoggedIn()) {
         if (Input::get('SelectSensitization')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                'select_date' => array(
+                'sensitization_date' => array(
                     'required' => true,
                 ),
                 'project_id' => array(
@@ -21,8 +21,6 @@ if ($user->isLoggedIn()) {
                 ),
             ));
             if ($validate->passed()) {
-                print_r(Input::get('checkname'));
-
                 if (count(Input::get('checkname')) >= 1) {
                     try {
                         $i = 0;
@@ -33,6 +31,17 @@ if ($user->isLoggedIn()) {
                                     'available' => 0,
                                     'sensitization' => 1,
                                 ), $value);
+
+                                $user->createRecord('sensitization', array(
+                                    'select_sensitization' => 1,
+                                    'select_sensitization_date' => Input::get('sensitization_date'),
+                                    'project_name' => Input::get('project_id'),
+                                    'sensitization1_statatus' => 1,
+                                    'staff_id' => $user->data()->id,
+                                    'client_id' => $value,
+                                    'site_id' => $user->data()->site_id,
+                                    'status' => 1,
+                                ));
                             }
                             $i++;
                         }
@@ -49,7 +58,7 @@ if ($user->isLoggedIn()) {
         } elseif (Input::get('RemoveSensitization')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                'select_date' => array(
+                'sensitization_date' => array(
                     'required' => true,
                 ),
                 'project_id' => array(
@@ -70,138 +79,19 @@ if ($user->isLoggedIn()) {
                             }
                             $i++;
                         }
-                        $successMessage = 'Client Selected Successful';
-                    } catch (Exception $e) {
-                        die($e->getMessage());
-                    }
-                } else {
-                    $errorMessage = 'Please select ataleast One Patient to Submit';
-                }
-            } else {
-                $pageError = $validate->errors();
-            }
-        } elseif (Input::get('AddSensitization1')) {
-            $validate = new validate();
-            $validate = $validate->check($_POST, array(
-                'sensitization_date' => array(
-                    'required' => true,
-                ),
-                // 'project_id' => array(
-                //     'required' => true,
-                // ),
-            ));
-            if ($validate->passed()) {
-                if (Input::get('checkname')) {
-                    try {
-                        $i = 0;
-                        foreach (Input::get('checkname') as $value) {
-                            if (Input::get('checkname')[$i]) {
-                                $user->updateRecord('clients', array(
-                                    'available' => 0,
-                                    'sensitization' => 0,
-                                    'sensitization1' => 1,
-                                ), $value);
+
+                        $j = 0;
+                        foreach (Input::get('sensitization_id') as $sensitization_id) {
+
+                            if (Input::get('sensitization_id')[$j]) {
+
+                                $user->updateRecord('sensitization', array(
+                                    'status' => 0,
+                                ), $sensitization_id['id']);
                             }
-                            $i++;
+                            $j++;
                         }
-                        $successMessage = 'Client Sensitization 1 Added Successful';
-                    } catch (Exception $e) {
-                        die($e->getMessage());
-                    }
-                } else {
-                    $errorMessage = 'Please select ataleast One Patient to Submit';
-                }
-            } else {
-                $pageError = $validate->errors();
-            }
-        } elseif (Input::get('RemoveSensitization1')) {
-            $validate = new validate();
-            $validate = $validate->check($_POST, array(
-                'sensitization_date' => array(
-                    'required' => true,
-                ),
-            ));
-            if ($validate->passed()) {
-                if (Input::get('checkname')) {
-                    try {
-                        $i = 0;
-                        foreach (Input::get('checkname') as $value) {
-                            if (Input::get('checkname')[$i]) {
-                                $user->updateRecord('clients', array(
-                                    'project_id' => 0,
-                                    'available' => 1,
-                                    'sensitization' => 0,
-                                    'sensitization1' => 0,
-                                ), $value);
-                            }
-                            $i++;
-                        }
-                        $successMessage = 'Client Sensitization 1 Added Successful';
-                    } catch (Exception $e) {
-                        die($e->getMessage());
-                    }
-                } else {
-                    $errorMessage = 'Please select ataleast One Patient to Submit';
-                }
-            } else {
-                $pageError = $validate->errors();
-            }
-        } elseif (Input::get('AddSensitization2')) {
-            $validate = new validate();
-            $validate = $validate->check($_POST, array(
-                // 'id' => array(
-                //     'required' => true,
-                // ),
-            ));
-            if ($validate->passed()) {
-                if (Input::get('checkname')) {
-                    try {
-                        $i = 0;
-                        foreach (Input::get('checkname') as $value) {
-                            if (Input::get('checkname')[$i]) {
-                                $user->updateRecord('clients', array(
-                                    'available' => 0,
-                                    'sensitization' => 0,
-                                    'sensitization1' => 0,
-                                    'sensitization2' => 1,
-                                ), $value);
-                            }
-                            $i++;
-                        }
-                        $successMessage = 'Client Sensitization 2 Added Successful';
-                    } catch (Exception $e) {
-                        die($e->getMessage());
-                    }
-                } else {
-                    $errorMessage = 'Please select ataleast One Patient to Submit';
-                }
-            } else {
-                $pageError = $validate->errors();
-            }
-        } elseif (Input::get('RemoveSensitization2')) {
-            $validate = new validate();
-            $validate = $validate->check($_POST, array(
-                'sensitization_date' => array(
-                    'required' => true,
-                ),
-            ));
-            if ($validate->passed()) {
-                if (Input::get('checkname')) {
-                    try {
-                        $i = 0;
-                        foreach (Input::get('checkname') as $value) {
-                            if (Input::get('checkname')[$i]) {
-                                $user->updateRecord('clients', array(
-                                    'project_id' => 0,
-                                    'available' => 1,
-                                    'sensitization' => 0,
-                                    'sensitization1' => 0,
-                                    'sensitization2' => 0,
-                                ), $value);
-                            }
-                            $i++;
-                        }
-                        $successMessage = 'Client Sensitization 1 Added Successful';
+                        $successMessage = 'Client Selection For Sensitization Removed Successful';
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -214,9 +104,9 @@ if ($user->isLoggedIn()) {
         } elseif (Input::get('SelectScreening')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                // 'id' => array(
-                //     'required' => true,
-                // ),
+                'screening_date' => array(
+                    'required' => true,
+                ),
             ));
             if ($validate->passed()) {
                 if (Input::get('checkname')) {
@@ -227,8 +117,6 @@ if ($user->isLoggedIn()) {
                                 $user->updateRecord('clients', array(
                                     'available' => 0,
                                     'sensitization' => 0,
-                                    'sensitization1' => 0,
-                                    'sensitization2' => 0,
                                     'screening' => 1,
                                 ), $value);
                             }
@@ -247,9 +135,9 @@ if ($user->isLoggedIn()) {
         } elseif (Input::get('RemoveScreening')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                // 'sensitization_date' => array(
-                //     'required' => true,
-                // ),
+                'screening_date' => array(
+                    'required' => true,
+                ),
             ));
             if ($validate->passed()) {
                 if (Input::get('checkname')) {
@@ -258,86 +146,15 @@ if ($user->isLoggedIn()) {
                         foreach (Input::get('checkname') as $value) {
                             if (Input::get('checkname')[$i]) {
                                 $user->updateRecord('clients', array(
-                                    'project_id' => 0,
                                     'available' => 1,
-                                    'sensitization' => 0,
-                                    'sensitization1' => 0,
-                                    'sensitization2' => 0,
-                                    'screening' => 0,
-                                ), $value);
-                            }
-                            $i++;
-                        }
-                        $successMessage = 'Client Sensitization 1 Added Successful';
-                    } catch (Exception $e) {
-                        die($e->getMessage());
-                    }
-                } else {
-                    $errorMessage = 'Please select ataleast One Patient to Submit';
-                }
-            } else {
-                $pageError = $validate->errors();
-            }
-        } elseif (Input::get('AddScreening1')) {
-            $validate = new validate();
-            $validate = $validate->check($_POST, array(
-                // 'id' => array(
-                //     'required' => true,
-                // ),
-            ));
-            if ($validate->passed()) {
-                if (Input::get('checkname')) {
-                    try {
-                        $i = 0;
-                        foreach (Input::get('checkname') as $value) {
-                            if (Input::get('checkname')[$i]) {
-                                $user->updateRecord('clients', array(
-                                    'available' => 0,
-                                    'sensitization' => 0,
-                                    'sensitization1' => 0,
-                                    'sensitization2' => 0,
-                                    'screening' => 0,
-                                    'screening1' => 1,
-                                ), $value);
-                            }
-                            $i++;
-                        }
-                        $successMessage = 'Client screening 1 Added Successful';
-                    } catch (Exception $e) {
-                        die($e->getMessage());
-                    }
-                } else {
-                    $errorMessage = 'Please select ataleast One Patient to Submit';
-                }
-            } else {
-                $pageError = $validate->errors();
-            }
-        } elseif (Input::get('RemoveScreening1')) {
-            $validate = new validate();
-            $validate = $validate->check($_POST, array(
-                // 'sensitization_date' => array(
-                //     'required' => true,
-                // ),
-            ));
-            if ($validate->passed()) {
-                if (Input::get('checkname')) {
-                    try {
-                        $i = 0;
-                        foreach (Input::get('checkname') as $value) {
-                            if (Input::get('checkname')[$i]) {
-                                $user->updateRecord('clients', array(
                                     'project_id' => 0,
-                                    'available' => 1,
                                     'sensitization' => 0,
-                                    'sensitization1' => 0,
-                                    'sensitization2' => 0,
                                     'screening' => 0,
-                                    'screening1' => 0,
                                 ), $value);
                             }
                             $i++;
                         }
-                        $successMessage = 'Client Sensitization 1 Added Successful';
+                        $successMessage = 'Client Selection for Screening Removed Successful';
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -345,19 +162,17 @@ if ($user->isLoggedIn()) {
                     $errorMessage = 'Please select ataleast One Patient to Submit';
                 }
             } else {
-                $pageError = $validate->errors();
-            }
-        } elseif (Input::get('AddScreening2')) {
-            $validate = new validate();
-            $validate = $validate->check($_POST, array(
-                // 'id' => array(
-                //     'required' => true,
-                // ),
-            ));
-            if ($validate->passed()) {
-                // print_r(count(Input::get('checkname')));
 
-                // print_r(Input::get('checkname'));
+                $pageError = $validate->errors();
+            }
+        } elseif (Input::get('SelectEligible')) {
+            $validate = new validate();
+            $validate = $validate->check($_POST, array(
+                'eligible_date' => array(
+                    'required' => true,
+                ),
+            ));
+            if ($validate->passed()) {
                 if (Input::get('checkname')) {
                     try {
                         $i = 0;
@@ -366,17 +181,19 @@ if ($user->isLoggedIn()) {
                                 $user->updateRecord('clients', array(
                                     'available' => 0,
                                     'sensitization' => 0,
-                                    'sensitization1' => 0,
-                                    'sensitization2' => 0,
                                     'screening' => 0,
-                                    'screening1' => 0,
-                                    'screening2' => 1,
+                                    'eligible' => 1,
                                 ), $value);
+
+                                // $user->updateRecord('clients', array(
+                                //     'available' => Input::get('checkname'),
+                                //     'sensitization' => 0,
+                                //     'screening' => 1,
+                                // ), $value);
                             }
                             $i++;
                         }
-                        $successMessage = 'Client screening 2 Added Successful';
-                        // Redirect::to('info.php?id=1&status=3');
+                        $successMessage = 'Client Selection for Eligible Successful';
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -386,12 +203,12 @@ if ($user->isLoggedIn()) {
             } else {
                 $pageError = $validate->errors();
             }
-        } elseif (Input::get('RemoveScreening2')) {
+        } elseif (Input::get('RemoveEligible')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                // 'sensitization_date' => array(
-                //     'required' => true,
-                // ),
+                'eligible_date' => array(
+                    'required' => true,
+                ),
             ));
             if ($validate->passed()) {
                 if (Input::get('checkname')) {
@@ -400,19 +217,22 @@ if ($user->isLoggedIn()) {
                         foreach (Input::get('checkname') as $value) {
                             if (Input::get('checkname')[$i]) {
                                 $user->updateRecord('clients', array(
-                                    'project_id' => 0,
                                     'available' => 1,
+                                    'project_id' => 0,
                                     'sensitization' => 0,
-                                    'sensitization1' => 0,
-                                    'sensitization2' => 0,
                                     'screening' => 0,
-                                    'screening1' => 0,
-                                    'screening2' => 0,
+                                    'eligible' => 0,
                                 ), $value);
+
+                                // $user->updateRecord('clients', array(
+                                //     'available' => Input::get('checkname'),
+                                //     'sensitization' => 0,
+                                //     'screening' => 1,
+                                // ), $value);
                             }
                             $i++;
                         }
-                        $successMessage = 'Client Sensitization 1 Added Successful';
+                        $successMessage = 'Client Removed from Eligible Successful';
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -425,14 +245,11 @@ if ($user->isLoggedIn()) {
         } elseif (Input::get('SelectEnrollment')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                // 'id' => array(
-                //     'required' => true,
-                // ),
+                'enrollment_date' => array(
+                    'required' => true,
+                ),
             ));
             if ($validate->passed()) {
-                // print_r(count(Input::get('checkname')));
-
-                // print_r(Input::get('checkname'));
                 if (Input::get('checkname')) {
                     try {
                         $i = 0;
@@ -441,11 +258,8 @@ if ($user->isLoggedIn()) {
                                 $user->updateRecord('clients', array(
                                     'available' => 0,
                                     'sensitization' => 0,
-                                    'sensitization1' => 0,
-                                    'sensitization2' => 0,
                                     'screening' => 0,
-                                    'screening1' => 0,
-                                    'screening2' => 0,
+                                    'eligible' => 0,
                                     'enrollment' => 1,
                                 ), $value);
                             }
@@ -475,20 +289,17 @@ if ($user->isLoggedIn()) {
                         foreach (Input::get('checkname') as $value) {
                             if (Input::get('checkname')[$i]) {
                                 $user->updateRecord('clients', array(
-                                    'project_id' => 0,
                                     'available' => 1,
+                                    'project_id' => 0,
                                     'sensitization' => 0,
-                                    'sensitization1' => 0,
-                                    'sensitization2' => 0,
                                     'screening' => 0,
-                                    'screening1' => 0,
-                                    'screening2' => 0,
+                                    'eligible' => 0,
                                     'enrollment' => 0,
                                 ), $value);
                             }
                             $i++;
                         }
-                        $successMessage = 'Client Sensitization 1 Added Successful';
+                        $successMessage = 'Client Enrollment Removed Successful';
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
@@ -757,111 +568,70 @@ if ($user->isLoggedIn()) {
                                             <?php } elseif ($_GET['status'] == 2) { ?>
                                                 List of Available Clients
                                             <?php } elseif ($_GET['status'] == 3) { ?>
-                                                List of Selected for Sensitization 1
+                                                List of Selected for Sensitization
                                             <?php } elseif ($_GET['status'] == 4) { ?>
-                                                List of Sensitizations 1
-                                            <?php } elseif ($_GET['status'] == 5) { ?>
-                                                List of Sensitizations 2
-                                            <?php } elseif ($_GET['status'] == 6) { ?>
                                                 List of Selected for Screening
-                                            <?php } elseif ($_GET['status'] == 7) { ?>
-                                                List of Screening 1
-                                            <?php } elseif ($_GET['status'] == 8) { ?>
-                                                List of Screening 2
-                                            <?php } elseif ($_GET['status'] == 9) { ?>
-                                                List of Selected for Enrollment
-                                            <?php } elseif ($_GET['status'] == 10) { ?>
+                                            <?php } elseif ($_GET['status'] == 5) { ?>
+                                                List of Eligible Clients
+                                            <?php } elseif ($_GET['status'] == 6) { ?>
                                                 List of Enrolled Clients
+                                            <?php } elseif ($_GET['status'] == 7) { ?>
+                                                List of Locked Clients
                                             <?php } ?>
+                                            <?php
+                                            $pagNum = 0;
+                                            if ($_GET['status'] == 1) {
+                                                $pagNum = $override->getCount('clients', 'status', 1);
+                                            } elseif ($_GET['status'] == 2) {
+                                                $pagNum = $override->getCount2Not('clients', 'status', 1, 'available', 1, 'project_id', $available['id']);
+                                            } elseif ($_GET['status'] == 3) {
+                                                $pagNum = $override->getCount2('clients', 'status', 1, 'sensitization', 1, 'project_id', $_GET['project_id']);
+                                            } elseif ($_GET['status'] == 4) {
+                                                $pagNum = $override->getCount2('clients', 'status', 1, 'screening', 1, 'project_id', $_GET['project_id']);
+                                            } elseif ($_GET['status'] == 5) {
+                                                $pagNum = $override->getCount2('clients', 'status', 1, 'eligible', 1, 'project_id', $_GET['project_id']);
+                                            } elseif ($_GET['status'] == 6) {
+                                                $pagNum = $override->getCount2('clients', 'status', 1, 'enrollment', 1, 'project_id', $_GET['project_id']);
+                                            } elseif ($_GET['status'] == 7) {
+                                                $pagNum = $override->getCount2('clients', 'status', 1, 'locked', 1, 'project_id', $_GET['project_id']);
+                                            }
+
+                                            $pages = ceil($pagNum / $numRec);
+                                            if (!$_GET['page'] || $_GET['page'] == 1) {
+                                                $page = 0;
+                                            } else {
+                                                $page = ($_GET['page'] * $numRec) - $numRec;
+                                            }
+
+
+                                            if ($_GET['status'] == 1) {
+                                                $clients = $override->getWithLimit('clients', 'status', 1, $page, $numRec);
+                                            } elseif ($_GET['status'] == 2) {
+                                                // $project_id = $int = intval($string);
+                                                $clients = $override->getCount2NotNews('clients', 'status', 1, 'available', 1, 'project_id', $_GET['project_id'], $page, $numRec);
+                                            } elseif ($_GET['status'] == 3) {
+                                                $clients = $override->getWithLimit3('clients', 'status', 1, 'sensitization', 1, 'project_id', $_GET['project_id'], $page, $numRec);
+                                            } elseif ($_GET['status'] == 4) {
+                                                $clients = $override->getWithLimit3('clients', 'status', 1, 'screening', 1, 'project_id', $_GET['project_id'], $page, $numRec);
+                                            } elseif ($_GET['status'] == 5) {
+                                                $clients = $override->getWithLimit3('clients', 'status', 1, 'eligible', 1, 'project_id', $_GET['project_id'], $page, $numRec);
+                                            } elseif ($_GET['status'] == 6) {
+                                                $clients = $override->getWithLimit3('clients', 'status', 1, 'enrollment', 1, 'project_id', $_GET['project_id'], $page, $numRec);
+                                            } elseif ($_GET['status'] == 7) {
+                                                $clients = $override->getWithLimit3('clients', 'status', 1, 'locked', 1, 'project_id', $_GET['project_id'], $page, $numRec);
+                                            }
+                                            ?>
                                     </div>
                                     <!-- /.card-header -->
-                                    <?php
-                                    $pagNum = 0;
-                                    if ($_GET['status'] == 1) {
-                                        $pagNum = $override->countData('clients', 'status', 1, 'site_id', $user->data()->site_id);
-                                    } elseif ($_GET['status'] == 2) {
-                                        $pagNum = $override->countData2('clients', 'status', 1, 'available', 1, 'site_id', $user->data()->site_id);
-                                    } elseif ($_GET['status'] == 3) {
-                                        if ($_GET['sensitization'] == 1) {
-                                            $pagNum = $override->countData4('clients', 'status', 1, 'sensitization1', 1, 'sensitization2', 1, 'site_id', $user->data()->site_id);
-                                        } else {
-                                            $pagNum = $override->countData2('clients', 'status', 1, 'sensitization', 1, 'site_id', $user->data()->site_id);
-                                        }
-                                    } elseif ($_GET['status'] == 4) {
-                                        $pagNum = $override->countData2('clients', 'status', 1, 'sensitization1', 1, 'site_id', $user->data()->site_id);
-                                    } elseif ($_GET['status'] == 5) {
-                                        $pagNum = $override->countData2('clients', 'status', 1, 'sensitization2', 1, 'site_id', $user->data()->site_id);
-                                    } elseif ($_GET['status'] == 6) {
-                                        if ($_GET['screening'] == 1) {
-                                            $pagNum = $override->countData4('clients', 'status', 1, 'screening1', 1, 'screening2', 1, 'site_id', $user->data()->site_id);
-                                        } else {
-                                            $pagNum = $override->countData2('clients', 'status', 1, 'screening', 1, 'site_id', $user->data()->site_id);
-                                        }
-                                        // $pagNum = $override->getNoAvailable('progres', 'status', 1, 'pt_status', 0, 'pt_status', 2);
-                                    } elseif ($_GET['status'] == 7) {
-                                        $pagNum = $override->countData2('clients', 'status', 1, 'screening1', 1, 'site_id', $user->data()->site_id);
-                                    } elseif ($_GET['status'] == 8) {
-                                        $pagNum = $override->countData2('clients', 'status', 1, 'screening2', 1, 'site_id', $user->data()->site_id);
-                                    } elseif ($_GET['status'] == 9) {
-                                        $pagNum = $override->countData2('clients', 'status', 1, 'enrollment', 1, 'site_id', $user->data()->site_id);
-                                    } elseif ($_GET['status'] == 10) {
-                                        $pagNum = $override->countData2('clients', 'status', 1, 'enrolled', 1, 'site_id', $user->data()->site_id);
-                                    } elseif ($_GET['status'] == 11) {
-                                        $pagNum = $override->countData2('clients', 'status', 1, 'locked', 1, 'site_id', $user->data()->site_id);
-                                    }
-
-                                    $pages = ceil($pagNum / $numRec);
-                                    if (!$_GET['page'] || $_GET['page'] == 1) {
-                                        $page = 0;
-                                    } else {
-                                        $page = ($_GET['page'] * $numRec) - $numRec;
-                                    }
-
-
-                                    if ($_GET['status'] == 1) {
-                                        $clients = $override->getWithLimit1('clients', 'status', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                    } elseif ($_GET['status'] == 2) {
-                                        $clients = $override->getWithLimit3('clients', 'status', 1, 'available', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                    } elseif ($_GET['status'] == 3) {
-                                        if ($_GET['sensitization'] == 1) {
-                                            $clients = $override->getWithLimit6('clients', 'status', 1, 'sensitization1', 1, 'sensitization2', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                        } else {
-                                            $clients = $override->getWithLimit3('clients', 'status', 1, 'sensitization', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                        }
-                                    } elseif ($_GET['status'] == 4) {
-                                        $clients = $override->getWithLimit3('clients', 'status', 1, 'sensitization1', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                    } elseif ($_GET['status'] == 5) {
-                                        $clients = $override->getWithLimit3('clients', 'status', 1, 'sensitization2', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                    } elseif ($_GET['status'] == 6) {
-                                        // $clients = $override->getAvailable('progres', 'status', 1, 'pt_status', 0, 'pt_status', 2);
-                                        if ($_GET['screening'] == 1) {
-                                            $clients = $override->getWithLimit6('clients', 'status', 1, 'screening1', 1, 'screening2', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                        } else {
-                                            $clients = $override->getWithLimit3('clients', 'status', 1, 'screening', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                        }
-                                    } elseif ($_GET['status'] == 7) {
-                                        $clients = $override->getWithLimit3('clients', 'status', 1, 'screening1', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                    } elseif ($_GET['status'] == 8) {
-                                        $clients = $override->getWithLimit3('clients', 'status', 1, 'screening2', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                    } elseif ($_GET['status'] == 9) {
-                                        $clients = $override->getWithLimit3('clients', 'status', 1, 'enrollment', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                    } elseif ($_GET['status'] == 10) {
-                                        $clients = $override->getWithLimit3('clients', 'status', 1, 'enrolled', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                    } elseif ($_GET['status'] == 11) {
-                                        $clients = $override->getWithLimit3('clients', 'status', 1, 'locked', 1, 'site_id', $user->data()->site_id, $page, $numRec);
-                                    }
-                                    ?>
                                     <div class="card-body">
                                         <form id="validation" method="post">
-                                            <?php
-                                            if ($_GET['status'] == 2) {
-                                            ?>
+                                            <?php if ($_GET['status'] == 2) { ?>
                                                 <div class="row">
                                                     <div class="col-sm-3">
                                                         <!-- text input -->
                                                         <div class="form-group">
                                                             <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="select_date" id="select_date" value="" />
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-2">
@@ -879,7 +649,7 @@ if ($user->isLoggedIn()) {
                                                     <div class="col-sm-2">
                                                         <div class="form-group">
                                                             <label>Submit </label>
-                                                            <input type="submit" class="form-control btn btn-info btn-clean" name="SelectSensitization" value="Select for sensitization">
+                                                            <input type="submit" class="form-control btn btn-info btn-clean" name="SelectSensitization" value="Select for Sensitization">
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-2">
@@ -895,57 +665,14 @@ if ($user->isLoggedIn()) {
                                                         <!-- text input -->
                                                         <div class="form-group">
                                                             <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="screening_date" id="screening_date" value="" />
                                                         </div>
                                                     </div>
+
                                                     <div class="col-sm-2">
                                                         <div class="form-group">
                                                             <label>Submit </label>
-                                                            <input type="submit" class="btn btn-info btn-clean" name="AddSensitization1" value="Add sensitization 1">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <div class="form-group">
-                                                            <label>Discard </label>
-                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveSensitization1" value="Remove">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <?php } elseif ($_GET['status'] == 4) { ?>
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <!-- text input -->
-                                                        <div class="form-group">
-                                                            <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <div class="form-group">
-                                                            <label>Submit </label>
-                                                            <input type="submit" class="btn btn-warning btn-clean" name="AddSensitization2" value="Add sensitization 2">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <div class="form-group">
-                                                            <label>Discard </label>
-                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveSensitization2" value="Remove">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <?php } elseif ($_GET['status'] == 5) { ?>
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <!-- text input -->
-                                                        <div class="form-group">
-                                                            <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <div class="form-group">
-                                                            <label>Submit </label>
-                                                            <input type="submit" class="btn btn-warning btn-clean" name="SelectScreening" value="Select for Screening">
+                                                            <input type="submit" class="form-control btn btn-info btn-clean" name="SelectScreening" value="Select for Screening">
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-2">
@@ -955,57 +682,39 @@ if ($user->isLoggedIn()) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <?php } elseif ($_GET['status'] == 6) { ?>
+
+                                            <?php } elseif ($_GET['status'] == 4) { ?>
+
                                                 <div class="row">
                                                     <div class="col-sm-3">
                                                         <!-- text input -->
                                                         <div class="form-group">
                                                             <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="eligible_date" id="eligible_date" value="" />
                                                         </div>
                                                     </div>
+
                                                     <div class="col-sm-2">
                                                         <div class="form-group">
                                                             <label>Submit </label>
-                                                            <input type="submit" class="btn btn-info btn-clean" name="AddScreening1" value="Add Screening 1">
+                                                            <input type="submit" class="form-control btn btn-info btn-clean" name="SelectEligible" value="Select Eligible List">
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-2">
                                                         <div class="form-group">
                                                             <label>Discard </label>
-                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveScreening1" value="Remove">
+                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveEligible" value="Remove">
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <?php } elseif ($_GET['status'] == 7) { ?>
+
+                                            <?php } elseif ($_GET['status'] == 5) { ?>
                                                 <div class="row">
                                                     <div class="col-sm-3">
                                                         <!-- text input -->
                                                         <div class="form-group">
                                                             <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <div class="form-group">
-                                                            <label>Submit </label>
-                                                            <input type="submit" class="btn btn-info btn-clean" name="AddScreening2" value="Add Screening 2">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <div class="form-group">
-                                                            <label>Discard </label>
-                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveScreening2" value="Remove">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <?php } elseif ($_GET['status'] == 8) { ?>
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <!-- text input -->
-                                                        <div class="form-group">
-                                                            <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="enrollment_date" id="enrollment_date" value="" />
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-2">
@@ -1021,45 +730,7 @@ if ($user->isLoggedIn()) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <?php } elseif ($_GET['status'] == 9) { ?>
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <!-- text input -->
-                                                        <div class="form-group">
-                                                            <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <div class="form-group">
-                                                            <label>Submit </label>
-                                                            <input type="submit" class="btn btn-info btn-clean" name="AddEnrollment" value="Add Enrollment">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <div class="form-group">
-                                                            <label>Discard </label>
-                                                            <input type="submit" class="form-control btn btn-warning btn-clean" name="RemoveScreening1" value="Remove">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <?php } elseif ($_GET['status'] == 10) { ?>
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <!-- text input -->
-                                                        <div class="form-group">
-                                                            <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <div class="form-group">
-                                                            <label>Submit </label>
-                                                            <input type="submit" class="btn btn-warning btn-clean" name="EndEnrollment" value="End Enrollment / Study">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <?php } elseif ($_GET['status'] == 11) { ?>
+                                            <?php } elseif ($_GET['status'] == 7) { ?>
                                                 <div class="row">
                                                     <div class="col-sm-3">
                                                         <!-- text input -->
@@ -1109,12 +780,18 @@ if ($user->isLoggedIn()) {
                                                         $age = $user->dateDiffYears(date('Y-m-d'), $dob);
                                                         $project_name = $override->get('study', 'id', $value['project_id'])[0];
                                                         $client = $override->get('clients', 'id', $value['client_id'])[0];
+                                                        $sensitization_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
+                                                        $screening_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
+                                                        $enrollment_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
                                                     ?>
                                                         <tr>
                                                             <?php if ($_GET['status'] != 1) { ?>
                                                                 <td>
                                                                     <div class="icheck-primary d-inline">
                                                                         <input type="hidden" name="id[]" value="<?= $value['id']; ?>">
+                                                                        <input type="hidden" name="sensitization_id[]" value="<?= $sensitization_id['id']; ?>">
+                                                                        <input type="hidden" name="screening_id[]" value="<?= $screening_id['id']; ?>">
+                                                                        <input type="hidden" name="enrollment_id[]" value="<?= $enrollment_id['id']; ?>">
                                                                         <input type="checkbox" name="checkname[]" value="<?= $value['id']; ?>">
                                                                     </div>
                                                                 </td>

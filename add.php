@@ -66,6 +66,7 @@ if ($user->isLoggedIn()) {
                 ),
             ));
             if ($validate->passed()) {
+                // print_r($_POST);
                 $dob_date = date('Y-m-d', strtotime(Input::get('dob')));
                 $intwr_date = date('Y-m-d', strtotime(Input::get('interviewer_date')));
                 $rvwr_date = date('Y-m-d', strtotime(Input::get('reviewer_date')));

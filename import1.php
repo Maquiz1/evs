@@ -39,75 +39,71 @@ if ($user->isLoggedIn()) {
                         $data = $spreadsheet->getActiveSheet()->toArray();
 
                         $count = "0";
-                        // foreach ($data as $row) {
-                        //     $dob_date = date('Y-m-d', strtotime(Input::get('dob')));
 
-                        //     $dob = $row['7'];
-                        //     $age = $user->dateDiffYears(date('Y-m-d'), $dob);
-                        //     if ($count > 0) {
+                        $i = 0;
 
-                        //     $registered_date = $row['0'];
-                        //     $sensitization_no = $row['1'];
-                        //     $project_id = $row['2'];
-                        //     $fname = $row['3'];
-                        //     $mname = $row['4'];
-                        //     $lname = $row['5'];
-                        //     $nickname = $row['6'];
-                        //     $dob = $row['7'];
-                        //     $age = $row['8'];
-                        //     $gender = $row['9'];
-                        //     $marital = $row['10'];
-                        //     $education = $row['11'];
-                        //     $occupation = $row['12'];
-                        //     $phone1 = $row['13'];
-                        //     $phone2 = $row['14'];
-                        //     $region = $row['15'];
-                        //     $district = $row['16'];
-                        //     $ward = $row['17'];
-                        //     $village = $row['18'];
-                        //     $hamlet = $row['19'];
-                        //     $duration = $row['20'];
-                        //     $house_number = $row['21'];
-                        //     $tencell_leader = $row['22'];
-                        //     $location = $row['23'];
-                        //     $comments = $row['24'];
-                        //     $site_id = $row['25'];
 
-                        //     $user->createRecord('clients', array(
-                        //     'registered_date' => $registered_date,
-                        //     'sensitization_no' => $sensitization_no,
-                        //     'project_id' => $project_id,
-                        //     'fname' => $fname,
-                        //     'mname' => $mname,
-                        //     'lname' => $lname,
-                        //     'nickname' => $nickname,
-                        //     'dob' => $dob,
-                        //     'age' => $age,
-                        //     'gender' => $gender,
-                        //     'marital' => $marital,
-                        //     'education' => $education,
-                        //     'occupation' => $occupation,
-                        //     'phone1' => $phone1,
-                        //     'phone2' => $phone2,
-                        //     'region' => $region,
-                        //     'district' => $district,
-                        //     'ward' => $ward,
-                        //     'village' => $village,
-                        //     'hamlet' => $hamlet,
-                        //     'duration' => $duration,
-                        //     'house_number' => $house_number,
-                        //     'tencell_leader' => $tencell_leader,
-                        //     'location' => $location,
-                        //     'staff_id' => $user->data()->id,
-                        //     'site_id' => $site_id,
-                        //     'status' => 1,
-                        //     'comments' => $comments,
-                        //     ));
-                        //         $msg = true;
-                        //     } else {
-                        //         $count = "1";
-                        //     }
-                        // }
+
+                        foreach ($data as $row) {
+
+                            $dob_date = date('Y-m-d', strtotime(Input::get('dob')));
+
+                            $dob = $row['5'];
+                            $age = $user->dateDiffYears(date('Y-m-d'), $dob);
+
+
+                            if ($count > 0) {
+                                $registered_date = $row['0'];
+                                $fname = $row['1'];
+                                $mname = $row['2'];
+                                $lname = $row['3'];
+                                $dob = $row['4'];
+                                $age = $row['5'];
+                                $gender = $row['6'];
+                                $marital = $row['7'];
+                                $education = $row['8'];
+                                $occupation = $row['9'];
+                                $phone1 = $row['10'];
+                                $phone2 = $row['11'];
+                                $region = $row['12'];
+                                $district = $row['13'];
+                                $ward = $row['14'];
+                                $village = $row['15'];
+                                $hamlet = $row['16'];
+                                $duration = $row['17'];
+                                $location = $row['18'];
+                                $comments = $row['19'];
+
+                                $user->createRecord('clients', array(
+                                    'registered_date' => $registered_date,
+                                    'fname' => $fname,
+                                    'mname' => $mname,
+                                    'lname' => $lname,
+                                    'dob' => $dob,
+                                    'age' => $age,
+                                    'gender' => $gender,
+                                    'marital' => $marital,
+                                    'education' => $education,
+                                    'occupation' => $occupation,
+                                    'phone1' => $phone1,
+                                    'phone2' => $phone2,
+                                    'region' => $region,
+                                    'district' => $district,
+                                    'ward' => $ward,
+                                    'village' => $village,
+                                    'hamlet' => $hamlet,
+                                    'duration' => $duration,
+                                    'location' => $location,
+                                    'staff_id' => $user->data()->id,
+                                    'site_id' => $user->data()->site_id,
+                                    'status' => 1,
+                                    'comments' => $comments,
+                                ));
+                                $msg = true;
+                            } else {
+                                $count = "1";
+                            }
+                        }
 
                         if ($msg) {
                             $successMessage = 'Successfully Imported';
@@ -205,17 +201,23 @@ if ($user->isLoggedIn()) {
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
+
                     <div class="card">
                         <div class="card-header">
                             <h4>Import Excel Data</h4>
                         </div>
                         <div class="card-body">
-                            <form method="post" enctype="multipart/form-data">
+
+                            <form method="POST" enctype="multipart/form-data">
+
                                 <input type="file" name="import_file" class="form-control" />
-                                <input type="submit" name="save_excel_data" class="btn btn-primary mt-3" value="Import excel Data" />
+                                <input type="submit" name="save_excel_data" class="btn btn-primary mt-3" value="Import" />
+
                             </form>
+
                         </div>
                     </div>
+
                     <!-- /.container-fluid -->
             </section>
             <!-- /.content -->
