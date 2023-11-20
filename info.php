@@ -278,9 +278,9 @@ if ($user->isLoggedIn()) {
         } elseif (Input::get('RemoveEnrollment')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                // 'sensitization_date' => array(
-                //     'required' => true,
-                // ),
+                'enrollment_date' => array(
+                    'required' => true,
+                ),
             ));
             if ($validate->passed()) {
                 if (Input::get('checkname')) {
@@ -395,14 +395,11 @@ if ($user->isLoggedIn()) {
         } elseif (Input::get('UnLock')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                // 'id' => array(
-                //     'required' => true,
-                // ),
+                'unlock_date' => array(
+                    'required' => true,
+                ),
             ));
             if ($validate->passed()) {
-                // print_r(count(Input::get('checkname')));
-
-                // print_r(Input::get('checkname'));
                 if (Input::get('checkname')) {
                     try {
                         $i = 0;
@@ -410,14 +407,11 @@ if ($user->isLoggedIn()) {
                             if (Input::get('checkname')[$i]) {
                                 $user->updateRecord('clients', array(
                                     'available' => 1,
+                                    'project_id' => 0,
                                     'sensitization' => 0,
-                                    'sensitization1' => 0,
-                                    'sensitization2' => 0,
                                     'screening' => 0,
-                                    'screening1' => 0,
-                                    'screening2' => 0,
+                                    'eligible' => 0,
                                     'enrollment' => 0,
-                                    'enrolled' => 0,
                                     'locked' => 0,
                                 ), $value);
                             }
@@ -447,12 +441,20 @@ if ($user->isLoggedIn()) {
             if ($validate->passed()) {
                 try {
                     // $dob_date = date('Y-m-d', strtotime(Input::get('enrollment_date')));
-                    $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'));
+                    $user->updateRecord('clients', array(
+                        'locked' => 1,
+                    ), Input::get('cid'));
+                    if (Input::get('project_id') == 1) {
+                        $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'));
+                    } elseif (Input::get('project_id') == 2) {
+                        $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'));
+                    }
                 } catch (Exception $e) {
                     die($e->getMessage());
                 }
 
                 $successMessage = 'Patient Enrolled Successful';
+                Redirect::to('info.php?id=2&cid=' . $_GET['cid']);
             } else {
                 $pageError = $validate->errors();
             }
@@ -737,7 +739,7 @@ if ($user->isLoggedIn()) {
                                                         <!-- text input -->
                                                         <div class="form-group">
                                                             <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="eligible_date" id="eligible_date" value="" />
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="unlock_date" id="unlock_date" value="" />
                                                         </div>
                                                     </div>
 
@@ -769,7 +771,7 @@ if ($user->isLoggedIn()) {
                                                             <th>Status</th>
                                                             <th>Action</th>
                                                         <?php } ?>
-                                                        <?php if ($_GET['status'] == 10) { ?>
+                                                        <?php if ($_GET['status'] == 6) { ?>
                                                             <th>Schedules</th>
                                                         <?php } ?>
                                                     </tr>
@@ -785,6 +787,8 @@ if ($user->isLoggedIn()) {
                                                         $sensitization_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
                                                         $screening_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
                                                         $enrollment_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
+                                                        // $schedule = $override->getNews('clients', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
+
                                                     ?>
                                                         <tr>
                                                             <?php if ($_GET['status'] != 1) { ?>
@@ -823,10 +827,15 @@ if ($user->isLoggedIn()) {
                                                                     </div>
                                                                 </td>
                                                             <?php } ?>
-                                                            <?php if ($_GET['status'] == 10) { ?>
+                                                            <?php if ($_GET['status'] == 6) { ?>
                                                                 <td>
-                                                                    <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> Add</a>
-                                                                    </div>
+                                                                    <?php if ($value['locked'] == 1) { ?>
+                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>" class="btn btn-secondary btn-clean"><span class="icon-eye-open"></span> Add</a> </div>
+
+                                                                    <?php } else { ?>
+                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> Add</a> </div>
+
+                                                                    <?php } ?>
                                                                     <div class="btn-group btn-group-xs"><a href="info.php?id=2&cid=<?= $value['id'] ?>" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> View</a>
                                                                     </div>
                                                                 </td>
@@ -854,7 +863,7 @@ if ($user->isLoggedIn()) {
                                                             <th>Status</th>
                                                             <th>Action</th>
                                                         <?php } ?>
-                                                        <?php if ($_GET['status'] == 10) { ?>
+                                                        <?php if ($_GET['status'] == 6) { ?>
                                                             <th>Schedules</th>
                                                         <?php } ?>
                                                     </tr>
@@ -1048,7 +1057,7 @@ if ($user->isLoggedIn()) {
                                             <div class="row">
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
-                                                        <label>Enrollment Date( Dose 1)</label>
+                                                        <label>Enrollment Date</label>
                                                         <input type="date" class="form-control fas fa-calendar input-prefix" name="enrollment_date" id="enrollment_date" value="" required />
                                                     </div>
                                                 </div>
