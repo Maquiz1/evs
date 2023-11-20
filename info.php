@@ -967,16 +967,14 @@ if ($user->isLoggedIn()) {
                                                                         </div>
                                                                         <div class="modal-body">
                                                                             <div class="row">
-                                                                                <div class="col-sm-6">
+                                                                                <div class="col-sm-8">
                                                                                     <div class="form-group">
                                                                                         <label>Vist Date</label>
                                                                                         <input value="<?php if ($visit['status'] != 0) {
                                                                                                             echo $visit['visit_date'];
                                                                                                         } ?>" class="validate[required,custom[date]]" type="date" name="visit_date" id="visit_date" />
-                                                                                        <span>Example: 2010-12-01</span>
                                                                                     </div>
-                                                                                </div>
-                                                                                <div class="row">
+                                                                               
                                                                                     <div class="col-sm-4">
                                                                                         <div class="row-form clearfix">
                                                                                             <!-- select -->
