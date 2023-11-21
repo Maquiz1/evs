@@ -446,16 +446,16 @@ if ($user->isLoggedIn()) {
                     ), Input::get('cid'));
                     if (Input::get('btn') == 'Add') {
                         if (Input::get('project_id') == 1) {
-                            $user->generateSchedulePQP(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'));
+                            $user->generateSchedulePQP(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'), Input::get('site_id'));
                         } elseif (Input::get('project_id') == 2) {
-                            $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'));
+                            $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'), Input::get('site_id'));
                         }
                     } elseif (Input::get('btn') == 'Update') {
-                        // if (Input::get('project_id') == 1) {
-                        //     $user->updateSchedulePQP(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('dose'), Input::get('dose'), 'u', Input::get('comments'));
-                        // } elseif (Input::get('project_id') == 2) {
-                        //     $user->updateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), Input::get('dose'), 'u', Input::get('comments'));
-                        // }
+                        if (Input::get('project_id') == 1) {
+                            $user->updateSchedulePQP(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'u', Input::get('comments'), Input::get('site_id'));
+                        } elseif (Input::get('project_id') == 2) {
+                            $user->updateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), Input::get('dose'), 'u', Input::get('comments'), Input::get('site_id'));
+                        }
                     }
                 } catch (Exception $e) {
                     die($e->getMessage());
@@ -507,6 +507,8 @@ if ($user->isLoggedIn()) {
                         'visit_date' => $visit_date,
                         'visit_status' => Input::get('visit_status'),
                         'comments' => Input::get('comments'),
+                        'update_id' => $user->data()->id,
+                        'update_on' => date('Y-m-d H:i:s'),
                     ), Input::get('id'));
                 } catch (Exception $e) {
                     die($e->getMessage());
@@ -870,11 +872,11 @@ if ($user->isLoggedIn()) {
                                                             <?php } ?>
                                                             <?php if ($_GET['status'] == 6) { ?>
                                                                 <td>
-                                                                    <?php if ($value['locked'] == 1) { ?>
-                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>&btn=Update" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> Update</a> </div>
+                                                                    <?php if ($value['schedule'] == 1) { ?>
+                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>&site_id=<?= $value['site_id'] ?>&btn=Update" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> Update</a> </div>
 
                                                                     <?php } else { ?>
-                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>&btn=Add" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> Add</a> </div>
+                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>&site_id=<?= $value['site_id'] ?>&btn=Add" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> Add</a> </div>
 
                                                                     <?php } ?>
                                                                     <div class="btn-group btn-group-xs"><a href="info.php?id=2&cid=<?= $value['id'] ?>" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> View</a>
@@ -1167,13 +1169,13 @@ if ($user->isLoggedIn()) {
                                                     </div>
                                                 </div>
 
-                                                <?php if ($_GET['btn'] == 'Edit') { ?>
+                                                <?php if ($_GET['btn'] == 'Update' && $_GET['project_id'] == 2) { ?>
                                                     <div class="col-sm-3">
                                                         <!-- text input -->
                                                         <div class="form-group">
                                                             <label>Dose / Vaccine </label>
                                                             <select name="dose" class="form-control">
-                                                                <option value="<?= $history['visit_group'] ?>"><?php if ($schedule['visit_group'] != 0) {
+                                                                <option value="<?= $schedule['visit_group'] ?>"><?php if ($schedule['visit_group'] != 0) {
                                                                                                                     if ($schedule['visit_group'] == 1) {
                                                                                                                         echo '1';
                                                                                                                     } elseif ($schedule['visit_group'] == 2) {
@@ -1203,6 +1205,7 @@ if ($user->isLoggedIn()) {
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <input type="hidden" name="cid" value="<?= $_GET['cid'] ?>" />
+                                                    <input type="hidden" name="site_id" value="<?= $_GET['site_id'] ?>" />
                                                     <input type="hidden" name="project_id" value="<?= $_GET['project_id'] ?>" />
                                                     <input type="hidden" name="btn" value="<?= $_GET['btn'] ?>" />
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
