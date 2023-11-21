@@ -619,7 +619,7 @@ if ($user->isLoggedIn()) {
                                             if ($_GET['status'] == 1) {
                                                 $pagNum = $override->getCount('clients', 'status', 1);
                                             } elseif ($_GET['status'] == 2) {
-                                                $pagNum = $override->getCount2Not('clients', 'status', 1, 'available', 1, 'project_id', $available['id']);
+                                                $pagNum = $override->getCount2Not('clients', 'status', 1, 'available', 1, 'project_id', $_GET['project_id']);
                                             } elseif ($_GET['status'] == 3) {
                                                 $pagNum = $override->getCount2('clients', 'status', 1, 'sensitization', 1, 'project_id', $_GET['project_id']);
                                             } elseif ($_GET['status'] == 4) {
@@ -821,9 +821,9 @@ if ($user->isLoggedIn()) {
                                                         $age = $user->dateDiffYears(date('Y-m-d'), $dob);
                                                         $project_name = $override->get('study', 'id', $value['project_id'])[0];
                                                         $client = $override->get('clients', 'id', $value['client_id'])[0];
-                                                        $sensitization_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
-                                                        $screening_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
-                                                        $enrollment_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
+                                                        $sensitization_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_id', $value['project_id'])[0];
+                                                        $screening_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_id', $value['project_id'])[0];
+                                                        $enrollment_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_id', $value['project_id'])[0];
                                                         // $schedule = $override->getNews('clients', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
                                                         $study_id = $override->getlastRow1('visit', 'patient_id', $value['id'], 'project_id', $value['project_id'], 'id')[0];
 
