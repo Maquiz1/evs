@@ -446,16 +446,16 @@ if ($user->isLoggedIn()) {
                     ), Input::get('cid'));
                     if (Input::get('btn') == 'Add') {
                         if (Input::get('project_id') == 1) {
-                            $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'));
+                            $user->generateSchedulePQP(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'));
                         } elseif (Input::get('project_id') == 2) {
                             $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), 1, 'c', Input::get('comments'));
                         }
-                    } elseif (Input::get('btn') == 'Edit') {
-                        if (Input::get('project_id') == 1) {
-                            $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('dose'), Input::get('dose'), 'c', Input::get('comments'));
-                        } elseif (Input::get('project_id') == 2) {
-                            $user->generateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), Input::get('dose'), 'c', Input::get('comments'));
-                        }
+                    } elseif (Input::get('btn') == 'Update') {
+                        // if (Input::get('project_id') == 1) {
+                        //     $user->updateSchedulePQP(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('dose'), Input::get('dose'), 'u', Input::get('comments'));
+                        // } elseif (Input::get('project_id') == 2) {
+                        //     $user->updateScheduleCEPI(Input::get('study_id'), Input::get('project_id'), Input::get('cid'), Input::get('enrollment_date'), Input::get('dose'), 'u', Input::get('comments'));
+                        // }
                     }
                 } catch (Exception $e) {
                     die($e->getMessage());
@@ -463,6 +463,30 @@ if ($user->isLoggedIn()) {
 
                 $successMessage = 'Patient Enrolled Successful';
                 Redirect::to('info.php?id=2&cid=' . $_GET['cid']);
+            } else {
+                $pageError = $validate->errors();
+            }
+        } elseif (Input::get('delete_schedule')) {
+            $validate = new validate();
+            $validate = $validate->check($_POST, array(
+                // 'visit_date' => array(
+                //     'required' => true,
+                // ),
+                // 'visit_status' => array(
+                //     'required' => true,
+                // ),
+            ));
+            if ($validate->passed()) {
+                try {
+                    if (Input::get('project_id') == 1) {
+                        $user->deleteSchedulePQP(Input::get('id'), Input::get('project_id'));
+                    } elseif (Input::get('project_id') == 2) {
+                        $user->deleteScheduleCEPI(Input::get('id'), Input::get('project_id'));
+                    }
+                } catch (Exception $e) {
+                    die($e->getMessage());
+                }
+                $successMessage = 'Patient Visit Deleted Successful';
             } else {
                 $pageError = $validate->errors();
             }
@@ -762,10 +786,13 @@ if ($user->isLoggedIn()) {
                                             <table id="example1" class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr>
-                                                        <?php if ($_GET['status'] != 1) { ?>
+                                                        <?php if ($_GET['status'] != 1 & $_GET['status'] != 6) { ?>
                                                             <th></th>
                                                         <?php } ?>
                                                         <th>No.</th>
+                                                        <?php if ($_GET['status'] == 6) { ?>
+                                                            <th>Patient Id</th>
+                                                        <?php } ?>
                                                         <th>First Name</th>
                                                         <th>Middle Name</th>
                                                         <th>Last Name</th>
@@ -796,10 +823,12 @@ if ($user->isLoggedIn()) {
                                                         $screening_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
                                                         $enrollment_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
                                                         // $schedule = $override->getNews('clients', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
+                                                        $study_id = $override->getlastRow1('visit', 'patient_id', $value['id'], 'project_id', $value['project_id'], 'id')[0];
+
 
                                                     ?>
                                                         <tr>
-                                                            <?php if ($_GET['status'] != 1) { ?>
+                                                            <?php if ($_GET['status'] != 1 & $_GET['status'] != 6) { ?>
                                                                 <td>
                                                                     <div class="icheck-primary d-inline">
                                                                         <input type="hidden" name="id[]" value="<?= $value['id']; ?>">
@@ -811,9 +840,13 @@ if ($user->isLoggedIn()) {
                                                                 </td>
                                                             <?php } ?>
                                                             <td><?= $x; ?></td>
+                                                            <?php if ($_GET['status'] == 6) { ?>
+                                                                <td><?= $study_id['study_id']; ?></td>
+                                                            <?php } ?>
                                                             <td><?= $value['fname']; ?></td>
                                                             <td><?= $value['mname']; ?></td>
                                                             <td><?= $value['lname']; ?></td>
+
                                                             <?php if ($value['gender'] == 1) { ?>
                                                                 <td>Male</td>
                                                             <?php } elseif ($value['gender'] == 2) { ?>
@@ -838,26 +871,60 @@ if ($user->isLoggedIn()) {
                                                             <?php if ($_GET['status'] == 6) { ?>
                                                                 <td>
                                                                     <?php if ($value['locked'] == 1) { ?>
-                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>&btn=Add" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> Update</a> </div>
+                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>&btn=Update" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> Update</a> </div>
 
                                                                     <?php } else { ?>
-                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>&btn=Edit" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> Add</a> </div>
+                                                                        <div class="btn-group btn-group-xs"><a href="info.php?id=3&cid=<?= $value['id'] ?>&project_id=<?= $value['project_id'] ?>&btn=Add" class="btn btn-default btn-clean"><span class="icon-eye-open"></span> Add</a> </div>
 
                                                                     <?php } ?>
                                                                     <div class="btn-group btn-group-xs"><a href="info.php?id=2&cid=<?= $value['id'] ?>" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> View</a>
                                                                     </div>
+                                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteSchedule<?= $value['id'] ?>">
+                                                                        Delete Visit
+                                                                    </button>
                                                                 </td>
                                                             <?php } ?>
                                                         </tr>
-                                                    <?php
+                                                        <div class="modal fade" id="deleteSchedule<?= $value['id'] ?>">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <form id="validation" method="post">
+                                                                        <div class="modal-header">
+                                                                            <h4 class="modal-title">Delete Schedule</h4>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-8">
+                                                                                    Are you sure you want to delete this schedule?
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer justify-content-between">
+                                                                            <input type="hidden" name="id" value="<?= $value['id'] ?>">
+                                                                            <input type="hidden" name="project_id" value="<?= $value['project_id'] ?>">
+                                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                            <input type="submit" name="delete_schedule" class="btn btn-warning" value="Delete">
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                                <!-- /.modal-content -->
+                                                            </div>
+                                                        <?php
                                                         $x++;
                                                     } ?>
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <?php if ($_GET['status'] != 1) { ?>
+                                                        <?php if ($_GET['status'] != 1 & $_GET['status'] != 6) { ?>
                                                             <th></th>
-                                                        <?php } ?> <th>No.</th>
+                                                        <?php } ?>
+                                                        <th>No.</th>
+                                                        <?php if ($_GET['status'] == 6) { ?>
+                                                            <th>Patient Id</th>
+                                                        <?php } ?>
                                                         <th>First Name</th>
                                                         <th>Middle Name</th>
                                                         <th>Last Name</th>
@@ -904,11 +971,14 @@ if ($user->isLoggedIn()) {
                                                 <thead>
                                                     <tr>
                                                         <th width="2%">#</th>
+                                                        <th width="8%">ID</th>
                                                         <th width="8%">Visit Name</th>
+                                                        <th width="10%">Dose / Vaccine</th>
                                                         <th width="10%">Visit Type</th>
                                                         <th width="10%">Day</th>
                                                         <th width="10%">Expected Date</th>
                                                         <th width="10%">Visit Date</th>
+                                                        <th width="10%">Remarks</th>
                                                         <th width="3%">Study</th>
                                                         <th width="5%">Status</th>
                                                         <th width="15%">Action</th>
@@ -927,31 +997,44 @@ if ($user->isLoggedIn()) {
                                                             $btnV = 'Add';
                                                         } elseif ($visit['status'] == 1) {
                                                             $btnV = 'Edit';
+                                                        } elseif ($visit['status'] == 2) {
+                                                            $btnV = 'Edit';
                                                         }
                                                     ?>
                                                         <tr>
                                                             <td><?= $x ?></td>
+                                                            <td> <?= $visit['study_id'] ?></td>
                                                             <td> <?= $visit['visit_name'] ?></td>
+                                                            <td> <?= $visit['visit_group'] ?></td>
                                                             <td> <?= $visit['visit_type'] ?></td>
                                                             <td> <?= date('l', strtotime($visit['expected_date'])) ?> </td>
                                                             <td> <?= $visit['expected_date'] ?></td>
                                                             <td> <?= $visit['visit_date'] ?></td>
+                                                            <td> <?= $visit['comments'] ?></td>
                                                             <td> <?= $study['name'] ?></td>
                                                             <td>
                                                                 <?php if ($visit['visit_status'] == 1) { ?>
                                                                     <a href="#" role="button" class="btn btn-success">Done</a>
                                                                 <?php } elseif ($visit['visit_status'] == 0) { ?>
                                                                     <a href="#" role="button" class="btn btn-warning">Pending</a>
+                                                                <?php } elseif ($visit['visit_status'] == 2) { ?>
+                                                                    <a href="#" role="button" class="btn btn-danger">Missed</a>
                                                                 <?php } ?>
                                                             </td>
                                                             <td>
                                                                 <?php if ($visit['visit_status'] == 1) { ?>
                                                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addVisit<?= $visit['id'] ?>">
                                                                         <?= $btnV . ' - ' ?>Visit
-                                                                    </button> <?php } elseif ($visit['visit_status'] == 0) { ?>
+                                                                    </button>
+                                                                <?php } elseif ($visit['visit_status'] == 0) { ?>
                                                                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#addVisit<?= $visit['id'] ?>">
                                                                         <?= $btnV . ' - ' ?>Visit
-                                                                    </button> <?php } ?>
+                                                                    </button>
+                                                                <?php } elseif ($visit['visit_status'] == 2) { ?>
+                                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#addVisit<?= $visit['id'] ?>">
+                                                                        <?= $btnV . ' - ' ?>Visit
+                                                                    </button>
+                                                                <?php } ?>
 
                                                             </td>
                                                         </tr>
@@ -974,7 +1057,7 @@ if ($user->isLoggedIn()) {
                                                                                                             echo $visit['visit_date'];
                                                                                                         } ?>" class="validate[required,custom[date]]" type="date" name="visit_date" id="visit_date" />
                                                                                     </div>
-                                                                               
+
                                                                                     <div class="col-sm-4">
                                                                                         <div class="row-form clearfix">
                                                                                             <!-- select -->
@@ -1028,11 +1111,14 @@ if ($user->isLoggedIn()) {
                                                 <tfoot>
                                                     <tr>
                                                         <th width="2%">#</th>
+                                                        <th width="8%">ID</th>
                                                         <th width="8%">Visit Name</th>
+                                                        <th width="10%">Dose / Vaccine</th>
                                                         <th width="10%">Visit Type</th>
                                                         <th width="10%">Day</th>
                                                         <th width="10%">Expected Date</th>
                                                         <th width="10%">Visit Date</th>
+                                                        <th width="10%">Remarks</th>
                                                         <th width="3%">Study</th>
                                                         <th width="5%">Status</th>
                                                         <th width="15%">Action</th>
@@ -1131,6 +1217,196 @@ if ($user->isLoggedIn()) {
                             <!-- /.card -->
                         </div>
                         <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+            <?php } elseif ($_GET['id'] == 4) { ?>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    List of Visit Schedules
+                                </h3>
+                            </div>
+                            <!-- /.card-header -->
+
+                            <div class="card-body">
+                                <form method="POST">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th width="2%">#</th>
+                                                <th width="8%">ID</th>
+                                                <th width="8%">Visit Name</th>
+                                                <th width="10%">Dose / Vaccine</th>
+                                                <th width="10%">Visit Type</th>
+                                                <th width="10%">Day</th>
+                                                <th width="10%">Expected Date</th>
+                                                <th width="10%">Visit Date</th>
+                                                <th width="10%">Remarks</th>
+                                                <th width="3%">Study</th>
+                                                <th width="5%">Status</th>
+                                                <th width="15%">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php $x = 1;
+                                            if ($_GET['day'] == 0) {
+                                                $visits = $override->getCount3News('visit', 'status', 1, 'visit_status', 0, 'expected_date', date('Y-m-d'), 'project_id', $_GET['project_id']);
+                                            } elseif ($_GET['day'] == 1) {
+                                                $visits = $override->getCount3News('visit', 'status', 1, 'visit_status', 0, 'expected_date', date('Y-m-d', strtotime(date('Y-m-d') . ' + 1 days')), 'project_id', $_GET['project_id']);
+                                            } elseif ($_GET['day'] == 7) {
+                                                $visits = $override->getCount3LessNews('visit', 'status', 1, 'visit_status', 0, 'expected_date', date('Y-m-d', strtotime(date('Y-m-d') . ' + 7 days')), 'project_id', $_GET['project_id']);
+                                            } elseif ($_GET['day'] == -1) {
+                                                $visits = $override->getCount3LessNews('visit', 'status', 1, 'visit_status', 0, 'expected_date', date('Y-m-d', strtotime(date('Y-m-d') . ' + 0 days')), 'project_id', $_GET['project_id']);
+                                            }
+                                            foreach ($visits as $visit) {
+                                                $study = $override->get('study', 'id', $visit['project_id'])[0];
+
+                                                $visit_status = 0;
+                                                if ($visit['visit_status']) {
+                                                }
+
+                                                if ($visit['visit_status'] == 0) {
+                                                    $btnV = 'Add';
+                                                } elseif ($visit['status'] == 1) {
+                                                    $btnV = 'Edit';
+                                                } elseif ($visit['status'] == 2) {
+                                                    $btnV = 'Edit';
+                                                }
+                                            ?>
+                                                <tr>
+                                                    <td><?= $x ?></td>
+                                                    <td> <?= $visit['study_id'] ?></td>
+                                                    <td> <?= $visit['visit_name'] ?></td>
+                                                    <td> <?= $visit['visit_group'] ?></td>
+                                                    <td> <?= $visit['visit_type'] ?></td>
+                                                    <td> <?= date('l', strtotime($visit['expected_date'])) ?> </td>
+                                                    <td> <?= $visit['expected_date'] ?></td>
+                                                    <td> <?= $visit['visit_date'] ?></td>
+                                                    <td> <?= $visit['comments'] ?></td>
+                                                    <td> <?= $study['name'] ?></td>
+                                                    <td>
+                                                        <?php if ($visit['visit_status'] == 1) { ?>
+                                                            <a href="#" role="button" class="btn btn-success">Done</a>
+                                                        <?php } elseif ($visit['visit_status'] == 0) { ?>
+                                                            <a href="#" role="button" class="btn btn-warning">Pending</a>
+                                                        <?php } elseif ($visit['visit_status'] == 2) { ?>
+                                                            <a href="#" role="button" class="btn btn-danger">Missed</a>
+                                                        <?php } ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php if ($visit['visit_status'] == 1) { ?>
+                                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addVisit<?= $visit['id'] ?>">
+                                                                <?= $btnV . ' - ' ?>Visit
+                                                            </button>
+                                                        <?php } elseif ($visit['visit_status'] == 0) { ?>
+                                                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#addVisit<?= $visit['id'] ?>">
+                                                                <?= $btnV . ' - ' ?>Visit
+                                                            </button>
+                                                        <?php } elseif ($visit['visit_status'] == 2) { ?>
+                                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#addVisit<?= $visit['id'] ?>">
+                                                                <?= $btnV . ' - ' ?>Visit
+                                                            </button>
+                                                        <?php } ?>
+
+                                                    </td>
+                                                </tr>
+                                                <div class="modal fade" id="addVisit<?= $visit['id'] ?>">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <form id="validation" method="post">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Visit Status</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-8">
+                                                                            <div class="form-group">
+                                                                                <label>Vist Date</label>
+                                                                                <input value="<?php if ($visit['status'] != 0) {
+                                                                                                    echo $visit['visit_date'];
+                                                                                                } ?>" class="validate[required,custom[date]]" type="date" name="visit_date" id="visit_date" />
+                                                                            </div>
+
+                                                                            <div class="col-sm-4">
+                                                                                <div class="row-form clearfix">
+                                                                                    <!-- select -->
+                                                                                    <div class="form-group">
+                                                                                        <label>Visit Status</label>
+                                                                                        <select name="visit_status" id="visit_status" style="width: 100%;">
+                                                                                            <option value="<?= $visit['visit_status'] ?>"><?php if ($visit) {
+                                                                                                                                                if ($visit['visit_status'] == 1) {
+                                                                                                                                                    echo 'Atended';
+                                                                                                                                                } elseif ($visit['visit_status'] == 2) {
+                                                                                                                                                    echo 'Missed';
+                                                                                                                                                }
+                                                                                                                                            } else {
+                                                                                                                                                echo 'Select';
+                                                                                                                                            } ?>
+                                                                                            </option>
+                                                                                            <option value="1">Atended</option>
+                                                                                            <option value="2">Missed</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-group">
+                                                                                <label>Comments / Remarks / Notes
+                                                                                    :
+                                                                                </label>
+                                                                                <textarea name="comments" id="comments" cols="20%" rows="3" placeholder="Type Comments..."><?php if ($visit['comments']) {
+                                                                                                                                                                                print_r($visit['comments']);
+                                                                                                                                                                            }  ?></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer justify-content-between">
+                                                                    <input type="hidden" name="id" value="<?= $visit['id'] ?>">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    <input type="submit" name="addVisit" class="btn btn-warning" value="Save">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+
+                                                <?php
+                                                $x++;
+                                            } ?>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th width="2%">#</th>
+                                                <th width="8%">ID</th>
+                                                <th width="8%">Visit Name</th>
+                                                <th width="10%">Dose / Vaccine</th>
+                                                <th width="10%">Visit Type</th>
+                                                <th width="10%">Day</th>
+                                                <th width="10%">Expected Date</th>
+                                                <th width="10%">Visit Date</th>
+                                                <th width="10%">Remarks</th>
+                                                <th width="3%">Study</th>
+                                                <th width="5%">Status</th>
+                                                <th width="15%">Action</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </form>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
                 </div>
                 <!-- /.row -->
             <?php } ?>
