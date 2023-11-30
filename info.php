@@ -13,41 +13,52 @@ if ($user->isLoggedIn()) {
         if (Input::get('SelectSensitization')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
-                'sensitization_date' => array(
+                'select_date' => array(
                     'required' => true,
                 ),
-                'project_id' => array(
-                    'required' => true,
-                ),
+                // 'project_id' => array(
+                //     'required' => true,
+                // ),
             ));
             if ($validate->passed()) {
-                if (count(Input::get('checkname')) >= 1) {
-                    try {
-                        $i = 0;
-                        foreach (Input::get('checkname') as $value) {
-                            if (Input::get('checkname')[$i]) {
-                                $user->updateRecord('clients', array(
-                                    'project_id' => Input::get('project_id'),
-                                    'available' => 0,
-                                    'sensitization' => 1,
-                                ), $value);
+                if ($_GET['project_id'] == 0) {
+                    $project_id = Input::get('project_id');
+                } else {
+                    $project_id = $_GET['project_id'];
+                }
 
-                                $user->createRecord('sensitization', array(
-                                    'select_sensitization' => 1,
-                                    'select_sensitization_date' => Input::get('sensitization_date'),
-                                    'project_name' => Input::get('project_id'),
-                                    'sensitization1_statatus' => 1,
-                                    'staff_id' => $user->data()->id,
-                                    'client_id' => $value,
-                                    'site_id' => $user->data()->site_id,
-                                    'status' => 1,
-                                ));
+                if ($project_id) {
+                    if (count(Input::get('checkname')) >= 1) {
+                        try {
+                            $i = 0;
+                            foreach (Input::get('checkname') as $value) {
+                                if (Input::get('checkname')[$i]) {
+                                    $user->updateRecord('clients', array(
+                                        'project_id' => $project_id,
+                                        'available' => 0,
+                                        'sensitization' => 1,
+                                    ), $value);
+
+                                    $user->createRecord('sensitization', array(
+                                        'select_date' => Input::get('select_date'),
+                                        'project_id' => $project_id,
+                                        'client_id' => $value,
+                                        'status' => 1,
+                                        'staff_id' => $user->data()->id,
+                                        'create_on' => date('Y-m-d H:i:s'),
+                                        'update_id' => $user->data()->id,
+                                        'update_on' => date('Y-m-d H:i:s'),
+                                        'site_id' => $user->data()->site_id,
+                                    ));
+                                }
+                                $i++;
                             }
-                            $i++;
+                            $successMessage = 'Client Selected Successful';
+                        } catch (Exception $e) {
+                            die($e->getMessage());
                         }
-                        $successMessage = 'Client Selected Successful';
-                    } catch (Exception $e) {
-                        die($e->getMessage());
+                    } else {
+                        $errorMessage = 'Please select Project Name First';
                     }
                 } else {
                     $errorMessage = 'Please select ataleast One Patient to Submit';
@@ -75,6 +86,7 @@ if ($user->isLoggedIn()) {
                                     'project_id' => 0,
                                     'available' => 1,
                                     'sensitization' => 0,
+                                    'screened' => 2,
                                 ), $value);
                             }
                             $i++;
@@ -101,6 +113,58 @@ if ($user->isLoggedIn()) {
             } else {
                 $pageError = $validate->errors();
             }
+        } elseif (Input::get('add_sensitization')) {
+            $validate = new validate();
+            $validate = $validate->check($_POST, array(
+                'sensitization_date' => array(
+                    'required' => true,
+                ),
+                'sensitization_no' => array(
+                    'required' => true,
+                ),
+                'eligible' => array(
+                    'required' => true,
+                ),
+            ));
+            if ($validate->passed()) {
+                $sensitization = $override->get4('sensitization', 'status', 1, 'client_id', Input::get('cid'), 'project_id', Input::get('project_id'), 'sensitization_no', Input::get('sensitization_no'));
+                if (Input::get('btn') == 'Add') {
+                    if (!$sensitization) {
+                        try {
+                            $user->updateRecord('sensitization', array(
+                                'sensitization_date' => Input::get('sensitization_date'),
+                                'sensitization_no' => Input::get('sensitization_no'),
+                                'eligible' => Input::get('eligible'),
+                                'comments' => Input::get('comments'),
+                                'update_id' => $user->data()->id,
+                                'update_on' => date('Y-m-d H:i:s'),
+                            ), Input::get('id'));
+
+                            // $user->updateRecord('clients', array(
+                            //     'project_id' => 0,
+                            //     'available' => 1,
+                            //     'sensitization' => 0,
+                            // ), $value);
+                            $successMessage = 'Client Screening Added Successful';
+                        } catch (Exception $e) {
+                            die($e->getMessage());
+                        }
+                    } else {
+                        $errorMessage = 'Sensitization number Already used Please assign other number';
+                    }
+                } elseif (Input::get('btn') == 'Update') {
+                    $user->updateRecord('sensitization', array(
+                        'sensitization_date' => Input::get('sensitization_date'),
+                        'sensitization_no' => Input::get('sensitization_no'),
+                        'eligible' => Input::get('eligible'),
+                        'comments' => Input::get('comments'),
+                        'update_id' => $user->data()->id,
+                        'update_on' => date('Y-m-d H:i:s'),
+                    ), Input::get('id'));
+                }
+            } else {
+                $pageError = $validate->errors();
+            }
         } elseif (Input::get('SelectScreening')) {
             $validate = new validate();
             $validate = $validate->check($_POST, array(
@@ -119,9 +183,18 @@ if ($user->isLoggedIn()) {
                                     'sensitization' => 0,
                                     'screening' => 1,
                                 ), $value);
+
+                                $sensitization = $override->getNews('sensitization', 'client_id', $value, 'project_id', $_GET['project_id']);
+
+                                $user->updateRecord('sensitization', array(
+                                    'screened' => 1,
+                                    'update_id' => $user->data()->id,
+                                    'update_on' => date('Y-m-d H:i:s'),
+                                ), $sensitization[0]['id']);
                             }
                             $i++;
                         }
+
                         $successMessage = 'Client Selection for Screening Successful';
                     } catch (Exception $e) {
                         die($e->getMessage());
@@ -151,6 +224,14 @@ if ($user->isLoggedIn()) {
                                     'sensitization' => 0,
                                     'screening' => 0,
                                 ), $value);
+
+                                $sensitization = $override->getNews('sensitization', 'client_id', $value, 'project_id', $_GET['project_id']);
+
+                                $user->updateRecord('sensitization', array(
+                                    'screened' => 0,
+                                    'update_id' => $user->data()->id,
+                                    'update_on' => date('Y-m-d H:i:s'),
+                                ), $sensitization[0]['id']);
                             }
                             $i++;
                         }
@@ -163,6 +244,53 @@ if ($user->isLoggedIn()) {
                 }
             } else {
 
+                $pageError = $validate->errors();
+            }
+        } elseif (Input::get('add_screening')) {
+            $validate = new validate();
+            $validate = $validate->check($_POST, array(
+                'screening_date' => array(
+                    'required' => true,
+                ),
+                'screening_id' => array(
+                    'required' => true,
+                ),
+                'eligible' => array(
+                    'required' => true,
+                ),
+            ));
+            if ($validate->passed()) {
+                $sensitization = $override->get4('screening', 'status', 1, 'client_id', Input::get('cid'), 'project_id', Input::get('project_id'), 'screening_id', Input::get('screening_id'));
+                if (Input::get('btn') == 'Add') {
+                    if (!$sensitization) {
+                        try {
+                            $user->updateRecord('screening', array(
+                                'screening_date' => Input::get('screening_date'),
+                                'screening_id' => Input::get('screening_id'),
+                                'eligible' => Input::get('eligible'),
+                                'comments' => Input::get('comments'),
+                                'update_id' => $user->data()->id,
+                                'update_on' => date('Y-m-d H:i:s'),
+                            ), Input::get('id'));
+
+                            $successMessage = 'Client Screening Added Successful';
+                        } catch (Exception $e) {
+                            die($e->getMessage());
+                        }
+                    } else {
+                        $errorMessage = 'Screening number Already used Please assign other number';
+                    }
+                } elseif (Input::get('btn') == 'Update') {
+                    $user->updateRecord('screening', array(
+                        'screening_date' => Input::get('screening_date'),
+                        'screening_id' => Input::get('screening_id'),
+                        'eligible' => Input::get('eligible'),
+                        'comments' => Input::get('comments'),
+                        'update_id' => $user->data()->id,
+                        'update_on' => date('Y-m-d H:i:s'),
+                    ), Input::get('id'));
+                }
+            } else {
                 $pageError = $validate->errors();
             }
         } elseif (Input::get('SelectEligible')) {
@@ -540,7 +668,6 @@ if ($user->isLoggedIn()) {
         <!-- Main Sidebar Container -->
         <?php include 'sidebar.php'; ?>
 
-
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -604,15 +731,30 @@ if ($user->isLoggedIn()) {
                                             <?php } elseif ($_GET['status'] == 2) { ?>
                                                 List of Available Clients
                                             <?php } elseif ($_GET['status'] == 3) { ?>
-                                                List of Selected for Sensitization
+                                                List of Selected Clients for Sensitization on Study
+                                                <?=
+                                                $override->get('study', 'id', $_GET['project_id'])[0]['name'];
+                                                ?>
                                             <?php } elseif ($_GET['status'] == 4) { ?>
-                                                List of Selected for Screening
+                                                List of Selected for Screening on Study
+                                                <?=
+                                                $override->get('study', 'id', $_GET['project_id'])[0]['name'];
+                                                ?>
                                             <?php } elseif ($_GET['status'] == 5) { ?>
-                                                List of Eligible Clients
+                                                List of Eligible Clients on Study
+                                                <?=
+                                                $override->get('study', 'id', $_GET['project_id'])[0]['name'];
+                                                ?>
                                             <?php } elseif ($_GET['status'] == 6) { ?>
-                                                List of Enrolled Clients
+                                                List of Enrolled Clients on Study
+                                                <?=
+                                                $override->get('study', 'id', $_GET['project_id'])[0]['name'];
+                                                ?>
                                             <?php } elseif ($_GET['status'] == 7) { ?>
-                                                List of Locked Clients
+                                                List of Locked Clients on Study
+                                                <?=
+                                                $override->get('study', 'id', $_GET['project_id'])[0]['name'];
+                                                ?>
                                             <?php } ?>
                                             <?php
                                             $pagNum = 0;
@@ -667,21 +809,25 @@ if ($user->isLoggedIn()) {
                                                         <!-- text input -->
                                                         <div class="form-group">
                                                             <label>Date </label>
-                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="sensitization_date" id="sensitization_date" value="" />
+                                                            <input type="date" class="form-control fas fa-calendar input-prefix" name="select_date" id="select_date" value="" />
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-2">
-                                                        <!-- text input -->
-                                                        <div class="form-group">
-                                                            <label>Study </label>
-                                                            <select name="project_id" class="form-control">
-                                                                <option value="">Select</option>
-                                                                <?php foreach ($override->getData2('study', 'status', 1) as $study) { ?>
-                                                                    <option value=" <?= $study['id'] ?>"><?= $study['name'] ?></option>
-                                                                <?php } ?>
-                                                            </select>
+                                                    <?php
+                                                    if ($_GET['project_id'] == 0) {
+                                                    ?>
+                                                        <div class="col-sm-2">
+                                                            <!-- text input -->
+                                                            <div class="form-group">
+                                                                <label>Study </label>
+                                                                <select name="project_id" class="form-control">
+                                                                    <option value="">Select</option>
+                                                                    <?php foreach ($override->getData2('study', 'status', 1) as $study) { ?>
+                                                                        <option value=" <?= $study['id'] ?>"><?= $study['name'] ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    <?php } ?>
                                                     <div class="col-sm-2">
                                                         <div class="form-group">
                                                             <label>Submit </label>
@@ -804,7 +950,7 @@ if ($user->isLoggedIn()) {
                                                             <th>Study</th>
                                                         <?php } ?>
                                                         <th>Phone</th>
-                                                        <?php if ($_GET['status'] == 1) { ?>
+                                                        <?php if ($_GET['status'] == 1 || $_GET['status'] == 3 || $_GET['status'] == 4) { ?>
                                                             <th>Status</th>
                                                             <th>Action</th>
                                                         <?php } ?>
@@ -821,22 +967,20 @@ if ($user->isLoggedIn()) {
                                                         $age = $user->dateDiffYears(date('Y-m-d'), $dob);
                                                         $project_name = $override->get('study', 'id', $value['project_id'])[0];
                                                         $client = $override->get('clients', 'id', $value['client_id'])[0];
-                                                        $sensitization_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_id', $value['project_id'])[0];
-                                                        $screening_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_id', $value['project_id'])[0];
-                                                        $enrollment_id = $override->getNews('sensitization', 'client_id', $value['id'], 'project_id', $value['project_id'])[0];
+                                                        $sensitization = $override->getNews('sensitization', 'client_id', $value['id'], 'project_id', $value['project_id'])[0];
+                                                        $screening = $override->getNews('screening', 'client_id', $value['id'], 'project_id', $value['project_id'])[0];
+                                                        $enrollment = $override->getNews('enrollment', 'client_id', $value['id'], 'project_id', $value['project_id'])[0];
                                                         // $schedule = $override->getNews('clients', 'client_id', $value['id'], 'project_name', $value['project_id'])[0];
                                                         $study_id = $override->getlastRow1('visit', 'patient_id', $value['id'], 'project_id', $value['project_id'], 'id')[0];
-
-
                                                     ?>
                                                         <tr>
                                                             <?php if ($_GET['status'] != 1 & $_GET['status'] != 6) { ?>
                                                                 <td>
                                                                     <div class="icheck-primary d-inline">
                                                                         <input type="hidden" name="id[]" value="<?= $value['id']; ?>">
-                                                                        <input type="hidden" name="sensitization_id[]" value="<?= $sensitization_id['id']; ?>">
-                                                                        <input type="hidden" name="screening_id[]" value="<?= $screening_id['id']; ?>">
-                                                                        <input type="hidden" name="enrollment_id[]" value="<?= $enrollment_id['id']; ?>">
+                                                                        <input type="hidden" name="sensitization_id[]" value="<?= $sensitization['id']; ?>">
+                                                                        <input type="hidden" name="screening_id[]" value="<?= $screening['id']; ?>">
+                                                                        <input type="hidden" name="enrollment_id[]" value="<?= $enrollment['id']; ?>">
                                                                         <input type="checkbox" name="checkname[]" value="<?= $value['id']; ?>">
                                                                     </div>
                                                                 </td>
@@ -868,6 +1012,46 @@ if ($user->isLoggedIn()) {
                                                                 <td>
                                                                     <div class=" btn-group btn-group-xs"><a href="add.php?id=1&cid=<?= $value['id'] ?>&btn=Edit" class="btn btn-primary btn-clean"><span class="icon-eye-open"></span> Edit</a>
                                                                     </div>
+                                                                </td>
+                                                            <?php } ?>
+                                                            <?php if ($_GET['status'] == 3) { ?>
+                                                                <?php if ($sensitization['eligible'] == 1) {
+                                                                    $btn = 'Update';
+                                                                    $btnClass = 'btn btn-success'; ?>
+                                                                    <td>Eligible for Screening</td>
+                                                                <?php } elseif ($sensitization['eligible'] == 2) {
+                                                                    $btn = 'Update';
+                                                                    $btnClass = 'btn btn-warning'; ?>
+                                                                    <td>Not Eligible for Screening</td>
+                                                                <?php } else {
+                                                                    $btn = 'Add';
+                                                                    $btnClass = 'btn btn-default'; ?>
+                                                                    <td>Pending</td>
+                                                                <?php } ?>
+                                                                <td>
+                                                                    <button type="button" class="<?= $btnClass; ?>" data-toggle="modal" data-target="#updateSensitization<?= $sensitization['id'] ?>">
+                                                                        <?= $btn; ?> Sensitization
+                                                                    </button>
+                                                                </td>
+                                                            <?php } ?>
+                                                            <?php if ($_GET['status'] == 4) { ?>
+                                                                <?php if ($screening['eligible'] == 1) {
+                                                                    $btn = 'Update';
+                                                                    $btnClass = 'btn btn-success'; ?>
+                                                                    <td>Eligible for Enrollment</td>
+                                                                <?php } elseif ($screening['eligible'] == 2) {
+                                                                    $btn = 'Update';
+                                                                    $btnClass = 'btn btn-warning'; ?>
+                                                                    <td>Not Eligible for Enrollment</td>
+                                                                <?php } else {
+                                                                    $btn = 'Add';
+                                                                    $btnClass = 'btn btn-default'; ?>
+                                                                    <td>Pending</td>
+                                                                <?php } ?>
+                                                                <td>
+                                                                    <button type="button" class="<?= $btnClass; ?>" data-toggle="modal" data-target="#updateScreening<?= $screening['id'] ?>">
+                                                                        <?= $btn; ?> Screening
+                                                                    </button>
                                                                 </td>
                                                             <?php } ?>
                                                             <?php if ($_GET['status'] == 6) { ?>
@@ -914,7 +1098,198 @@ if ($user->isLoggedIn()) {
                                                                 </div>
                                                                 <!-- /.modal-content -->
                                                             </div>
-                                                        <?php
+                                                        </div>
+                                                        <div class="modal fade" id="updateSensitization<?= $sensitization['id'] ?>">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title"><?= $btn; ?> Sensitization</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="container-fluid">
+                                                                            <div class="row">
+                                                                                <!-- general form elements disabled -->
+                                                                                <div class="card card-warning">
+                                                                                    <div class="card-header">
+                                                                                        <h3 class="card-title">Sensitization for <?= $sensitization['client_id'] ?></h3>
+                                                                                    </div>
+                                                                                    <!-- /.card-header -->
+                                                                                    <div class="card-body">
+                                                                                        <form id="validation" method="post">
+                                                                                            <div class="row">
+                                                                                                <div class="col-sm-6">
+                                                                                                    <!-- text input -->
+                                                                                                    <div class="form-group">
+                                                                                                        <label>Date</label>
+                                                                                                        <input type="date" class="form-control" name='sensitization_date' placeholder="Enter sensitization_date..." value="<?php if ($sensitization['sensitization_date']) {
+                                                                                                                                                                                                                                print_r($sensitization['sensitization_date']);
+                                                                                                                                                                                                                            }  ?>" required>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class=" col-sm-6">
+                                                                                                    <div class="form-group">
+                                                                                                        <label>Sensitization Number</label>
+                                                                                                        <input type="number" class="form-control" placeholder="Enter sensitization_number..." name='sensitization_no' value="<?php if ($sensitization['sensitization_no']) {
+                                                                                                                                                                                                                                    print_r($sensitization['sensitization_no']);
+                                                                                                                                                                                                                                }  ?>" required>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-sm-6">
+                                                                                                    <div class="form-group">
+                                                                                                        <label>Eligible for Screening ?</label>
+                                                                                                        <select name="eligible" style="width: 100%;">
+                                                                                                            <option value="<?= $sensitization['eligible'] ?>"><?php if ($sensitization) {
+                                                                                                                                                                    if ($sensitization['eligible'] == 1) {
+                                                                                                                                                                        echo 'Yes';
+                                                                                                                                                                    } elseif ($sensitization['eligible'] == 2) {
+                                                                                                                                                                        echo 'No';
+                                                                                                                                                                    }
+                                                                                                                                                                } else {
+                                                                                                                                                                    echo 'Select';
+                                                                                                                                                                } ?></option>
+                                                                                                            <option value="1">Yes</option>
+                                                                                                            <option value="2">No</option>
+                                                                                                        </select>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-sm-6">
+                                                                                                    <!-- textarea -->
+                                                                                                    <div class="form-group">
+                                                                                                        <label>Comments / Remarks </label>
+                                                                                                        <textarea class="form-control" rows="3" placeholder="Enter ..." name='comments' value=''>
+                                                                                                            <?php if ($sensitization['comments']) {
+                                                                                                                print_r($sensitization['comments']);
+                                                                                                            }  ?>
+                                                                                                        </textarea>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="modal-footer justify-content-between">
+                                                                                                <input type="hidden" name="id" value="<?= $sensitization['id'] ?>">
+                                                                                                <input type="hidden" name="cid" value="<?= $sensitization['client_id'] ?>">
+                                                                                                <input type="hidden" name="project_id" value="<?= $sensitization['project_id'] ?>">
+                                                                                                <input type="hidden" name="btn" value="<?= $btn ?>">
+                                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                <input type="submit" name="add_sensitization" value="<?= $btn; ?>">
+                                                                                            </div>
+                                                                                        </form>
+                                                                                    </div>
+                                                                                    <!-- /.card-body -->
+                                                                                </div>
+                                                                                <!-- /.card-body -->
+                                                                            </div>
+                                                                            <!-- /.row -->
+                                                                        </div>
+                                                                        <!-- /.container-fluid -->
+                                                                    </div>
+                                                                    <!-- /.modal-content -->
+                                                                </div>
+                                                                <!-- /.modal-dialog -->
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- /.modal -->
+                                                        <div class="modal fade" id="updateScreening<?= $screening['id'] ?>">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title"><?= $btn; ?> Screening</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="container-fluid">
+                                                                            <div class="row">
+                                                                                <!-- general form elements disabled -->
+                                                                                <div class="card card-warning">
+                                                                                    <div class="card-header">
+                                                                                        <h3 class="card-title">Screening for <?= $screening['client_id'] ?></h3>
+                                                                                    </div>
+                                                                                    <!-- /.card-header -->
+                                                                                    <div class="card-body">
+                                                                                        <form id="validation" method="post">
+                                                                                            <div class="row">
+                                                                                                <div class="col-sm-6">
+                                                                                                    <!-- text input -->
+                                                                                                    <div class="form-group">
+                                                                                                        <label>Date</label>
+                                                                                                        <input type="date" class="form-control" name='screening_date' placeholder="Enter screening_date..." value="<?php if ($screening['screening_date']) {
+                                                                                                                                                                                                                        print_r($screening['screening_date']);
+                                                                                                                                                                                                                    }  ?>" required>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class=" col-sm-6">
+                                                                                                    <div class="form-group">
+                                                                                                        <label>Screening ID</label>
+                                                                                                        <input type="text" class="form-control" placeholder="Enter screening_id..." name='screening_id' value="<?php if ($screening['screening_id']) {
+                                                                                                                                                                                                                    print_r($screening['screening_id']);
+                                                                                                                                                                                                                }  ?>">
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-sm-6">
+                                                                                                    <div class="form-group">
+                                                                                                        <label>Eligible for Screening ?</label>
+                                                                                                        <select name="eligible" style="width: 100%;">
+                                                                                                            <option value="<?= $screening['eligible'] ?>"><?php if ($screening) {
+                                                                                                                                                                if ($screening['eligible'] == 1) {
+                                                                                                                                                                    echo 'Yes';
+                                                                                                                                                                } elseif ($screening['eligible'] == 2) {
+                                                                                                                                                                    echo 'No';
+                                                                                                                                                                }
+                                                                                                                                                            } else {
+                                                                                                                                                                echo 'Select';
+                                                                                                                                                            } ?></option>
+                                                                                                            <option value="1">Yes</option>
+                                                                                                            <option value="2">No</option>
+                                                                                                        </select>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-sm-6">
+                                                                                                    <!-- textarea -->
+                                                                                                    <div class="form-group">
+                                                                                                        <label>Comments / Remarks </label>
+                                                                                                        <textarea class="form-control" rows="3" placeholder="Enter ..." name='comments' value=''>
+                                                                                                            <?php if ($screening['comments']) {
+                                                                                                                print_r($screening['comments']);
+                                                                                                            }  ?>
+                                                                                                        </textarea>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="modal-footer justify-content-between">
+                                                                                                <input type="hidden" name="id" value="<?= $screening['id'] ?>">
+                                                                                                <input type="hidden" name="cid" value="<?= $screening['client_id'] ?>">
+                                                                                                <input type="hidden" name="project_id" value="<?= $screening['project_id'] ?>">
+                                                                                                <input type="hidden" name="btn" value="<?= $btn ?>">
+                                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                <input type="submit" name="add_screening" value="<?= $btn; ?>">
+                                                                                            </div>
+                                                                                        </form>
+                                                                                    </div>
+                                                                                    <!-- /.card-body -->
+                                                                                </div>
+                                                                                <!-- /.card-body -->
+                                                                            </div>
+                                                                            <!-- /.row -->
+                                                                        </div>
+                                                                        <!-- /.container-fluid -->
+                                                                    </div>
+                                                                    <!-- /.modal-content -->
+                                                                </div>
+                                                                <!-- /.modal-dialog -->
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- /.modal -->
+                                                    <?php
                                                         $x++;
                                                     } ?>
                                                 </tbody>
@@ -936,7 +1311,7 @@ if ($user->isLoggedIn()) {
                                                             <th>Study</th>
                                                         <?php } ?>
                                                         <th>Phone</th>
-                                                        <?php if ($_GET['status'] == 1) { ?>
+                                                        <?php if ($_GET['status'] == 1 || $_GET['status'] == 3 || $_GET['status'] == 4) { ?>
                                                             <th>Status</th>
                                                             <th>Action</th>
                                                         <?php } ?>
